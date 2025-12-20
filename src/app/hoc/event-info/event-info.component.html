@@ -1,0 +1,55 @@
+<form [formGroup]="form" class="form">
+
+  <!-- Date -->
+  <mat-form-field appearance="fill">
+    <mat-label>Date</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="date" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="form.get('date')?.hasError('required')">
+      Date is required
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Client Name -->
+  <mat-form-field appearance="fill">
+    <mat-label>Client Name</mat-label>
+    <input matInput formControlName="clientName" />
+    <mat-error *ngIf="form.get('clientName')?.hasError('required')">
+      Client name is required
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Quoted Amount -->
+  <mat-form-field appearance="fill">
+    <mat-label>Quoted Amount</mat-label>
+    <input
+      matInput
+      type="number"
+      formControlName="quotedAmount" />
+    <mat-error *ngIf="form.get('quotedAmount')?.hasError('required')">
+      Amount is required
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Venue -->
+  <mat-form-field appearance="fill">
+    <mat-label>Venue</mat-label>
+    <input matInput formControlName="venue" />
+  </mat-form-field>
+
+
+  <!-- Location -->
+  <mat-form-field appearance="fill">
+    <mat-label>Location</mat-label>
+    <input matInput formControlName="location" />
+  </mat-form-field>
+
+  <div class="actions">
+    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="submit()">
+      Save
+    </button>
+  </div>
+
+</form>

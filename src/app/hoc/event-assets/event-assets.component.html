@@ -1,0 +1,142 @@
+<div class="asset-management-container">
+  <h3>Asset Tracking</h3>
+
+  <!-- Summary Stats -->
+  <!-- <div class="stats-bar" *ngIf="assets.length > 0">
+    <div class="stat">
+      <span class="stat-label">Total:</span>
+      <span class="stat-value">{{ getTotalAssets() }}</span>
+    </div>
+    <div class="stat out">
+      <span class="stat-label">Out:</span>
+      <span class="stat-value">{{ getTakenOutCount() }}</span>
+    </div>
+    <div class="stat back">
+      <span class="stat-label">Back:</span>
+      <span class="stat-value">{{ getBroughtBackCount() }}</span>
+    </div>
+    <div class="stat pending" [class.warning]="getPendingReturnCount() > 0">
+      <span class="stat-label">Pending:</span>
+      <span class="stat-value">{{ getPendingReturnCount() }}</span>
+    </div>
+  </div> -->
+
+  <!-- Asset List with Checkboxes -->
+  <div class="asset-list">
+    <div class="list-header">
+      <div class="col-item">Item (Qty)</div>
+      <div class="col-checkbox">Out</div>
+      <div class="col-checkbox">Back</div>
+      <div class="col-actions">Actions</div>
+    </div>
+
+    <!-- Existing Assets -->
+    <div *ngFor="let asset of assets"
+         class="asset-row"
+         [class.taken-out]="asset.takenOut && !asset.broughtBack"
+         [class.completed]="asset.broughtBack">
+
+      <!-- Normal View -->
+      <ng-container *ngIf="!editMode[asset.id]">
+        <div class="col-item">
+          <strong>{{ asset.name }}</strong>
+          <span class="qty-badge">× {{ asset.quantity }}</span>
+        </div>
+
+        <div class="col-checkbox">
+          <mat-checkbox
+            [(ngModel)]="asset.takenOut"
+            (change)="toggleTakenOut(asset)"
+            color="primary"
+            class="large-checkbox">
+          </mat-checkbox>
+          <span class="time" *ngIf="asset.takenOutTime">
+            {{ asset.takenOutTime | date:'HH:mm' }}
+          </span>
+        </div>
+
+        <div class="col-checkbox">
+          <mat-checkbox
+            [(ngModel)]="asset.broughtBack"
+            (change)="toggleBroughtBack(asset)"
+            [disabled]="!asset.takenOut"
+            color="accent"
+            class="large-checkbox">
+          </mat-checkbox>
+          <span class="time" *ngIf="asset.broughtBackTime">
+            {{ asset.broughtBackTime | date:'HH:mm' }}
+          </span>
+        </div>
+
+        <div class="col-actions">
+          <button mat-icon-button (click)="startEdit(asset)" [disabled]="asset.takenOut">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Edit View -->
+      <ng-container *ngIf="editMode[asset.id]">
+        <div class="col-item edit-mode">
+          <input
+            type="text"
+            class="inline-input"
+            [(ngModel)]="editForms[asset.id].name"
+            placeholder="Item name" />
+          <input
+            type="number"
+            class="inline-input qty-input"
+            [(ngModel)]="editForms[asset.id].quantity"
+            placeholder="Qty" />
+        </div>
+
+        <div class="col-actions edit-actions">
+          <button mat-icon-button color="primary" (click)="saveEdit(asset)">
+            <mat-icon>check</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteAsset(asset.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button (click)="cancelEdit(asset.id)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Add New Row (Always at the end) -->
+    <div class="asset-row add-row">
+      <div class="col-item edit-mode">
+        <input
+          #addNameInput
+          type="text"
+          class="inline-input"
+          [(ngModel)]="newAssetName"
+          (keyup.enter)="canAddAsset() && addNewAsset()"
+          placeholder="Add new item..." />
+        <input
+          type="number"
+          class="inline-input qty-input"
+          [(ngModel)]="newAssetQuantity"
+          (keyup.enter)="canAddAsset() && addNewAsset()"
+          placeholder="Qty" />
+      </div>
+
+      <div class="col-actions add-actions">
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="addNewAsset()"
+          [disabled]="!canAddAsset()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Note -->
+  <div class="info-note">
+    <mat-icon>info</mat-icon>
+    <span>Items can only be edited before being taken out. Press Enter to quickly add items.</span>
+  </div>
+</div>

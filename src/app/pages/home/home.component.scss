@@ -1,0 +1,23 @@
+@use "_variables" as *;
+
+.home-container {
+  .list-container {
+    margin-bottom: 1rem;
+    h6 {
+      margin: 0 10px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 20px 70px 1fr 1fr 1fr;
+      padding: 0 10px;
+      align-items: center;
+      border-bottom: 1px solid $border-grey;
+    }
+  }
+  .fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+  }
+}

@@ -1,0 +1,42 @@
+/* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+
+
+
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// Customize Material components globally
+:root {
+  @include mat.toolbar-overrides(
+    (
+      // container-background-color: orange,
+      // container-text-color: red,
+    )
+  );
+  @include mat.sidenav-overrides(
+
+  );
+}
+/* Fixes the "partial thick line" or "double border" in Material Outline fields */
+// .mdc-notched-outline__notch {
+//   border-right: none !important;
+//   border-left: none !important;
+// }
+
+/* If the line is specifically at the very bottom of the notch area */
+// .mdc-notched-outline__notch {
+//   box-sizing: content-box !important;
+// }
+
+.mat-drawer-content {
+    background-color: rgb(255, 255, 255);
+    height: 100dvh !important;
+}

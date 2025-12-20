@@ -13,24 +13,59 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { HomeComponent } from './pages/home/home.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { EventDetailsComponent } from './pages/event-details/event-details.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { EventInfoComponent } from './hoc/event-info/event-info.component';
+import { EventCrewComponent } from './hoc/event-crew/event-crew.component';
+import { EventAssetsComponent } from './hoc/event-assets/event-assets.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatSelectModule} from '@angular/material/select';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatCardModule} from '@angular/material/card';
+import { FormsModule } from '@angular/forms';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatMenuModule} from '@angular/material/menu';
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     EvolveTopNavComponent,
+    EventDetailsComponent,
+    EventInfoComponent,
+    EventCrewComponent,
+    EventAssetsComponent
     // other components go here
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
     AppRoutingModule,
     RouterModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatTabsModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatCardModule,
+    FormsModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatMenuModule
   ],
   bootstrap: [AppComponent],
+  providers:[ provideNativeDateAdapter()]
 })
 export class AppModule {}

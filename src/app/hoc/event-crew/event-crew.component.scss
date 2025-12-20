@@ -1,0 +1,179 @@
+.event-crew-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+
+  h3 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+  }
+}
+
+.crew-list-container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  min-height: 200px;
+
+  mat-list {
+    padding: 0;
+  }
+}
+
+.crew-item {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 16px !important;
+  height: auto !important;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  .crew-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .service-badge {
+    background: #1976d2;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .crew-details {
+    flex: 1;
+    min-width: 150px;
+
+    .crew-name {
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .crew-contact {
+      font-size: 14px;
+      color: #666;
+    }
+  }
+
+  .crew-amount {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2e7d32;
+    margin-left: auto;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #999;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  p {
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+.total-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 20px;
+
+  strong {
+    font-size: 18px;
+    color: #333;
+  }
+
+  .total-amount {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2e7d32;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+
+  button {
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Dialog styles
+.crew-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+mat-dialog-content {
+  min-width: 350px;
+  padding: 20px !important;
+}
+
+mat-dialog-actions {
+  padding: 16px 24px !important;
+  margin: 0 !important;
+}
+
+// Responsive design
+@media (max-width: 600px) {
+  .crew-item {
+    .crew-info {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .crew-amount {
+      margin-left: 0;
+    }
+  }
+
+  .action-buttons {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+}
