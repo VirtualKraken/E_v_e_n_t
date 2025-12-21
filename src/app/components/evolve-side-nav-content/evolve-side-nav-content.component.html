@@ -1,0 +1,19 @@
+<mat-card class="demo-inline-calendar-card">
+  <mat-calendar></mat-calendar>
+</mat-card>
+<mat-nav-list>
+  <a
+    mat-list-item
+    routerLink="/home"
+    routerLinkActive="active-link"
+    (click)="drawer.close()"
+  >
+    <!-- <mat-icon>home</mat-icon>  -->
+    <span>
+
+      Home
+    </span>
+  </a>
+  <!-- <a mat-list-item routerLink="/events" routerLinkActive="active-link" (click)="drawer.close()">Events</a> -->
+  <!-- <a mat-list-item routerLink="/settings" routerLinkActive="active-link" (click)="drawer.close()">Settings</a> -->
+</mat-nav-list>

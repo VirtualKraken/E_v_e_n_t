@@ -1,7 +1,7 @@
 <form [formGroup]="form" class="form">
 
   <!-- Date -->
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Date</mat-label>
     <input matInput [matDatepicker]="picker" formControlName="date" />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -12,13 +12,14 @@
   </mat-form-field>
 
   <!-- Client Name -->
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Client Name</mat-label>
     <input matInput formControlName="clientName" />
     <mat-error *ngIf="form.get('clientName')?.hasError('required')">
       Client name is required
     </mat-error>
   </mat-form-field>
+
 
   <!-- Quoted Amount -->
   <mat-form-field appearance="fill">

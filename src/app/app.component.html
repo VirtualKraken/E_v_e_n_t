@@ -1,21 +1,15 @@
 <mat-sidenav-container class="app-container">
-
   <!-- Side nav -->
   <mat-sidenav #drawer mode="side" class="app-sidenav">
-    <mat-nav-list>
-      <a mat-list-item routerLink="/home" (click)="drawer.close()">Home</a>
-      <a mat-list-item routerLink="/events" (click)="drawer.close()">Events</a>
-      <a mat-list-item routerLink="/settings" (click)="drawer.close()">Settings</a>
-    </mat-nav-list>
+    <evolve-side-nav-content [drawer]="drawer" />
   </mat-sidenav>
 
   <!-- Main content -->
-  <mat-sidenav-content >
+  <mat-sidenav-content>
     <!-- Top nav -->
     <evolve-top-nav (toggleSidenav)="drawer.toggle()"></evolve-top-nav>
 
     <!-- Pages -->
     <router-outlet></router-outlet>
   </mat-sidenav-content>
-
 </mat-sidenav-container>

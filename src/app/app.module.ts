@@ -30,6 +30,7 @@ import { FormsModule } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatMenuModule} from '@angular/material/menu';
+import { EvolveSideNavContentComponent } from './components/evolve-side-nav-content/evolve-side-nav-content.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import {MatMenuModule} from '@angular/material/menu';
     EventDetailsComponent,
     EventInfoComponent,
     EventCrewComponent,
-    EventAssetsComponent
+    EventAssetsComponent,
+    EvolveSideNavContentComponent
     // other components go here
   ],
   imports: [
