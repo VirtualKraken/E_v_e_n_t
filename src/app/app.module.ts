@@ -31,6 +31,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatMenuModule} from '@angular/material/menu';
 import { EvolveSideNavContentComponent } from './components/evolve-side-nav-content/evolve-side-nav-content.component';
+import { LoginComponent } from './pages/login/login.component';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { EventQuoteComponent } from './hoc/event-quote/event-quote.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,9 @@ import { EvolveSideNavContentComponent } from './components/evolve-side-nav-cont
     EventInfoComponent,
     EventCrewComponent,
     EventAssetsComponent,
-    EvolveSideNavContentComponent
+    EvolveSideNavContentComponent,
+    LoginComponent,
+    EventQuoteComponent
     // other components go here
   ],
   imports: [
@@ -65,7 +70,8 @@ import { EvolveSideNavContentComponent } from './components/evolve-side-nav-cont
     FormsModule,
     MatCheckboxModule,
     MatChipsModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSlideToggleModule
   ],
   bootstrap: [AppComponent],
   providers:[ provideNativeDateAdapter()]

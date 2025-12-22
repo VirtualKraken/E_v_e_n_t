@@ -2,8 +2,8 @@
   <!-- <h5>Hi Kunju, Welcome to Evolve Events</h5> -->
   <!-- <button mat-raised-button color="accent">Create Event</button> -->
   <!-- list of events with number, date , client name -->
-  <div class="list-container" *ngFor="let item of [].constructor(3)">
-    <h6 class="month">December 2025</h6>
+  <div class="list-container" *ngFor="let item of [].constructor(3)" (click)="openEventDetails()">
+    <h2 class="month">December 2025</h2>
     <div class="row" *ngFor="let item of [].constructor(10)">
       <span class="date">05</span>
       <span>Client Name</span>

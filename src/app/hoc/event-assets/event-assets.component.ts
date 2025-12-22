@@ -11,9 +11,10 @@ interface Asset {
 }
 
 @Component({
-  selector: 'event-assets',
-  templateUrl: './event-assets.component.html',
-  styleUrl: './event-assets.component.scss',
+    selector: 'event-assets',
+    templateUrl: './event-assets.component.html',
+    styleUrl: './event-assets.component.scss',
+    standalone: false
 })
 export class EventAssetsComponent {
   assets: Asset[] = [];

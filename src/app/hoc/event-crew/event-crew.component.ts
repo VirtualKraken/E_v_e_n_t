@@ -10,9 +10,10 @@ interface CrewMember {
 }
 
 @Component({
-  selector: 'event-crew',
-  templateUrl: './event-crew.component.html',
-  styleUrls: ['./event-crew.component.scss'],
+    selector: 'event-crew',
+    templateUrl: './event-crew.component.html',
+    styleUrls: ['./event-crew.component.scss'],
+    standalone: false
 })
 export class EventCrewComponent {
   crew: CrewMember[] = [];

@@ -1,44 +1,60 @@
 /* You can add global styles to this file, and also import other style files */
-// @use "@angular/material" as mat;
+@use "@angular/material" as mat;
 
 
-
-
+/* Evolve colors */
+$evolve-body-bkg: #1e1e1e;
+$evolve-primary-gold: #ff9100;
 html,
 body {
   height: 100%;
 }
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: 14px;
+  font-family: "Quicksand", sans-serif !important;
+  background-color: aquamarine;
+  // font-family: Roboto, "Helvetica Neue", sans-serif;
+  // font-size: 14px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
 }
 
-// // Customize Material components globally
-// :root {
-//   @include mat.toolbar-overrides(
-//     (
-//       // container-background-color: orange,
-//       // container-text-color: red,
-//     )
-//   );
-//   @include mat.sidenav-overrides(
+// Customize Material components globally
+:root {
+  @include mat.toolbar-overrides(
+    (
+      // container-background-color: orange,
+      // container-text-color: red,
+    )
+  );
+  @include mat.sidenav-overrides();
+}
 
-//   );
-// }
-/* Fixes the "partial thick line" or "double border" in Material Outline fields */
-// .mdc-notched-outline__notch {
-//   border-right: none !important;
-//   border-left: none !important;
-// }
+/* ✅ Material 3 typography */
+$quicksand-typography: mat.define-typography(
+  (
+    brand-family: "Quicksand, sans-serif",
+    plain-family: "Quicksand, sans-serif"
+  )
+);
 
-/* If the line is specifically at the very bottom of the notch area */
-// .mdc-notched-outline__notch {
-//   box-sizing: content-box !important;
-// }
+/* ✅ Apply to all Material components - WRAPPED IN SELECTOR */
+html {
+  @include mat.all-component-typographies($quicksand-typography);
+}
 
 .mat-drawer-content {
-    background-color: rgb(255, 255, 255);
-    height: 100dvh !important;
+  background-color: rgb(255, 255, 255);
+  height: 100dvh !important;
 }
 
+// Fix for Material Outline fields
+::ng-deep .mdc-notched-outline__notch {
+  border-top: none !important;
+}

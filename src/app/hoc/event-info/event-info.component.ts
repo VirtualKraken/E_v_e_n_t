@@ -2,9 +2,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'event-info',
-  templateUrl: './event-info.component.html',
-  styleUrl: './event-info.component.scss'
+    selector: 'event-info',
+    templateUrl: './event-info.component.html',
+    styleUrl: './event-info.component.scss',
+    standalone: false
 })
 export class EventInfoComponent {
   @Output() submitForm = new EventEmitter<any>();

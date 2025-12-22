@@ -1,0 +1,37 @@
+
+// login.component.scss
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #fafafa;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.login-button {
+  margin-top: 8px;
+  height: 48px;
+  font-size: 16px;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+mat-card-title {
+  font-size: 24px;
+  font-weight: 500;
+}

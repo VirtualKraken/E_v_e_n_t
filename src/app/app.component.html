@@ -1,4 +1,9 @@
-<mat-sidenav-container class="app-container">
+<div *ngIf="!showLayout">
+  <!-- Auth pages without navigation -->
+  <router-outlet></router-outlet>
+</div>
+
+<mat-sidenav-container class="app-container" *ngIf="showLayout">
   <!-- Side nav -->
   <mat-sidenav #drawer mode="side" class="app-sidenav">
     <evolve-side-nav-content [drawer]="drawer" />

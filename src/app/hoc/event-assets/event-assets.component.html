@@ -1,5 +1,9 @@
 <div class="asset-management-container">
-  <h3>Asset Tracking</h3>
+  <!-- <h2>Asset Tracking</h2> -->
+  <h4 class="share-title">
+    Share with production Team
+    <mat-slide-toggle class="example-margin"> </mat-slide-toggle>
+  </h4>
 
   <!-- Summary Stats -->
   <!-- <div class="stats-bar" *ngIf="assets.length > 0">
@@ -31,11 +35,12 @@
     </div>
 
     <!-- Existing Assets -->
-    <div *ngFor="let asset of assets"
-         class="asset-row"
-         [class.taken-out]="asset.takenOut && !asset.broughtBack"
-         [class.completed]="asset.broughtBack">
-
+    <div
+      *ngFor="let asset of assets"
+      class="asset-row"
+      [class.taken-out]="asset.takenOut && !asset.broughtBack"
+      [class.completed]="asset.broughtBack"
+    >
       <!-- Normal View -->
       <ng-container *ngIf="!editMode[asset.id]">
         <div class="col-item">
@@ -48,10 +53,11 @@
             [(ngModel)]="asset.takenOut"
             (change)="toggleTakenOut(asset)"
             color="primary"
-            class="large-checkbox">
+            class="large-checkbox"
+          >
           </mat-checkbox>
           <span class="time" *ngIf="asset.takenOutTime">
-            {{ asset.takenOutTime | date:'HH:mm' }}
+            {{ asset.takenOutTime | date : "HH:mm" }}
           </span>
         </div>
 
@@ -61,15 +67,20 @@
             (change)="toggleBroughtBack(asset)"
             [disabled]="!asset.takenOut"
             color="accent"
-            class="large-checkbox">
+            class="large-checkbox"
+          >
           </mat-checkbox>
           <span class="time" *ngIf="asset.broughtBackTime">
-            {{ asset.broughtBackTime | date:'HH:mm' }}
+            {{ asset.broughtBackTime | date : "HH:mm" }}
           </span>
         </div>
 
         <div class="col-actions">
-          <button mat-icon-button (click)="startEdit(asset)" [disabled]="asset.takenOut">
+          <button
+            mat-icon-button
+            (click)="startEdit(asset)"
+            [disabled]="asset.takenOut"
+          >
             <mat-icon>edit</mat-icon>
           </button>
         </div>
@@ -82,12 +93,14 @@
             type="text"
             class="inline-input"
             [(ngModel)]="editForms[asset.id].name"
-            placeholder="Item name" />
+            placeholder="Item name"
+          />
           <input
             type="number"
             class="inline-input qty-input"
             [(ngModel)]="editForms[asset.id].quantity"
-            placeholder="Qty" />
+            placeholder="Qty"
+          />
         </div>
 
         <div class="col-actions edit-actions">
@@ -113,13 +126,15 @@
           class="inline-input"
           [(ngModel)]="newAssetName"
           (keyup.enter)="canAddAsset() && addNewAsset()"
-          placeholder="Add new item..." />
+          placeholder="Add new item..."
+        />
         <input
           type="number"
           class="inline-input qty-input"
           [(ngModel)]="newAssetQuantity"
           (keyup.enter)="canAddAsset() && addNewAsset()"
-          placeholder="Qty" />
+          placeholder="Qty"
+        />
       </div>
 
       <div class="col-actions add-actions">
@@ -127,7 +142,8 @@
           mat-icon-button
           color="primary"
           (click)="addNewAsset()"
-          [disabled]="!canAddAsset()">
+          [disabled]="!canAddAsset()"
+        >
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -137,6 +153,9 @@
   <!-- Info Note -->
   <div class="info-note">
     <mat-icon>info</mat-icon>
-    <span>Items can only be edited before being taken out. Press Enter to quickly add items.</span>
+    <span
+      >Items can only be edited before being taken out. Press Enter to quickly
+      add items.</span
+    >
   </div>
 </div>
