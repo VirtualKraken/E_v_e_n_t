@@ -9,11 +9,13 @@
     (click)="drawer.close()"
   >
     <!-- <mat-icon>home</mat-icon>  -->
-    <span>
-
-      Home
-    </span>
+    <span> Home </span>
   </a>
-  <!-- <a mat-list-item routerLink="/events" routerLinkActive="active-link" (click)="drawer.close()">Events</a> -->
+
+  <a mat-list-item (click)="toggleTheme()"
+    >{{ "Switch to " + (isDark ? "light" : "dark") + " mode" }}
+
+    <mat-icon>{{ isDark ? "light_mode" : "dark_mode" }}</mat-icon>
+  </a>
   <!-- <a mat-list-item routerLink="/settings" routerLinkActive="active-link" (click)="drawer.close()">Settings</a> -->
 </mat-nav-list>

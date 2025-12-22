@@ -1,77 +1,77 @@
-/* Add this to your component's CSS or global styles */
+// /* Add this to your component's CSS or global styles */
 
-/* Container styling */
-::ng-deep .mat-mdc-tab-group {
-  background: transparent;
-}
+// /* Container styling */
+// ::ng-deep .mat-mdc-tab-group {
+//   background: transparent;
+// }
 
-/* Tab header background */
-::ng-deep .mat-mdc-tab-header {
-  background: #f1f3f4;
-  border-radius: 8px;
-  padding: 4px;
-  border: none;
-}
+// /* Tab header background */
+// ::ng-deep .mat-mdc-tab-header {
+//   background: #f1f3f4;
+//   border-radius: 8px;
+//   padding: 4px;
+//   border: none;
+// }
 
-/* Individual tab labels */
-::ng-deep .mat-mdc-tab {
-  min-width: 90px;
-  height: 40px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  background: transparent;
-  color: #5f6368;
-  font-weight: 500;
-  padding: 0 16px;
-}
+// /* Individual tab labels */
+// ::ng-deep .mat-mdc-tab {
+//   min-width: 90px;
+//   height: 40px;
+//   border-radius: 6px;
+//   transition: all 0.2s ease;
+//   background: transparent;
+//   color: #5f6368;
+//   font-weight: 500;
+//   padding: 0 16px;
+// }
 
-/* Tab label content with icons */
-::ng-deep .mat-mdc-tab .mdc-tab__content {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+// /* Tab label content with icons */
+// ::ng-deep .mat-mdc-tab .mdc-tab__content {
+//   display: flex;
+//   align-items: center;
+//   gap: 8px;
+// }
 
-/* Icon styling */
-::ng-deep .mat-mdc-tab .mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  color: inherit;
-}
+// /* Icon styling */
+// ::ng-deep .mat-mdc-tab .mat-icon {
+//   font-size: 20px;
+//   width: 20px;
+//   height: 20px;
+//   color: inherit;
+// }
 
-/* Active tab */
-::ng-deep .mat-mdc-tab.mdc-tab--active {
-  background: white;
-  color: #1a73e8;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
+// /* Active tab */
+// ::ng-deep .mat-mdc-tab.mdc-tab--active {
+//   background: white;
+//   color: #1a73e8;
+//   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+// }
 
-/* Hover effect for inactive tabs */
-::ng-deep .mat-mdc-tab:not(.mdc-tab--active):hover {
-  background: rgba(255, 255, 255, 0.5);
-}
+// /* Hover effect for inactive tabs */
+// ::ng-deep .mat-mdc-tab:not(.mdc-tab--active):hover {
+//   background: rgba(255, 255, 255, 0.5);
+// }
 
-/* Remove the default ink bar */
-::ng-deep .mat-mdc-tab-header-pagination {
-  display: none;
-}
+// /* Remove the default ink bar */
+// ::ng-deep .mat-mdc-tab-header-pagination {
+//   display: none;
+// }
 
-::ng-deep .mdc-tab-indicator {
-  display: none;
-}
+// ::ng-deep .mdc-tab-indicator {
+//   display: none;
+// }
 
-/* Tab label text */
-::ng-deep .mat-mdc-tab .mdc-tab__text-label {
-  color: inherit;
-}
+// /* Tab label text */
+// ::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+//   color: inherit;
+// }
 
-/* Remove ripple effect (optional) */
-::ng-deep .mat-mdc-tab .mat-ripple {
-  display: none;
-}
+// /* Remove ripple effect (optional) */
+// ::ng-deep .mat-mdc-tab .mat-ripple {
+//   display: none;
+// }
 
-/* Tab body */
-::ng-deep .mat-mdc-tab-body-wrapper {
-  padding-top: 16px;
-}
+// /* Tab body */
+// ::ng-deep .mat-mdc-tab-body-wrapper {
+//   padding-top: 16px;
+// }

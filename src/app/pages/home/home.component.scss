@@ -4,7 +4,7 @@
   .list-container {
     padding: 10px;
     margin-bottom: 1rem;
-.month {
+    .month {
       margin: 0 0 16px 0;
     }
     .row {
@@ -16,11 +16,12 @@
       gap: 10px;
       font-size: 14px;
       padding: 10px;
-      box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+      box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
+        rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
       margin-bottom: 10px;
       border-radius: 6px;
       .date {
-        background: white;
+        background: var(--theme-btn-primary);
         border-radius: 50%;
         aspect-ratio: 1;
         display: flex;
@@ -28,7 +29,7 @@
         justify-content: center;
         font-size: 18px;
         font-weight: 600;
-        border: 1px solid $border-grey;
+        // border: 1px solid $border-grey;
         height: 40px;
       }
       //last two child should have fontsixe of 12px

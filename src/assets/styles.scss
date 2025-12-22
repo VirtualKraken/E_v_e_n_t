@@ -1,21 +1,103 @@
 /* You can add global styles to this file, and also import other style files */
 @use "@angular/material" as mat;
 
+/* ============================================
+   EVOLVE COLOR PALETTE
+   ============================================ */
+$evolve-night-body-bkg: #1e1e1e;
+$evolve-night-primary-gold: #ff9100;
 
-/* Evolve colors */
-$evolve-body-bkg: #1e1e1e;
-$evolve-primary-gold: #ff9100;
+/* ============================================
+   CSS CUSTOM PROPERTIES FOR THEMING
+   ============================================ */
+:root {
+  --theme-background: white;
+  --theme-color: black;
+  --theme-surface: #ffffff;
+  --theme-surface-variant: #f5f5f5;
+  --theme-border: rgba(0, 0, 0, 0.12);
+  --theme-btn-primary:#ffd9e1;
+
+}
+
+:root[theme="dark"] {
+  --theme-background: #{$evolve-night-body-bkg};
+  --theme-color: rgba(255, 255, 255, 0.87);
+  --theme-surface: #2d2d2d;
+  --theme-surface-variant: #383838;
+  --theme-border: rgba(255, 255, 255, 0.12);
+  --theme-primary: #{$evolve-night-primary-gold};
+  --theme-btn-primary:#723600;
+}
+
+/* ============================================
+   LIGHT THEME CONFIGURATION (Material 3)
+   ============================================ */
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$rose-palette,
+    ),
+    typography: (
+      brand-family: "Quicksand, sans-serif",
+      plain-family: "Quicksand, sans-serif",
+    ),
+  )
+);
+
+/* ============================================
+   DARK THEME CONFIGURATION (Material 3)
+   ============================================ */
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$orange-palette,
+    ),
+    typography: (
+      brand-family: "Quicksand, sans-serif",
+      plain-family: "Quicksand, sans-serif",
+    ),
+  )
+);
+
+/* ============================================
+   APPLY THEMES
+   ============================================ */
+
+/* Default Light Theme */
+:root {
+  @include mat.all-component-themes($light-theme);
+}
+
+/* Dark Theme - Applied when theme="dark" attribute is present */
+:root[theme="dark"] {
+  @include mat.all-component-colors($dark-theme);
+
+  /* Override primary color to use custom gold */
+  --mat-sys-primary: #{$evolve-night-primary-gold};
+  --mat-sys-on-primary: #000000;
+  --mdc-filled-button-container-color: #{$evolve-night-primary-gold};
+  --mdc-protected-button-container-color: #{$evolve-night-primary-gold};
+}
+
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
 html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: "Quicksand", sans-serif !important;
-  background-color: aquamarine;
-  // font-family: Roboto, "Helvetica Neue", sans-serif;
-  // font-size: 14px;
+  background-color: var(--theme-background);
+  color: var(--theme-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 h1,
 h2,
 h3,
@@ -25,36 +107,92 @@ h6 {
   font-weight: normal;
 }
 
-// Customize Material components globally
-:root {
-  @include mat.toolbar-overrides(
-    (
-      // container-background-color: orange,
-      // container-text-color: red,
-    )
-  );
-  @include mat.sidenav-overrides();
-}
-
-/* ✅ Material 3 typography */
-$quicksand-typography: mat.define-typography(
-  (
-    brand-family: "Quicksand, sans-serif",
-    plain-family: "Quicksand, sans-serif"
-  )
-);
-
-/* ✅ Apply to all Material components - WRAPPED IN SELECTOR */
-html {
-  @include mat.all-component-typographies($quicksand-typography);
-}
-
+/* ============================================
+   MATERIAL COMPONENT OVERRIDES
+   ============================================ */
 .mat-drawer-content {
-  background-color: rgb(255, 255, 255);
+  background-color: var(--theme-background) !important;
   height: 100dvh !important;
+  transition: background-color 0.3s ease;
 }
 
-// Fix for Material Outline fields
+/* ============================================
+   DARK THEME CUSTOM OVERRIDES
+   ============================================ */
+:root[theme="dark"] {
+  /* Toolbar dark mode */
+  mat-toolbar {
+    background-color: var(--theme-surface);
+    color: var(--theme-color);
+  }
+
+  /* Card dark mode */
+  mat-card {
+    background-color: var(--theme-surface);
+    color: var(--theme-color);
+  }
+
+  /* Sidenav dark mode */
+  mat-sidenav {
+    background-color: var(--theme-surface);
+    color: var(--theme-color);
+  }
+
+  /* Form fields dark mode */
+  .mat-mdc-form-field {
+    color: var(--theme-color);
+  }
+
+  /* Divider dark mode */
+  mat-divider {
+    border-top-color: var(--theme-border);
+  }
+
+  /* Dialog dark mode */
+  .mat-mdc-dialog-container {
+    // background-color: var(--theme-surface);
+    // color: var(--theme-color);
+  }
+
+  /* Menu dark mode */
+  .mat-mdc-menu-panel {
+    background-color: var(--theme-surface);
+    color: var(--theme-color);
+  }
+
+  /* Buttons with primary color */
+  .mat-mdc-raised-button.mat-primary,
+  .mat-mdc-unelevated-button.mat-primary,
+  .mat-mdc-fab.mat-primary,
+  .mat-mdc-mini-fab.mat-primary {
+    --mdc-filled-button-container-color: var(--theme-btn-primary) !important;
+    --mdc-filled-button-label-text-color: #000000;
+  }
+
+  /* Icon buttons */
+  .mat-mdc-icon-button.mat-primary {
+    --mat-icon-button-state-layer-color: #{$evolve-night-primary-gold};
+    --mat-icon-button-ripple-color: rgba(255, 145, 0, 0.1);
+  }
+
+  /* Text buttons */
+  .mat-mdc-button.mat-primary {
+    --mdc-text-button-label-text-color: #{$evolve-night-primary-gold};
+  }
+
+  /* Slider */
+  .mat-mdc-slider.mat-primary {
+    --mdc-slider-handle-color: #{$evolve-night-primary-gold};
+    --mdc-slider-active-track-color: #{$evolve-night-primary-gold};
+  }
+
+  /* Progress bar */
+  .mat-mdc-progress-bar.mat-primary {
+    --mdc-linear-progress-active-indicator-color: #{$evolve-night-primary-gold};
+  }
+}
+
+/* Fix for Material Outline fields */
 ::ng-deep .mdc-notched-outline__notch {
   border-top: none !important;
 }
