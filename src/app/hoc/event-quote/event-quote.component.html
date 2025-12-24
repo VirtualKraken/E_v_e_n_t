@@ -1,1 +1,93 @@
-<p>event-quote works!</p>
+<div class="quote-container">
+
+  <mat-card class="details-card">
+    <mat-card-header>
+      <div mat-card-avatar class="avatar-placeholder">
+        {{ quoteData.client_details.client.charAt(0) }}
+      </div>
+      <mat-card-title>
+        {{ quoteData.client_details.client }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ quoteData.client_details.function_date }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="meta-grid">
+        <div class="meta-item">
+          <mat-icon>location_on</mat-icon>
+          <div>
+            <label>Venue</label>
+            <span>{{ quoteData.client_details.venue }}</span>
+          </div>
+        </div>
+        <div class="meta-item">
+          <mat-icon>receipt_long</mat-icon>
+          <div>
+            <label>Quote ID</label>
+            <span>E-360-{{ quoteData.client_details.function_date | date:'yyyy' }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="items-card">
+    <h3>Proposals & Requirements</h3>
+
+    <div class="table-responsive">
+      <table class="quote-table">
+        <thead>
+          <tr>
+            <th class="col-no">No.</th>
+            <th class="col-desc">Description</th>
+            <th class="col-qty">Qty</th>
+            <th class="col-price">Approx Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of quoteData.items; let i = index">
+            <td class="col-no">{{ item.sl_no || (i + 1) }}</td>
+
+            <td class="col-desc">
+              <span class="item-name">{{ item.description }}</span>
+              <span *ngIf="item.note" class="item-note">({{ item.note }})</span>
+            </td>
+
+            <td class="col-qty">{{ item.quantity || '-' }}</td>
+
+            <td class="col-price">
+              <span *ngIf="item.approx_rate_inr > 0">
+                {{ item.approx_rate_inr | currency:'INR':'symbol':'1.0-0' }}
+              </span>
+              <span *ngIf="item.approx_rate_inr === 0" class="free-tag">
+                Include
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </mat-card>
+
+  <mat-card class="financials-card">
+    <div class="summary-row">
+      <span>Sub Total</span>
+      <span>{{ quoteData.financials.sub_total | currency:'INR':'symbol':'1.0-0' }}</span>
+    </div>
+
+    <div class="summary-row discount" *ngIf="quoteData.financials.sub_total !== quoteData.financials.final_amount">
+        <span>Discount / Adjustments</span>
+        <span>- {{ (quoteData.financials.sub_total - quoteData.financials.final_amount) | currency:'INR':'symbol':'1.0-0' }}</span>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="summary-row total">
+      <span>Final Amount</span>
+      <span class="highlight">{{ quoteData.financials.final_amount | currency:'INR':'symbol':'1.0-0' }}</span>
+    </div>
+  </mat-card>
+
+</div>

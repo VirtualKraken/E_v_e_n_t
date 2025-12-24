@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { sampleQuoteData } from '../../../assets/constants';
+import { WeddingQuotation } from '../../types/quotes';
+
 
 @Component({
   selector: 'event-quote',
@@ -7,5 +10,6 @@ import { Component } from '@angular/core';
   standalone:false
 })
 export class EventQuoteComponent {
+  quoteData:WeddingQuotation=sampleQuoteData;
 
 }

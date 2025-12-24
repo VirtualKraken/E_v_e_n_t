@@ -1,8 +1,8 @@
 <div class="event-crew-container">
-  <h3>Event Crew / Vendors</h3>
+  <!-- <h3>Event Crew / Vendors</h3> -->
 
   <!-- Crew List -->
-  <div class="crew-list-container">
+  <mat-card class="crew-list-container">
     <mat-list *ngIf="crew.length > 0; else emptyState">
       <mat-list-item *ngFor="let member of crew; let i = index" class="crew-item">
         <div class="crew-info" matListItemTitle>
@@ -25,7 +25,7 @@
         <p>No crew members added yet</p>
       </div>
     </ng-template>
-  </div>
+  </mat-card>
 
   <!-- Total Amount -->
   <div class="total-section" *ngIf="crew.length > 0">
