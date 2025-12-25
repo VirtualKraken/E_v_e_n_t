@@ -39,6 +39,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { environment } from '../environments/environment';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { provideAuth, getAuth } from '@angular/fire/auth';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     provideNativeDateAdapter(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
+     provideAuth(() => getAuth()),
   ],
 })
 export class AppModule {}

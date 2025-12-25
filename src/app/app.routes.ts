@@ -1,25 +1,55 @@
-import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
 import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+// 1. Import the Guard functions
+import {
+  canActivate,
+  redirectUnauthorizedTo,
+  redirectLoggedInTo,
+} from '@angular/fire/auth-guard';
+
+import { HomeComponent } from './pages/home/home.component';
 import { EventDetailsComponent } from './pages/event-details/event-details.component';
 import { LoginComponent } from './pages/login/login.component';
 
+// 2. Define the Rules
+// "If not logged in, go to Login"
+const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
+
+// "If already logged in, go to Home" (So they don't see the login screen again)
+const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
+
 export const routes: Routes = [
-  {
-    path: 'home',
-    component: HomeComponent,
-  },
   {
     path: 'login',
     component: LoginComponent,
+    // If they are already logged in, skip this page and go to Home
+    ...canActivate(redirectLoggedInToHome),
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
+    // Protect this route: Check if logged in
+    ...canActivate(redirectUnauthorizedToLogin),
   },
   {
     path: 'event-details/:id',
     component: EventDetailsComponent,
+    ...canActivate(redirectUnauthorizedToLogin),
   },
-  { path: '**', redirectTo: 'login' },
 
+  // 2. Route WITHOUT an ID (e.g. /event-details)
+  {
+    path: 'event-details',
+    component: EventDetailsComponent,
+    ...canActivate(redirectUnauthorizedToLogin),
+  },
+
+  // Default Routes
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' },
 ];
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
