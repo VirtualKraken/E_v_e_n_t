@@ -15,13 +15,10 @@ export class HomeComponent {
     this.router.navigate(['/event-details']);
   }
 
-  ngOnInit(): void {
-    console.log(this.fs.item$);
-    this.fs.item$.subscribe((data) => {
-      console.log(data);
-    });   
-    
- 
+ngOnInit(): void {
+  this.fs.getUsers$().subscribe(users => {
+    console.log(users);
+  });
 }
 
 }
