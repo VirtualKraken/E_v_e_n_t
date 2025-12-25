@@ -70,6 +70,8 @@ $dark-theme: mat.define-theme(
 /* Default Light Theme */
 :root {
   @include mat.all-component-themes($light-theme);
+  --theme-scrollbar-thumb: rgba(0, 0, 0, 0.2);
+  --theme-scrollbar-thumb-hover: rgba(0, 0, 0, 0.4);
 }
 
 /* Dark Theme - Applied when theme="dark" attribute is present */
@@ -81,6 +83,8 @@ $dark-theme: mat.define-theme(
   --mat-sys-on-primary: #000000;
   --mdc-filled-button-container-color: #{$evolve-night-primary-gold};
   --mdc-protected-button-container-color: #{$evolve-night-primary-gold};
+  --theme-scrollbar-thumb: rgba(255, 255, 255, 0.2);
+  --theme-scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);
 }
 
 /* ============================================
@@ -88,6 +92,8 @@ $dark-theme: mat.define-theme(
    ============================================ */
 html {
   margin: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-scrollbar-thumb) transparent;
 }
 html,
 body {
@@ -128,7 +134,7 @@ h6 {
 :root[theme="dark"] {
   /* Toolbar dark mode */
   mat-toolbar {
-    background-color: var(--theme-surface);
+    background-color: transparent;
     color: var(--theme-color);
   }
 
@@ -196,6 +202,37 @@ h6 {
   .mat-mdc-progress-bar.mat-primary {
     --mdc-linear-progress-active-indicator-color: #{$evolve-night-primary-gold};
   }
+}
+
+/* Webkit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px; /* Height for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--theme-scrollbar-thumb);
+  border-radius: 4px;
+
+  /* Creates a small gap around the thumb for a "floating" look */
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--theme-scrollbar-thumb-hover);
+
+  /* Optional: Use your primary brand color on hover if preferred */
+  /* background-color: var(--theme-btn-primary); */
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 /* Fix for Material Outline fields */

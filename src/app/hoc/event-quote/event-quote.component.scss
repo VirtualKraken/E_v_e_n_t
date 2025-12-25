@@ -33,8 +33,14 @@ mat-card {
     font-weight: bold;
   }
 
+  mat-card-title{
+    flex: 1;
+  }
+
   mat-card-title, mat-card-subtitle {
      color: var(--theme-color);
+    flex: 1;
+
   }
 
   .meta-grid {

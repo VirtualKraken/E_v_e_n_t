@@ -10,6 +10,6 @@ import { WeddingQuotation } from '../../types/quotes';
   standalone:false
 })
 export class EventQuoteComponent {
-  quoteData:WeddingQuotation=sampleQuoteData;
+  quoteData:WeddingQuotation|null=sampleQuoteData;
 
 }
