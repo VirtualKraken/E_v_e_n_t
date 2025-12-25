@@ -2,90 +2,66 @@ import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
   collection,
-  query,
-  getDocs,
-  addDoc,
-  doc,
-  updateDoc,
-  getDoc,
-  orderBy,
   collectionData,
+  doc,
+  docData,
+  addDoc,
+  updateDoc,
+  query,
+  orderBy,
 } from '@angular/fire/firestore';
-import { from, Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { EvolveEvent } from '../app/types/quotes';
 
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
   private firestore = inject(Firestore);
 
+  // ✅ USERS LIST
   getUsers$(): Observable<any[]> {
-    const q = query(collection(this.firestore, 'users'));
-    return from(
-      getDocs(q).then((snap) =>
-        snap.docs.map((d) => ({ id: d.id, ...d.data() }))
-      )
-    );
+    const usersRef = collection(this.firestore, 'users');
+    return collectionData(usersRef, { idField: 'id' });
   }
 
-  addTestDoc() {
+  // ✅ TEST WRITE
+  addTestDoc(): Promise<any> {
     return addDoc(collection(this.firestore, 'test'), {
       message: 'Firestore connected',
       createdAt: new Date(),
     });
   }
 
+  // ✅ SINGLE EVENT (REALTIME)
   getEvent(eventId: string): Observable<EvolveEvent | undefined> {
-    const docRef = doc(this.firestore, 'events', eventId);
-
-    // getDoc returns a Promise, convert to Observable
-    return from(getDoc(docRef)).pipe(
-      map((snapshot) => {
-        if (snapshot.exists()) {
-          // Spread the data and include the ID just in case you need it later
-          return { id: snapshot.id, ...snapshot.data() } as EvolveEvent;
-        } else {
-          return undefined; // Handle "Event not found" case
-        }
-      })
-    );
+    const eventRef = doc(this.firestore, 'events', eventId);
+    return docData(eventRef, { idField: 'id' }) as Observable<
+      EvolveEvent | undefined
+    >;
   }
 
-  /**
-   * 1. CREATE EVENT (First Save)
-   * Creates a new document in the 'events' collection.
-   * Returns: A Promise that resolves to the new Document ID.
-   */
+  // ✅ CREATE EVENT
   async createEvent(initialData: Partial<EvolveEvent>): Promise<string> {
     const eventsRef = collection(this.firestore, 'events');
-
-    // addDoc automatically generates a unique ID
     const docRef = await addDoc(eventsRef, initialData);
-
     return docRef.id;
   }
 
-  /**
-   * 2. UPDATE EVENT (Subsequent Saves)
-   * Updates specific fields (Info, Crew, Assets) without overwriting the rest.
-   * Usage: updateEvent('event_123', { event_crew: [...] })
-   */
+  // ✅ UPDATE EVENT
   updateEvent(
     eventId: string,
     dataToUpdate: Partial<EvolveEvent>
-  ): Observable<void> {
-    const docRef = doc(this.firestore, 'events', eventId);
-
-    // updateDoc wraps in a Promise, so we convert it to Observable using 'from'
-    return from(updateDoc(docRef, dataToUpdate));
+  ): Promise<void> {
+    const eventRef = doc(this.firestore, 'events', eventId);
+    return updateDoc(eventRef, dataToUpdate);
   }
 
-  /**
-   * 4. GET ALL EVENTS (List View)
-   * Fetches all events
-   */
+  // ✅ EVENTS LIST (ORDERED, REALTIME)
   getEventsList(): Observable<EvolveEvent[]> {
     const eventsRef = collection(this.firestore, 'events');
-    const q = query(eventsRef, orderBy('event_info.function_date', 'desc'));
+    const q = query(
+      eventsRef,
+      orderBy('event_info.function_date', 'desc')
+    );
 
     return collectionData(q, { idField: 'id' }) as Observable<EvolveEvent[]>;
   }
