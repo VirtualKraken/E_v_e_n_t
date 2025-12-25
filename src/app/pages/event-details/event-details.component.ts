@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from '../../../service/firebase.service';
 import { EventInfo, EvolveEvent } from '../../types/quotes';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { ThemeServiceService } from '../../../service/theme-service.service';
 
 @Component({
   selector: 'app-event-details',
@@ -18,14 +20,14 @@ export class EventDetailsComponent {
     private firebaseService: FirebaseService,
     private router: Router,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private ts: ThemeServiceService
   ) {
     const nav = this.router.getCurrentNavigation();
     if (nav?.extras.state) {
       this.eventData = nav.extras.state as EvolveEvent;
       this.currentEventId = this.eventData.id as string;
       console.log(this.eventData);
-
     }
   }
 
@@ -58,9 +60,10 @@ export class EventDetailsComponent {
         this.currentEventId = await this.firebaseService.createEvent({
           event_info: data,
         });
-this.location.replaceState(`/event-details/${this.currentEventId}`);
+        this.location.replaceState(`/event-details/${this.currentEventId}`);
         console.log('Created new Event!', this.currentEventId);
         // Add a Toast/Snackbar notification here: "Event Created"
+        this.ts.showNotification('Event saved!');
       } else {
         // --- UPDATE (Subsequent Saves) ---
         await this.firebaseService.updateEvent(this.currentEventId, {
@@ -68,6 +71,8 @@ this.location.replaceState(`/event-details/${this.currentEventId}`);
         });
 
         console.log('Updated Event Info');
+        this.ts.showNotification('Event saved!');
+
         // Add a Toast/Snackbar notification here: "Info Updated"
       }
     } catch (error) {

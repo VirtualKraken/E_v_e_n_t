@@ -39,7 +39,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { environment } from '../environments/environment';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
     AppComponent,
@@ -78,6 +78,7 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
     MatMenuModule,
     MatSlideToggleModule,
     MatRippleModule,
+    MatSnackBarModule
   ],
   bootstrap: [AppComponent],
   providers: [
