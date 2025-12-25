@@ -1,0 +1,69 @@
+
+
+2.Firebase Setup Steps (Angular 19 – NgModule)
+1. Install Dependencies
+npm install firebase @angular/fire
+note : install the same version of angular and angular fire .
+
+2. Create Firebase Project
+
+Go to Firebase Console
+
+Create / select project
+
+Add a Web App
+
+Copy Firebase config
+
+3. Add Firebase Config
+src/environments/environment.ts
+export const environment = {
+  production: false,
+  firebase: {
+    apiKey: 'API_KEY',
+    authDomain: 'PROJECT_ID.firebaseapp.com',
+    projectId: 'PROJECT_ID',
+    storageBucket: 'PROJECT_ID.appspot.com',
+    messagingSenderId: 'SENDER_ID',
+    appId: 'APP_ID',
+  },
+};
+
+src/environments/environment.prod.ts
+export const environment = {
+  production: true,
+  firebase: {
+    apiKey: 'API_KEY',
+    authDomain: 'PROJECT_ID.firebaseapp.com',
+    projectId: 'PROJECT_ID',
+    storageBucket: 'PROJECT_ID.appspot.com',
+    messagingSenderId: 'SENDER_ID',
+    appId: 'APP_ID',
+  },
+};
+
+4. Configure Firebase in AppModule
+src/app/app.module.ts
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { environment } from '../environments/environment';
+
+@NgModule({
+  imports: [
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+  ],
+})
+export class AppModule {}
+
+5. Use Firestore
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+
+constructor(private afs: AngularFirestore) {}
+
+this.afs.collection('test').add({ ok: true });
+
+6. Run App
+ng serve

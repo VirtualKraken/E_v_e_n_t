@@ -1,16 +1,27 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { FirebaseService } from '../../../service/firebase.service';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrl: './home.component.scss',
-    standalone: false
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.scss',
+  standalone: false,
 })
 export class HomeComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private fs: FirebaseService) {}
 
   openEventDetails() {
     this.router.navigate(['/event-details']);
   }
+
+  ngOnInit(): void {
+    console.log(this.fs.item$);
+    this.fs.item$.subscribe((data) => {
+      console.log(data);
+    });   
+    
+ 
+}
+
 }

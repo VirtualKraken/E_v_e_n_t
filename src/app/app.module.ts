@@ -17,24 +17,28 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { EventDetailsComponent } from './pages/event-details/event-details.component';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { EventInfoComponent } from './hoc/event-info/event-info.component';
 import { EventCrewComponent } from './hoc/event-crew/event-crew.component';
 import { EventAssetsComponent } from './hoc/event-assets/event-assets.component';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatSelectModule} from '@angular/material/select';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatCardModule} from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatMenuModule } from '@angular/material/menu';
 import { EvolveSideNavContentComponent } from './components/evolve-side-nav-content/evolve-side-nav-content.component';
 import { LoginComponent } from './pages/login/login.component';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { EventQuoteComponent } from './hoc/event-quote/event-quote.component';
-import {MatRippleModule} from '@angular/material/core';
+import { MatRippleModule } from '@angular/material/core';
+// Firebase (MODERN, NOT compat)
+import { environment } from '../environments/environment';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -47,7 +51,7 @@ import {MatRippleModule} from '@angular/material/core';
     EventAssetsComponent,
     EvolveSideNavContentComponent,
     LoginComponent,
-    EventQuoteComponent
+    EventQuoteComponent,
     // other components go here
   ],
   imports: [
@@ -73,9 +77,13 @@ import {MatRippleModule} from '@angular/material/core';
     MatChipsModule,
     MatMenuModule,
     MatSlideToggleModule,
-    MatRippleModule
+    MatRippleModule,
   ],
   bootstrap: [AppComponent],
-  providers:[ provideNativeDateAdapter()]
+  providers: [
+    provideNativeDateAdapter(),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore()),
+  ],
 })
 export class AppModule {}
