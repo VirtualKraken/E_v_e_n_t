@@ -20,16 +20,14 @@
     </mat-error>
   </mat-form-field>
 
-
-  <!-- Quoted Amount -->
-  <mat-form-field appearance="outline">
-    <mat-label>Quoted Amount</mat-label>
-    <input
-      matInput
-      type="number"
-      formControlName="quotedAmount" />
-    <mat-error *ngIf="form.get('quotedAmount')?.hasError('required')">
-      Amount is required
+<mat-form-field appearance="outline">
+    <mat-label>Phone Number</mat-label>
+    <input matInput formControlName="phone" type="tel" placeholder="10 digit"/>
+    <mat-error *ngIf="form.get('phone')?.hasError('required')">
+      Phone number is required
+    </mat-error>
+    <mat-error *ngIf="form.get('phone')?.hasError('pattern')">
+      Enter a valid 10-digit number
     </mat-error>
   </mat-form-field>
 

@@ -5,7 +5,7 @@
       Info
     </ng-template>
 
-    <event-info></event-info>
+    <event-info (saveTriggered)="handleInfoSave($event)" [initialData]="eventData?.event_info"></event-info>
   </mat-tab>
 
   <mat-tab>

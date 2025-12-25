@@ -1,10 +1,10 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
   width: 100%;
       padding: 16px;
     box-sizing: border-box;
+    gap: 16px;
 }
 
 .actions {
