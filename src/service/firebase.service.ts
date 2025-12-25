@@ -7,9 +7,11 @@ import {
   addDoc,
   doc,
   updateDoc,
-  getDoc
+  getDoc,
+  orderBy,
+  collectionData,
 } from '@angular/fire/firestore';
-import { from, Observable,map } from 'rxjs';
+import { from, Observable, map } from 'rxjs';
 import { EvolveEvent } from '../app/types/quotes';
 
 @Injectable({ providedIn: 'root' })
@@ -19,8 +21,8 @@ export class FirebaseService {
   getUsers$(): Observable<any[]> {
     const q = query(collection(this.firestore, 'users'));
     return from(
-      getDocs(q).then(snap =>
-        snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      getDocs(q).then((snap) =>
+        snap.docs.map((d) => ({ id: d.id, ...d.data() }))
       )
     );
   }
@@ -37,7 +39,7 @@ export class FirebaseService {
 
     // getDoc returns a Promise, convert to Observable
     return from(getDoc(docRef)).pipe(
-      map(snapshot => {
+      map((snapshot) => {
         if (snapshot.exists()) {
           // Spread the data and include the ID just in case you need it later
           return { id: snapshot.id, ...snapshot.data() } as EvolveEvent;
@@ -67,11 +69,24 @@ export class FirebaseService {
    * Updates specific fields (Info, Crew, Assets) without overwriting the rest.
    * Usage: updateEvent('event_123', { event_crew: [...] })
    */
-  updateEvent(eventId: string, dataToUpdate: Partial<EvolveEvent>): Observable<void> {
+  updateEvent(
+    eventId: string,
+    dataToUpdate: Partial<EvolveEvent>
+  ): Observable<void> {
     const docRef = doc(this.firestore, 'events', eventId);
 
     // updateDoc wraps in a Promise, so we convert it to Observable using 'from'
     return from(updateDoc(docRef, dataToUpdate));
   }
 
+  /**
+   * 4. GET ALL EVENTS (List View)
+   * Fetches all events
+   */
+  getEventsList(): Observable<EvolveEvent[]> {
+    const eventsRef = collection(this.firestore, 'events');
+    const q = query(eventsRef, orderBy('event_info.function_date', 'desc'));
+
+    return collectionData(q, { idField: 'id' }) as Observable<EvolveEvent[]>;
+  }
 }

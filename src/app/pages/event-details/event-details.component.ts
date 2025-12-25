@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from '../../../service/firebase.service';
 import { EventInfo, EvolveEvent } from '../../types/quotes';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-event-details',
@@ -13,14 +14,32 @@ export class EventDetailsComponent {
   currentEventId: string | null = null;
   eventData: EvolveEvent | null = null;
 
-  constructor(private firebaseService: FirebaseService) {}
+  constructor(
+    private firebaseService: FirebaseService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location
+  ) {
+    const nav = this.router.getCurrentNavigation();
+    if (nav?.extras.state) {
+      this.eventData = nav.extras.state as EvolveEvent;
+      this.currentEventId = this.eventData.id as string;
+      console.log(this.eventData);
 
-  ngOnInit(): void {
-    this.fetchEvent();
+    }
   }
 
-  fetchEvent() {
-    this.firebaseService.getEvent('U0cqdDIevhDemGb36DMn').subscribe((event) => {
+  ngOnInit(): void {
+    if (!this.eventData) {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) {
+        this.fetchEvent(id);
+      }
+    }
+  }
+
+  fetchEvent(id: string) {
+    this.firebaseService.getEvent(id).subscribe((event) => {
       if (event) {
         this.eventData = event;
         console.log(event); // Works perfectly!
@@ -30,6 +49,8 @@ export class EventDetailsComponent {
 
   // 1. Handle "Event Info" Save
   async handleInfoSave(data: EventInfo) {
+    console.log(data);
+
     try {
       if (!this.currentEventId) {
         // --- CREATE (First Save) ---
@@ -37,7 +58,7 @@ export class EventDetailsComponent {
         this.currentEventId = await this.firebaseService.createEvent({
           event_info: data,
         });
-
+this.location.replaceState(`/event-details/${this.currentEventId}`);
         console.log('Created new Event!', this.currentEventId);
         // Add a Toast/Snackbar notification here: "Event Created"
       } else {

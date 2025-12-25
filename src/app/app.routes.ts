@@ -14,7 +14,7 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'event-details',
+    path: 'event-details/:id',
     component: EventDetailsComponent,
   },
   { path: '**', redirectTo: 'login' },
