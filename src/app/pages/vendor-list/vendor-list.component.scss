@@ -1,0 +1,75 @@
+.container {
+  padding: 20px;
+   .fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+  }
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  .filter-field {
+    margin-bottom: -1.25em; /* Fix standard material bottom spacing gap */
+    width: 100%;
+  }
+}
+
+/* Grid Layout for Cards */
+.vendor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.vendor-card {
+  border-radius: 12px;
+
+  .vendor-avatar {
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+  }
+
+  mat-card-content {
+    margin-top: 12px;
+
+    p {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0;
+      color: rgba(0,0,0,0.7);
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    .notes {
+      font-style: italic;
+      color: rgba(0,0,0,0.54);
+      margin-top: 12px;
+    }
+  }
+}
+
+/* Modal Form Styling */
+.form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 300px;
+  padding-top: 8px;
+}

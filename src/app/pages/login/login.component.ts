@@ -22,10 +22,7 @@ export class LoginComponent {
     private ts: ThemeServiceService
   ) {
     this.loginForm = this.fb.group({
-      username: [
-        '',
-        [Validators.required],
-      ],
+      username: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
@@ -38,23 +35,24 @@ export class LoginComponent {
     return this.loginForm.get('password');
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      console.log('Login Details:', this.loginForm.value);
-      this.isLoading = true;
+onSubmit() {
+  if (this.loginForm.valid) {
+    this.isLoading = true;
+    const { username, password } = this.loginForm.value;
 
-      this.authService
-        .login(this.loginForm.value.username, this.loginForm.value.password)
-        .catch((err) => {
-          // Show simple messages, not technical codes
-          this.ts.showNotification(err.message);
-          // this.errorMessage = 'Incorrect Phone or Passcode.';
-          this.isLoading = false;
-          this.router.navigate(['/home']);
-        });
-    } else {
-      console.log('Form is invalid');
-      this.loginForm.markAllAsTouched();
-    }
+    this.authService.login(username, password)
+      .then((res) => {
+        // SUCCESS: Set user and navigate
+        localStorage.setItem('eeUser', username.toString());
+        this.router.navigate(['/home']);
+      })
+      .catch((err) => {
+        // ERROR: Show notification and stay on page
+        this.ts.showNotification('Incorrect Phone or Passcode'); // or err.message
+        this.isLoading = false;
+      });
+  } else {
+    this.loginForm.markAllAsTouched();
   }
+}
 }

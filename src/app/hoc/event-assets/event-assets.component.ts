@@ -31,6 +31,8 @@ export class EventAssetsComponent implements OnInit, OnChanges {
 
   @ViewChild('addNameInput') addNameInput!: ElementRef;
 
+  user=localStorage.getItem('eeUser');
+  // Data
   assets: Asset[] = [];
   sharedWith: string = 'none';
 

@@ -9,6 +9,7 @@ import { AuthService } from '../../../service/auth.service';
 })
 export class EvolveSideNavContentComponent {
   @Input() drawer: any;
+  user=localStorage.getItem('eeUser');
   constructor(private themeService: ThemeServiceService,private auth: AuthService) {}
 
   get isDark(): boolean {

@@ -22,8 +22,10 @@
     </div>
   </div>
 
-  <button mat-fab color="primary" class="fab" (click)="openEventDetails()">
-    <mat-icon>add</mat-icon>
-  </button>
+  @if(user==='evolve'){
+    <button mat-fab color="primary" class="fab" (click)="openEventDetails()">
+      <mat-icon>add</mat-icon>
+    </button>
+  }
 
 </div>

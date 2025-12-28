@@ -1,6 +1,6 @@
-<h3>EVENT DETAILS</h3>
 <mat-tab-group>
-  <mat-tab>
+
+  <mat-tab *ngIf="user==='evolve'">
     <ng-template mat-tab-label>
       <mat-icon>info</mat-icon>
       Info
@@ -9,7 +9,7 @@
     <event-info (saveTriggered)="handleEventSave($event,'event_info')" [initialData]="eventData?.event_info"></event-info>
   </mat-tab>
 
-  <mat-tab>
+  <mat-tab *ngIf="user==='evolve'">
     <ng-template mat-tab-label>
       <mat-icon>group</mat-icon>
       Crew
@@ -24,7 +24,8 @@
     </ng-template>
     <event-assets (saveTriggered)="handleEventSave($event,'event_asset_details')" [initialData]="eventData?.event_asset_details" ></event-assets>
   </mat-tab>
-  <mat-tab>
+
+  <mat-tab *ngIf="user==='evolve'">
     <ng-template mat-tab-label>
       <mat-icon>request_quote</mat-icon>
       Quote

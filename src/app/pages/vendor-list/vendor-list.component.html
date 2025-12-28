@@ -1,0 +1,103 @@
+<div class="container">
+  <div class="header-actions">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Filter by Service</mat-label>
+      <mat-select [(ngModel)]="serviceFilter" (selectionChange)="applyFilter()">
+        <mat-option value="">All Services</mat-option>
+        <mat-option *ngFor="let service of availableServices" [value]="service">
+          {{ service }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- <button mat-flat-button color="primary" (click)="openAddModal()">
+      <mat-icon>add</mat-icon> Add Vendor
+    </button> -->
+  </div>
+
+  <div class="vendor-grid">
+    <mat-card *ngFor="let vendor of filteredVendors" class="vendor-card">
+      <mat-card-header>
+        <div mat-card-avatar class="vendor-avatar">
+          <mat-icon>storefront</mat-icon>
+        </div>
+        <mat-card-title>{{ vendor.name }}</mat-card-title>
+        <mat-card-subtitle>{{ vendor.service }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p *ngIf="vendor.location">
+          <mat-icon inline>location_on</mat-icon> {{ vendor.location }}
+        </p>
+        <p *ngIf="vendor.phone">
+          <mat-icon inline>phone</mat-icon> {{ vendor.phone }}
+        </p>
+        <p *ngIf="vendor.notes" class="notes">{{ vendor.notes }}</p>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-button color="primary" (click)="openEditModal(vendor)">
+          EDIT
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  <button mat-fab color="primary" class="fab" (click)="openAddModal()">
+  <mat-icon>add</mat-icon>
+</button>
+
+</div>
+
+<ng-template #vendorModal>
+  <h2 mat-dialog-title>{{ isEditMode ? "Edit Vendor" : "Add New Vendor" }}</h2>
+
+  <mat-dialog-content [formGroup]="vendorForm">
+    <div class="form-column">
+      <mat-form-field appearance="outline">
+        <mat-label>Vendor Name</mat-label>
+        <input
+          matInput
+          formControlName="name"
+          placeholder="e.g. ABC Catering"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Service Type</mat-label>
+        <input
+          matInput
+          formControlName="service"
+          placeholder="e.g. Decor, Audio, Food"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Location</mat-label>
+        <input matInput formControlName="location" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Notes</mat-label>
+        <textarea matInput formControlName="notes" rows="3"></textarea>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="saveVendor()"
+      [disabled]="vendorForm.invalid"
+    >
+      {{ isEditMode ? "Update" : "Save" }}
+    </button>
+  </mat-dialog-actions>
+</ng-template>
+

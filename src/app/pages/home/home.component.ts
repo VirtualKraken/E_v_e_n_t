@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../../service/firebase.service';
 import { EvolveEvent } from '../../types/quotes';
+import { AuthService } from '../../../service/auth.service';
 
 // Interface for your UI grouping
 interface EventGroup {
@@ -16,19 +17,25 @@ interface EventGroup {
   standalone: false,
 })
 export class HomeComponent implements OnInit {
-
   // This is what the HTML will iterate over
   groupedEvents: EventGroup[] = [];
   loading = true;
-
+  user: any;
   constructor(
     private router: Router,
-    private fs: FirebaseService
-  ) {}
+    private fs: FirebaseService,
+    private auth: AuthService
+  ) {
+  }
 
   ngOnInit(): void {
+    this.user=localStorage.getItem('eeUser');
     // Fetch all events
-    this.fs.getEventsList().subscribe((events) => {
+    const filters = {
+      user: this.user,
+    };
+
+    this.fs.getEventsList(filters).subscribe((events) => {
       this.groupedEvents = this.groupEventsByMonth(events);
       this.loading = false;
     });
@@ -48,17 +55,22 @@ export class HomeComponent implements OnInit {
   private groupEventsByMonth(events: EvolveEvent[]): EventGroup[] {
     // 1. Sort events by Date (Newest first)
     const sortedEvents = events.sort((a, b) => {
-      return new Date(b.event_info.function_date).getTime() -
-             new Date(a.event_info.function_date).getTime();
+      return (
+        new Date(b.event_info.function_date).getTime() -
+        new Date(a.event_info.function_date).getTime()
+      );
     });
 
     const groups: { [key: string]: EvolveEvent[] } = {};
 
     // 2. Group them
-    sortedEvents.forEach(event => {
+    sortedEvents.forEach((event) => {
       const date = new Date(event.event_info.function_date);
       // Create key like "December 2025"
-      const monthKey = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      const monthKey = date.toLocaleDateString('en-US', {
+        month: 'long',
+        year: 'numeric',
+      });
 
       if (!groups[monthKey]) {
         groups[monthKey] = [];
@@ -67,9 +79,9 @@ export class HomeComponent implements OnInit {
     });
 
     // 3. Convert Object to Array for *ngFor
-    return Object.keys(groups).map(key => ({
+    return Object.keys(groups).map((key) => ({
       month: key,
-      events: groups[key]
+      events: groups[key],
     }));
   }
 }

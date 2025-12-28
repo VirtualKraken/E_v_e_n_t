@@ -22,6 +22,7 @@ import { ThemeServiceService } from '../../../service/theme-service.service';
 export class EventDetailsComponent {
   currentEventId: string | null = null;
   eventData: EvolveEvent | null = null;
+  user = localStorage.getItem('eeUser');
 
   constructor(
     private firebaseService: FirebaseService,
@@ -36,7 +37,7 @@ export class EventDetailsComponent {
     if (id) {
       this.currentEventId = id;
       this.fetchEvent(id);
-    }else{
+    } else {
       this.currentEventId = null;
       this.eventData = null;
     }

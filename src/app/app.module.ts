@@ -41,6 +41,7 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { VendorListComponent } from './pages/vendor-list/vendor-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,6 +54,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     EvolveSideNavContentComponent,
     LoginComponent,
     EventQuoteComponent,
+    VendorListComponent
     // other components go here
   ],
   imports: [

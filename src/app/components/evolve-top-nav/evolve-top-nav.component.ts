@@ -8,4 +8,5 @@ import { Component, Output, EventEmitter } from '@angular/core';
 })
 export class EvolveTopNavComponent {
   @Output() toggleSidenav = new EventEmitter<void>();
+  user=localStorage.getItem('eeUser');
 }

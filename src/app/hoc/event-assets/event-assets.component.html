@@ -1,5 +1,5 @@
 <div class="asset-management-container">
-  <h4 class="share-title">
+  <h4 class="share-title" *ngIf="user === 'evolve'">
     Share with production Team
     <mat-form-field appearance="outline">
       <select
@@ -98,23 +98,28 @@
     </div>
 
     <div class="asset-row add-row">
-      <div class="col-item edit-mode">
-        <input
-          #addNameInput
-          type="text"
-          class="inline-input"
-          [(ngModel)]="newAssetName"
-          (keyup.enter)="canAddAsset() && addNewAsset()"
-          placeholder="Add new item..."
-        />
-        <input
-          type="number"
-          class="inline-input qty-input"
-          [(ngModel)]="newAssetQuantity"
-          (keyup.enter)="canAddAsset() && addNewAsset()"
-          placeholder="Qty"
-        />
-      </div>
+        <mat-form-field class="example-full-width" appearance="outline">
+          <input
+            matInput
+            #addNameInput
+            type="text"
+            class="inline-input"
+            [(ngModel)]="newAssetName"
+            (keyup.enter)="canAddAsset() && addNewAsset()"
+            placeholder="Add new item..."
+          />
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="outline">
+          <input
+          matInput
+            type="number"
+            class="inline-input qty-input"
+            [(ngModel)]="newAssetQuantity"
+            (keyup.enter)="canAddAsset() && addNewAsset()"
+            placeholder="Qty"
+          />
+        </mat-form-field>
 
       <div class="col-actions add-actions">
         <button
@@ -131,6 +136,9 @@
 
   <div class="info-note">
     <mat-icon>info</mat-icon>
-    <span>Items can only be edited before being taken out. Press Enter to quickly add items.</span>
+    <span
+      >Items can only be edited before being taken out. Press Enter to quickly
+      add items.</span
+    >
   </div>
 </div>

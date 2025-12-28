@@ -11,6 +11,7 @@ import {
 import { HomeComponent } from './pages/home/home.component';
 import { EventDetailsComponent } from './pages/event-details/event-details.component';
 import { LoginComponent } from './pages/login/login.component';
+import { VendorListComponent } from './pages/vendor-list/vendor-list.component';
 
 // 2. Define the Rules
 // "If not logged in, go to Login"
@@ -42,6 +43,12 @@ export const routes: Routes = [
   {
     path: 'event-details',
     component: EventDetailsComponent,
+    ...canActivate(redirectUnauthorizedToLogin),
+  },
+
+  {
+    path: 'vendor-list',
+    component: VendorListComponent,
     ...canActivate(redirectUnauthorizedToLogin),
   },
 

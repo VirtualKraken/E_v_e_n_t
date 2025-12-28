@@ -1,7 +1,39 @@
-mat-card,mat-nav-list{
-  margin: 10px;
+$icon-size: 24px;
+mat-card {
+  margin: 16px;
+  border-radius: 12px;
+  overflow: hidden;
 }
+
+mat-nav-list {
+  padding: 0 8px;
+}
+
+mat-nav-list a[mat-list-item] {
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+
+/* This wrapper handles the internal alignment */
+.menu-content {
+  display: flex;
+  justify-content: flex-start; /* Pushes icon to the right */
+  align-items: center;
+  gap: 1rem; /* Perfectly centers icon vertically */
+  width: 100%; /* Ensures it takes full width of the item */
+}
+
+.menu-content mat-icon {
+  margin-left: 8px;
+  font-size: var($icon-size);
+  width: var($icon-size);
+  height: var($icon-size);
+  /* Fix for some versions of Material where icons have line-height issues */
+  line-height: 20px;
+}
+
 .active-link {
-  background-color: rgba(0, 0, 0, 0.04);
-  // border-left: 4px solid #3f51b5;
+  // background-color: rgba(63, 81, 181, 0.12);
+  // color: #3f51b5;
+  font-weight: 500;
 }
