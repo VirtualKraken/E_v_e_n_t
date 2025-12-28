@@ -1,9 +1,13 @@
 <div class="asset-management-container">
-  <!-- <h2>Asset Tracking</h2> -->
   <h4 class="share-title">
     Share with production Team
     <mat-form-field appearance="outline">
-      <select matNativeControl required>
+      <select
+        matNativeControl
+        required
+        [(ngModel)]="sharedWith"
+        (change)="onSharedWithChange()"
+      >
         <option value="none">None</option>
         <option value="sk">SK</option>
         <option value="rythm">Rythm</option>
@@ -11,27 +15,6 @@
     </mat-form-field>
   </h4>
 
-  <!-- Summary Stats -->
-  <!-- <div class="stats-bar" *ngIf="assets.length > 0">
-    <div class="stat">
-      <span class="stat-label">Total:</span>
-      <span class="stat-value">{{ getTotalAssets() }}</span>
-    </div>
-    <div class="stat out">
-      <span class="stat-label">Out:</span>
-      <span class="stat-value">{{ getTakenOutCount() }}</span>
-    </div>
-    <div class="stat back">
-      <span class="stat-label">Back:</span>
-      <span class="stat-value">{{ getBroughtBackCount() }}</span>
-    </div>
-    <div class="stat pending" [class.warning]="getPendingReturnCount() > 0">
-      <span class="stat-label">Pending:</span>
-      <span class="stat-value">{{ getPendingReturnCount() }}</span>
-    </div>
-  </div> -->
-
-  <!-- Asset List with Checkboxes -->
   <div class="asset-list">
     <div class="list-header">
       <div class="col-item">Item (Qty)</div>
@@ -40,14 +23,12 @@
       <div class="col-actions">Actions</div>
     </div>
 
-    <!-- Existing Assets -->
     <div
       *ngFor="let asset of assets"
       class="asset-row"
       [class.taken-out]="asset.takenOut && !asset.broughtBack"
       [class.completed]="asset.broughtBack"
     >
-      <!-- Normal View -->
       <ng-container *ngIf="!editMode[asset.id]">
         <div class="col-item">
           <strong>{{ asset.name }}</strong>
@@ -62,9 +43,6 @@
             class="large-checkbox"
           >
           </mat-checkbox>
-          <span class="time" *ngIf="asset.takenOutTime">
-            {{ asset.takenOutTime | date : "HH:mm" }}
-          </span>
         </div>
 
         <div class="col-checkbox">
@@ -76,9 +54,6 @@
             class="large-checkbox"
           >
           </mat-checkbox>
-          <span class="time" *ngIf="asset.broughtBackTime">
-            {{ asset.broughtBackTime | date : "HH:mm" }}
-          </span>
         </div>
 
         <div class="col-actions">
@@ -92,7 +67,6 @@
         </div>
       </ng-container>
 
-      <!-- Edit View -->
       <ng-container *ngIf="editMode[asset.id]">
         <div class="col-item edit-mode">
           <input
@@ -123,7 +97,6 @@
       </ng-container>
     </div>
 
-    <!-- Add New Row (Always at the end) -->
     <div class="asset-row add-row">
       <div class="col-item edit-mode">
         <input
@@ -156,12 +129,8 @@
     </div>
   </div>
 
-  <!-- Info Note -->
   <div class="info-note">
     <mat-icon>info</mat-icon>
-    <span
-      >Items can only be edited before being taken out. Press Enter to quickly
-      add items.</span
-    >
+    <span>Items can only be edited before being taken out. Press Enter to quickly add items.</span>
   </div>
 </div>

@@ -1,4 +1,15 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  Output,
+  EventEmitter,
+  Input,
+  OnInit,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
+import { AssetDetails } from '../../types/quotes';
 
 interface Asset {
   id: string;
@@ -6,18 +17,24 @@ interface Asset {
   quantity: number;
   takenOut: boolean;
   broughtBack: boolean;
-  takenOutTime?: Date;
-  broughtBackTime?: Date;
 }
 
 @Component({
-    selector: 'event-assets',
-    templateUrl: './event-assets.component.html',
-    styleUrl: './event-assets.component.scss',
-    standalone: false
+  selector: 'event-assets',
+  templateUrl: './event-assets.component.html',
+  styleUrl: './event-assets.component.scss',
+  standalone: false
 })
-export class EventAssetsComponent {
+export class EventAssetsComponent implements OnInit, OnChanges {
+  @Input() initialData: AssetDetails | undefined;
+  @Output() saveTriggered = new EventEmitter<AssetDetails>();
+
+  @ViewChild('addNameInput') addNameInput!: ElementRef;
+
   assets: Asset[] = [];
+  sharedWith: string = 'none';
+
+  // UI State
   editMode: { [key: string]: boolean } = {};
   editForms: { [key: string]: { name: string; quantity: number } } = {};
 
@@ -25,32 +42,68 @@ export class EventAssetsComponent {
   newAssetName: string = '';
   newAssetQuantity: number = 1;
 
-  @ViewChild('addNameInput') addNameInput!: ElementRef;
+  ngOnInit() {
+    this.loadData();
+  }
 
-  toggleTakenOut(asset: Asset) {
-    // ngModel already toggled the value, just handle side effects
-    if (asset.takenOut) {
-      asset.takenOutTime = new Date();
-      asset.broughtBack = false;
-      asset.broughtBackTime = undefined;
-    } else {
-      asset.takenOutTime = undefined;
+  // Listen for async data updates or lazy load init
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['initialData'] && !changes['initialData'].firstChange) {
+      this.loadData();
     }
   }
 
+  loadData() {
+    if (this.initialData) {
+      this.sharedWith = this.initialData.shared_with || 'none';
+
+      if (this.initialData.items && Array.isArray(this.initialData.items)) {
+        // Map incoming data to local Asset interface ensuring all fields exist
+        this.assets = this.initialData.items.map((item: any) => ({
+          id: item.id || this.generateId(),
+          name: item.name || item.item_name, // fallback if naming differs
+          quantity: item.quantity || item.item_count || 0,
+          takenOut: item.takenOut || false,
+          broughtBack: item.broughtBack || false
+        }));
+      } else {
+        this.assets = [];
+      }
+    }
+  }
+
+  /**
+   * Centralized emitter.
+   * Called whenever data is modified to sync with parent.
+   */
+  emitChanges() {
+    // Cast to any or map strictly to AssetDetails structure required by parent
+    const payload: any = {
+      shared_with: this.sharedWith,
+      items: this.assets
+    };
+    this.saveTriggered.emit(payload);
+  }
+
+  onSharedWithChange() {
+    this.emitChanges();
+  }
+
+  toggleTakenOut(asset: Asset) {
+    // If unchecked (brought back in), reset the brought back status
+    if (asset.takenOut) {
+      asset.broughtBack = false;
+    }
+    this.emitChanges();
+  }
+
   toggleBroughtBack(asset: Asset) {
-    // ngModel already toggled the value
     if (!asset.takenOut) {
       // If "Out" is not checked, prevent checking "Back"
-      asset.broughtBack = false;
-      return;
+      setTimeout(() => (asset.broughtBack = false), 0);
+      return; // Do not emit, invalid state
     }
-
-    if (asset.broughtBack) {
-      asset.broughtBackTime = new Date();
-    } else {
-      asset.broughtBackTime = undefined;
-    }
+    this.emitChanges();
   }
 
   startEdit(asset: Asset) {
@@ -74,15 +127,18 @@ export class EventAssetsComponent {
         asset.quantity = form.quantity;
         this.editMode[asset.id] = false;
         delete this.editForms[asset.id];
+
+        this.emitChanges(); // Trigger Save
       }
     }
   }
 
   deleteAsset(assetId: string) {
     if (confirm('Delete this item?')) {
-      const index = this.assets.findIndex(a => a.id === assetId);
+      const index = this.assets.findIndex((a) => a.id === assetId);
       if (index !== -1) {
         this.assets.splice(index, 1);
+        this.emitChanges(); // Trigger Save
       }
     }
   }
@@ -98,6 +154,7 @@ export class EventAssetsComponent {
       };
 
       this.assets.push(newAsset);
+      this.emitChanges(); // Trigger Save
 
       // Reset form
       this.newAssetName = '';
@@ -116,20 +173,9 @@ export class EventAssetsComponent {
     return this.newAssetName.trim().length > 0 && this.newAssetQuantity > 0;
   }
 
+  // Statistics Helpers (Optional for UI)
   getTotalAssets(): number {
     return this.assets.reduce((sum, asset) => sum + asset.quantity, 0);
-  }
-
-  getTakenOutCount(): number {
-    return this.assets.filter(asset => asset.takenOut).length;
-  }
-
-  getBroughtBackCount(): number {
-    return this.assets.filter(asset => asset.broughtBack).length;
-  }
-
-  getPendingReturnCount(): number {
-    return this.assets.filter(asset => asset.takenOut && !asset.broughtBack).length;
   }
 
   private generateId(): string {

@@ -30,21 +30,27 @@ export type EvolveEvent = {
   id?: string;
   event_info: EventInfo;
   event_crew: EventCrew[];
-  event_assets: EventAsset[];
+  event_asset_details: AssetDetails;
   event_quote: any;
 };
+
 export type EventInfo = {
   client_name: string;
   function_date: string;
   venue: string;
   location?: string;
-  phone:string;
+  phone: string;
+  notes:string;
 };
 export type EventCrew = {
   service_type: string;
   person_name: string;
   phone: string;
   amount: number;
+};
+export type AssetDetails = {
+  shared_with: string;
+  items: EventAsset[];
 };
 export type EventAsset = {
   item_name: string;

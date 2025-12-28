@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from '../../../service/firebase.service';
 import {
+  AssetDetails,
   EventAsset,
   EventCrew,
   EventInfo,
@@ -52,7 +53,7 @@ export class EventDetailsComponent {
 
   // 1. Handle "Event Info" Save
   async handleEventSave(
-    data: EventInfo | EventCrew[] | EventAsset[] | EventQuote,
+    data: EventInfo | EventCrew[] | AssetDetails | EventQuote,
     eventdetailsType: string
   ) {
     console.log(data);

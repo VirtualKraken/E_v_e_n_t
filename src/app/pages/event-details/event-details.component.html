@@ -22,7 +22,7 @@
       <mat-icon>local_florist</mat-icon>
       Assets
     </ng-template>
-    <event-assets></event-assets>
+    <event-assets (saveTriggered)="handleEventSave($event,'event_asset_details')" [initialData]="eventData?.event_asset_details" ></event-assets>
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>

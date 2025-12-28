@@ -30,6 +30,7 @@ export class EventInfoComponent implements OnChanges {
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       venue: ['', Validators.required],
       location: [''],
+      notes: [''],
     });
 
     // 2. Default State: Disable the form immediately
@@ -93,6 +94,7 @@ export class EventInfoComponent implements OnChanges {
       function_date: formVal.date.toISOString(),
       venue: formVal.venue,
       location: formVal.location || '',
+      notes: formVal.notes || '',
     };
 
     // 1. Emit the data to the parent
