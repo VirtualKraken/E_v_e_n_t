@@ -11,16 +11,16 @@ export class AuthService {
   private router = inject(Router);
 
   // Define a consistent domain for your "fake" emails
-  private readonly DOMAIN = '@connect.local';
+  private readonly DOMAIN = '@evolve.events';
 
-  // HELPER: Convert Phone to Email
-  private formatEmail(phone: string): string {
-    return `${phone}${this.DOMAIN}`;
+  // HELPER: Convert username to Email
+  private formatEmail(username: string): string {
+    return `${username}${this.DOMAIN}`;
   }
 
-  // LOGIN: Worker passes Phone & Password
-  login(phone: string, pass: string) {
-    const email = this.formatEmail(phone); // Convert 9876 -> 9876@connect.local
+  // LOGIN: Worker passes username & Password
+  login(username: string, pass: string) {
+    const email = this.formatEmail(username); // Convert 9876 -> 9876@connect.local
 
     return signInWithEmailAndPassword(this.auth, email, pass)
       .then(() => {

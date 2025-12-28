@@ -22,16 +22,16 @@ export class LoginComponent {
     private ts: ThemeServiceService
   ) {
     this.loginForm = this.fb.group({
-      phoneNumber: [
+      username: [
         '',
-        [Validators.required, Validators.pattern(/^[0-9]{10}$/)],
+        [Validators.required],
       ],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
-  get phoneNumber() {
-    return this.loginForm.get('phoneNumber');
+  get username() {
+    return this.loginForm.get('username');
   }
 
   get password() {
@@ -44,7 +44,7 @@ export class LoginComponent {
       this.isLoading = true;
 
       this.authService
-        .login(this.loginForm.value.phoneNumber, this.loginForm.value.password)
+        .login(this.loginForm.value.username, this.loginForm.value.password)
         .catch((err) => {
           // Show simple messages, not technical codes
           this.ts.showNotification(err.message);
