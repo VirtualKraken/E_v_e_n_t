@@ -7,11 +7,11 @@ import { FirebaseService, Vendor } from '../../../service/firebase.service';
   selector: 'app-vendor-list',
   templateUrl: './vendor-list.component.html',
   styleUrls: ['./vendor-list.component.scss'],
-  standalone:false
+  standalone: false
 })
 export class VendorListComponent implements OnInit {
   // Services
-  private firebaseService = inject(FirebaseService); // Injected your main service
+  private firebaseService = inject(FirebaseService);
   private dialog = inject(MatDialog);
   private fb = inject(FormBuilder);
 
@@ -41,7 +41,6 @@ export class VendorListComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Call the new method from FirebaseService
     this.firebaseService.getVendors().subscribe(vendors => {
       this.allVendors = vendors;
       this.extractServices();
@@ -53,7 +52,6 @@ export class VendorListComponent implements OnInit {
 
   extractServices() {
     const services = this.allVendors.map(v => v.service);
-    // clean up empty services and get unique values
     this.availableServices = [...new Set(services.filter(s => s))];
   }
 
@@ -100,6 +98,19 @@ export class VendorListComponent implements OnInit {
       this.dialog.closeAll();
     } catch (error) {
       console.error('Error saving vendor:', error);
+    }
+  }
+
+  // ✅ ADDED DELETE METHOD HERE
+  async deleteVendor(vendor: Vendor) {
+    if (confirm(`Are you sure you want to delete ${vendor.name}?`)) {
+      try {
+        if (vendor.id) {
+          await this.firebaseService.deleteVendor(vendor.id);
+        }
+      } catch (error) {
+        console.error('Error deleting vendor:', error);
+      }
     }
   }
 }

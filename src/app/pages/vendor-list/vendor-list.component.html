@@ -9,10 +9,6 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-
-    <!-- <button mat-flat-button color="primary" (click)="openAddModal()">
-      <mat-icon>add</mat-icon> Add Vendor
-    </button> -->
   </div>
 
   <div class="vendor-grid">
@@ -36,16 +32,19 @@
       </mat-card-content>
 
       <mat-card-actions align="end">
+        <button mat-button color="warn" (click)="deleteVendor(vendor)">
+          DELETE
+        </button>
         <button mat-button color="primary" (click)="openEditModal(vendor)">
           EDIT
         </button>
       </mat-card-actions>
     </mat-card>
   </div>
-  <button mat-fab color="primary" class="fab" (click)="openAddModal()">
-  <mat-icon>add</mat-icon>
-</button>
 
+  <button mat-fab color="primary" class="fab" (click)="openAddModal()">
+    <mat-icon>add</mat-icon>
+  </button>
 </div>
 
 <ng-template #vendorModal>
@@ -55,20 +54,12 @@
     <div class="form-column">
       <mat-form-field appearance="outline">
         <mat-label>Vendor Name</mat-label>
-        <input
-          matInput
-          formControlName="name"
-          placeholder="e.g. ABC Catering"
-        />
+        <input matInput formControlName="name" placeholder="e.g. ABC Catering" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Service Type</mat-label>
-        <input
-          matInput
-          formControlName="service"
-          placeholder="e.g. Decor, Audio, Food"
-        />
+        <input matInput formControlName="service" placeholder="e.g. Decor, Audio, Food" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -90,14 +81,8 @@
 
   <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Cancel</button>
-    <button
-      mat-flat-button
-      color="primary"
-      (click)="saveVendor()"
-      [disabled]="vendorForm.invalid"
-    >
+    <button mat-flat-button color="primary" (click)="saveVendor()" [disabled]="vendorForm.invalid">
       {{ isEditMode ? "Update" : "Save" }}
     </button>
   </mat-dialog-actions>
 </ng-template>
-
