@@ -37,9 +37,7 @@ export class HomeComponent implements OnInit {
   openEventDetails(evolveEvent?: EvolveEvent) {
     if (evolveEvent) {
       // Edit Mode
-      this.router.navigate(['/event-details', evolveEvent.id], {
-        state: evolveEvent,
-      });
+      this.router.navigate(['/event-details', evolveEvent.id]);
     } else {
       // Create Mode
       this.router.navigate(['/event-details']);

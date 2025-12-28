@@ -1,7 +1,13 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from '../../../service/firebase.service';
-import { EventInfo, EvolveEvent } from '../../types/quotes';
+import {
+  EventAsset,
+  EventCrew,
+  EventInfo,
+  EventQuote,
+  EvolveEvent,
+} from '../../types/quotes';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ThemeServiceService } from '../../../service/theme-service.service';
@@ -22,21 +28,16 @@ export class EventDetailsComponent {
     private route: ActivatedRoute,
     private location: Location,
     private ts: ThemeServiceService
-  ) {
-    const nav = this.router.getCurrentNavigation();
-    if (nav?.extras.state) {
-      this.eventData = nav.extras.state as EvolveEvent;
-      this.currentEventId = this.eventData.id as string;
-      console.log(this.eventData);
-    }
-  }
+  ) {}
 
   ngOnInit(): void {
-    if (!this.eventData) {
-      const id = this.route.snapshot.paramMap.get('id');
-      if (id) {
-        this.fetchEvent(id);
-      }
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.currentEventId = id;
+      this.fetchEvent(id);
+    }else{
+      this.currentEventId = null;
+      this.eventData = null;
     }
   }
 
@@ -50,30 +51,26 @@ export class EventDetailsComponent {
   }
 
   // 1. Handle "Event Info" Save
-  async handleInfoSave(data: EventInfo) {
+  async handleEventSave(
+    data: EventInfo | EventCrew[] | EventAsset[] | EventQuote,
+    eventdetailsType: string
+  ) {
     console.log(data);
 
     try {
       if (!this.currentEventId) {
         // --- CREATE (First Save) ---
-        // We pass { event_info: data } because it's a Partial<Event>
         this.currentEventId = await this.firebaseService.createEvent({
-          event_info: data,
+          [eventdetailsType]: data,
         });
         this.location.replaceState(`/event-details/${this.currentEventId}`);
-        console.log('Created new Event!', this.currentEventId);
-        // Add a Toast/Snackbar notification here: "Event Created"
         this.ts.showNotification('Event saved!');
       } else {
         // --- UPDATE (Subsequent Saves) ---
         await this.firebaseService.updateEvent(this.currentEventId, {
-          event_info: data,
+          [eventdetailsType]: data,
         });
-
-        console.log('Updated Event Info');
-        this.ts.showNotification('Event saved!');
-
-        // Add a Toast/Snackbar notification here: "Info Updated"
+        this.ts.showNotification('Event updated!');
       }
     } catch (error) {
       console.error('Save failed', error);

@@ -1,3 +1,4 @@
+<h3>EVENT DETAILS</h3>
 <mat-tab-group>
   <mat-tab>
     <ng-template mat-tab-label>
@@ -5,7 +6,7 @@
       Info
     </ng-template>
 
-    <event-info (saveTriggered)="handleInfoSave($event)" [initialData]="eventData?.event_info"></event-info>
+    <event-info (saveTriggered)="handleEventSave($event,'event_info')" [initialData]="eventData?.event_info"></event-info>
   </mat-tab>
 
   <mat-tab>
@@ -13,7 +14,7 @@
       <mat-icon>group</mat-icon>
       Crew
     </ng-template>
-    <event-crew></event-crew>
+    <event-crew (saveTriggered)="handleEventSave($event,'event_crew')" [initialData]="eventData?.event_crew" ></event-crew>
   </mat-tab>
 
   <mat-tab>

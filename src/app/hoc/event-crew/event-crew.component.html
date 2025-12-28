@@ -1,108 +1,94 @@
 <div class="event-crew-container">
-  <!-- <h3>Event Crew / Vendors</h3> -->
+      <mat-card class="crew-list-container">
+        <mat-list *ngIf="crew.length > 0; else emptyState">
+          <mat-list-item *ngFor="let member of crew; let i = index" class="crew-item">
+            <div class="crew-info" matListItemTitle>
+              <div class="service-badge">{{ member.service_type }}</div>
+              <div class="crew-details">
+                <div class="crew-name">{{ member.person_name }}</div>
+                <div class="crew-contact">{{ member.phone }}</div>
+              </div>
+              <div class="crew-amount">₹{{ member.amount | number }}</div>
+            </div>
+            <button mat-icon-button color="warn" (click)="removeCrew(i)" matListItemMeta>
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-list>
 
-  <!-- Crew List -->
-  <mat-card class="crew-list-container">
-    <mat-list *ngIf="crew.length > 0; else emptyState">
-      <mat-list-item *ngFor="let member of crew; let i = index" class="crew-item">
-        <div class="crew-info" matListItemTitle>
-          <div class="service-badge">{{ member.serviceType }}</div>
-          <div class="crew-details">
-            <div class="crew-name">{{ member.name }}</div>
-            <div class="crew-contact">{{ member.phone }}</div>
+        <ng-template #emptyState>
+          <div class="empty-state">
+            <mat-icon>people_outline</mat-icon>
+            <p>No crew members added yet</p>
           </div>
-          <div class="crew-amount">₹{{ member.amount | number }}</div>
-        </div>
-        <button mat-icon-button color="warn" (click)="removeCrew(i)" matListItemMeta>
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-list-item>
-    </mat-list>
+        </ng-template>
+      </mat-card>
 
-    <ng-template #emptyState>
-      <div class="empty-state">
-        <mat-icon>people_outline</mat-icon>
-        <p>No crew members added yet</p>
+      <div class="total-section" *ngIf="crew.length > 0">
+        <strong>Total Amount:</strong>
+        <span class="total-amount">₹{{ getTotalAmount() | number }}</span>
       </div>
+
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" (click)="openAddCrewDialog()">
+          <mat-icon>add</mat-icon>
+          Add Crew
+        </button>
+      </div>
+    </div>
+
+    <ng-template #addCrewDialog>
+      <h2 mat-dialog-title>Add Crew / Vendor</h2>
+      <mat-dialog-content>
+        <form [formGroup]="crewForm" class="crew-form">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Service</mat-label>
+            <mat-select formControlName="service_type">
+              <mat-option *ngFor="let s of services" [value]="s">{{ s }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="crewForm.get('service_type')?.hasError('required')">
+              Service is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="person_name" placeholder="Enter name" />
+            <mat-error *ngIf="crewForm.get('person_name')?.hasError('required')">
+              Name is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="phone" placeholder="10 digit number" />
+            <!-- <mat-error *ngIf="crewForm.get('phone')?.hasError('required')">
+              Phone is required
+            </mat-error> -->
+            <mat-error *ngIf="crewForm.get('phone')?.hasError('pattern')">
+              Enter valid 10 digit phone number
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Amount</mat-label>
+            <input matInput type="number" formControlName="amount" placeholder="Enter amount" />
+            <span matPrefix>₹&nbsp;</span>
+            <mat-error *ngIf="crewForm.get('amount')?.hasError('required')">
+              Amount is required
+            </mat-error>
+            <mat-error *ngIf="crewForm.get('amount')?.hasError('min')">
+              Amount must be positive
+            </mat-error>
+          </mat-form-field>
+        </form>
+      </mat-dialog-content>
+
+      <mat-dialog-actions align="end">
+        <button mat-button (click)="cancelDialog()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="submitCrewForm()">
+          Add
+        </button>
+      </mat-dialog-actions>
     </ng-template>
-  </mat-card>
-
-  <!-- Total Amount -->
-  <div class="total-section" *ngIf="crew.length > 0">
-    <strong>Total Amount:</strong>
-    <span class="total-amount">₹{{ getTotalAmount() | number }}</span>
-  </div>
-
-  <!-- Action Buttons -->
-  <div class="action-buttons">
-    <button mat-raised-button color="primary" (click)="openAddCrewDialog()">
-      <mat-icon>add</mat-icon>
-      Add Crew
-    </button>
-
-    <button
-      mat-raised-button
-      color="accent"
-      (click)="submitEvent()"
-      [disabled]="crew.length === 0">
-      <mat-icon>check</mat-icon>
-      Submit Event
-    </button>
-  </div>
-</div>
-
-<!-- Add Crew Dialog Template -->
-<ng-template #addCrewDialog>
-  <h2 mat-dialog-title>Add Crew / Vendor</h2>
-  <mat-dialog-content>
-    <form [formGroup]="crewForm" class="crew-form">
-      <mat-form-field appearance="outline">
-        <mat-label>Service</mat-label>
-        <mat-select formControlName="serviceType">
-          <mat-option *ngFor="let s of services" [value]="s">{{ s }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="crewForm.get('serviceType')?.hasError('required')">
-          Service is required
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Name</mat-label>
-        <input matInput formControlName="name" placeholder="Enter name" />
-        <mat-error *ngIf="crewForm.get('name')?.hasError('required')">
-          Name is required
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Phone</mat-label>
-        <input matInput formControlName="phone" placeholder="10 digit number" />
-        <mat-error *ngIf="crewForm.get('phone')?.hasError('required')">
-          Phone is required
-        </mat-error>
-        <mat-error *ngIf="crewForm.get('phone')?.hasError('pattern')">
-          Enter valid 10 digit phone number
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Amount</mat-label>
-        <input matInput type="number" formControlName="amount" placeholder="Enter amount" />
-        <span matPrefix>₹&nbsp;</span>
-        <mat-error *ngIf="crewForm.get('amount')?.hasError('required')">
-          Amount is required
-        </mat-error>
-        <mat-error *ngIf="crewForm.get('amount')?.hasError('min')">
-          Amount must be positive
-        </mat-error>
-      </mat-form-field>
-    </form>
-  </mat-dialog-content>
-
-  <mat-dialog-actions align="end">
-    <button mat-button (click)="cancelDialog()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="submitCrewForm()">
-      Add
-    </button>
-  </mat-dialog-actions>
-</ng-template>
