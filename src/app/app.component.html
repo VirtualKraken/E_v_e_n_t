@@ -3,23 +3,24 @@
   <router-outlet></router-outlet>
 </div>
 
-<mat-sidenav-container
-  class="app-container"
-  *ngIf="showLayout"
-  (swiperight)="onSwipeRight($event)"
-  (swipeleft)="onSwipeLeft($event)">
-
-  <!-- Side nav -->
-  <mat-sidenav #drawer mode="over" class="app-sidenav">
-    <evolve-side-nav-content [drawer]="drawer" />
-  </mat-sidenav>
-
+<div class="app-container" *ngIf="showLayout">
   <!-- Main content -->
-  <mat-sidenav-content>
-    <!-- Top nav -->
-    <evolve-top-nav (toggleSidenav)="drawer.toggle()"></evolve-top-nav>
-
-    <!-- Pages -->
+  <div class="content-wrapper">
     <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <mat-toolbar class="bottom-nav">
+    <button mat-icon-button routerLink="/home" routerLinkActive="active">
+      <mat-icon>home</mat-icon>
+    </button>
+
+    <button mat-icon-button routerLink="/vendor-list" routerLinkActive="active">
+      <mat-icon>store_front</mat-icon>
+    </button>
+
+    <button mat-icon-button routerLink="/settings" routerLinkActive="active">
+      <mat-icon>settings</mat-icon>
+    </button>
+  </mat-toolbar>
+</div>

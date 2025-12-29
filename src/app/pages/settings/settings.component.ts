@@ -1,15 +1,14 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { ThemeServiceService } from '../../../service/theme-service.service';
 import { AuthService } from '../../../service/auth.service';
+
 @Component({
-  selector: 'evolve-side-nav-content',
-  templateUrl: './evolve-side-nav-content.component.html',
-  styleUrl: './evolve-side-nav-content.component.scss',
-  standalone: false,
+  selector: 'app-settings',
+  templateUrl: './settings.component.html',
+  styleUrl: './settings.component.scss',
+  standalone:false
 })
-export class EvolveSideNavContentComponent {
-  @Input() drawer: any;
-  user=localStorage.getItem('eeUser');
+export class SettingsComponent {
   constructor(private themeService: ThemeServiceService,private auth: AuthService) {}
 
   get isDark(): boolean {

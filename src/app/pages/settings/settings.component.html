@@ -1,0 +1,16 @@
+<mat-nav-list>
+
+  <a mat-list-item (click)="toggleTheme()">
+    <span class="menu-content">
+      <mat-icon>{{ isDark ? "light_mode" : "dark_mode" }}</mat-icon>
+      <span>{{ "Switch to " + (isDark ? "light" : "dark") + " mode" }}</span>
+    </span>
+  </a>
+
+  <a mat-list-item routerLinkActive="active-link" (click)="signOut();">
+    <span class="menu-content">
+      <mat-icon>logout</mat-icon>
+      <span>SignOut</span>
+    </span>
+  </a>
+</mat-nav-list>

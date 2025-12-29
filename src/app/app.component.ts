@@ -33,11 +33,4 @@ export class AppComponent implements OnInit {
     this.showLayout = !url.includes('/login');
   }
 
-    onSwipeRight(event: any) {
-    this.drawer.open();
-  }
-
-  onSwipeLeft(event: any) {
-    this.drawer.close();
-  }
 }

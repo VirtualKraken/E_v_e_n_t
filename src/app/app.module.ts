@@ -31,7 +31,6 @@ import { FormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
-import { EvolveSideNavContentComponent } from './components/evolve-side-nav-content/evolve-side-nav-content.component';
 import { LoginComponent } from './pages/login/login.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { EventQuoteComponent } from './hoc/event-quote/event-quote.component';
@@ -43,6 +42,7 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { VendorListComponent } from './pages/vendor-list/vendor-list.component';
+import { SettingsComponent } from './pages/settings/settings.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,10 +52,10 @@ import { VendorListComponent } from './pages/vendor-list/vendor-list.component';
     EventInfoComponent,
     EventCrewComponent,
     EventAssetsComponent,
-    EvolveSideNavContentComponent,
     LoginComponent,
     EventQuoteComponent,
-    VendorListComponent
+    VendorListComponent,
+    SettingsComponent
     // other components go here
   ],
   imports: [

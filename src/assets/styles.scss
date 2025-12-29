@@ -164,12 +164,12 @@ h6 {
 /* ============================================
    DARK THEME CUSTOM OVERRIDES
    ============================================ */
+   mat-toolbar {
+     background-color: var(--theme-background) !important;
+     color: var(--theme-color);
+   }
 :root[theme="dark"] {
   /* Toolbar dark mode */
-  mat-toolbar {
-    background-color: transparent;
-    color: var(--theme-color);
-  }
 
   /* Card dark mode */
   mat-card {

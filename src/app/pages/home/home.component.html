@@ -1,31 +1,32 @@
 <div class="home-container">
+  <mat-card *ngIf="!loading" class="demo-inline-calendar-card">
+    <mat-calendar [dateClass]="dateClass"></mat-calendar>
+  </mat-card>
 
   <div *ngIf="loading">Loading events...</div>
   <div *ngIf="!loading && groupedEvents.length === 0">No events found.</div>
 
   <div class="list-container" *ngFor="let group of groupedEvents">
+    <h4 class="month">{{ group.month }}</h4>
 
-    <h2 class="month">{{ group.month }}</h2>
-
-    <div class="row"
-         *ngFor="let item of group.events"
-         (click)="openEventDetails(item)">
-
+    <div
+      class="row"
+      *ngFor="let item of group.events"
+      (click)="openEventDetails(item)"
+    >
       <span class="date">
-        {{ item.event_info.function_date | date:'dd' }}
+        {{ item.event_info.function_date | date : "dd" }}
       </span>
 
       <span>{{ item.event_info.client_name }}</span>
       <span>{{ item.event_info.venue }}</span>
-      <span>{{ item.event_info.location || '' }}</span>
-
+      <span>{{ item.event_info.location || "" }}</span>
     </div>
   </div>
 
   @if(user==='evolve'){
-    <button mat-fab color="primary" class="fab" (click)="openEventDetails()">
-      <mat-icon>add</mat-icon>
-    </button>
+  <button mat-fab color="primary" class="fab" (click)="openEventDetails()">
+    <mat-icon>add</mat-icon>
+  </button>
   }
-
 </div>
