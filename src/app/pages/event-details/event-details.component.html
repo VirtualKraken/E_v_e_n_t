@@ -1,20 +1,36 @@
+<h3>
+  <span>
+    <mat-icon>redeem</mat-icon>
+  </span>
+  <span>
+    Client :
+    {{ eventData?.event_info?.client_name }} -
+    {{ eventData?.event_info?.function_date | date : "MMM d"
+    }}{{ eventData?.event_info?.location }}
+  </span>
+</h3>
 <mat-tab-group>
-
-  <mat-tab *ngIf="user==='evolve'">
+  <mat-tab *ngIf="user === 'evolve'">
     <ng-template mat-tab-label>
       <mat-icon>info</mat-icon>
       Info
     </ng-template>
 
-    <event-info (saveTriggered)="handleEventSave($event,'event_info')" [initialData]="eventData?.event_info"></event-info>
+    <event-info
+      (saveTriggered)="handleEventSave($event, 'event_info')"
+      [initialData]="eventData?.event_info"
+    ></event-info>
   </mat-tab>
 
-  <mat-tab *ngIf="user==='evolve'">
+  <mat-tab *ngIf="user === 'evolve'">
     <ng-template mat-tab-label>
       <mat-icon>group</mat-icon>
       Crew
     </ng-template>
-    <event-crew (saveTriggered)="handleEventSave($event,'event_crew')" [initialData]="eventData?.event_crew" ></event-crew>
+    <event-crew
+      (saveTriggered)="handleEventSave($event, 'event_crew')"
+      [initialData]="eventData?.event_crew"
+    ></event-crew>
   </mat-tab>
 
   <mat-tab>
@@ -22,14 +38,22 @@
       <mat-icon>local_florist</mat-icon>
       Assets
     </ng-template>
-    <event-assets (saveTriggered)="handleEventSave($event,'event_asset_details')" [initialData]="eventData?.event_asset_details" ></event-assets>
+    <event-assets
+      (saveTriggered)="handleEventSave($event, 'event_asset_details')"
+      [initialData]="eventData?.event_asset_details"
+    ></event-assets>
   </mat-tab>
 
-  <mat-tab *ngIf="user==='evolve'">
+  <mat-tab *ngIf="user === 'evolve'">
     <ng-template mat-tab-label>
       <mat-icon>request_quote</mat-icon>
       Quote
     </ng-template>
-    <event-quote></event-quote>
+    <event-quote
+      [initialData]="eventData?.event_quote"
+      (saveTriggered)="handleEventSave($event, 'event_quote')"
+    >
+      ></event-quote
+    >
   </mat-tab>
 </mat-tab-group>

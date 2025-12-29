@@ -13,7 +13,14 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { map, Observable } from 'rxjs';
-import { EvolveEvent } from '../app/types/quotes';
+import { EventQuote, EvolveEvent } from '../app/types/quotes';
+import {
+  Storage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject
+} from '@angular/fire/storage'; // <--- Import Storage
 
 // define interface here or in your types file
 export interface Vendor {
@@ -24,10 +31,39 @@ export interface Vendor {
   phone?: string;
   notes?: string;
 }
+// Interface for your uploaded files
 
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
   private firestore = inject(Firestore);
+  private storage = inject(Storage); // <--- Inject Storage
+
+  // 1. Upload raw file to Firebase Storage bucket
+  async uploadFileToStorage(file: File): Promise<string> {
+    const filePath = `quotes/${Date.now()}_${file.name}`; // Unique path
+    const storageRef = ref(this.storage, filePath);
+    const uploadResult = await uploadBytes(storageRef, file);
+    return getDownloadURL(uploadResult.ref);
+  }
+
+  deleteFile(fileUrl: string): Promise<void> {
+    // Create a reference from the full download URL
+    const fileRef = ref(this.storage, fileUrl);
+    return deleteObject(fileRef);
+  }
+
+  // 2. Save file metadata (URL, name) to Firestore Database
+  addFileToFirestore(fileData: EventQuote) {
+    const filesRef = collection(this.firestore, 'quote_uploads');
+    return addDoc(filesRef, fileData);
+  }
+
+  // 3. Get list of uploaded files from Firestore
+  getUploadedFiles(): Observable<EventQuote[]> {
+    const filesRef = collection(this.firestore, 'quote_uploads');
+    const q = query(filesRef, orderBy('uploadedAt', 'desc'));
+    return collectionData(q, { idField: 'id' }) as Observable<EventQuote[]>;
+  }
 
   // ✅ USERS LIST
   getUsers$(): Observable<any[]> {

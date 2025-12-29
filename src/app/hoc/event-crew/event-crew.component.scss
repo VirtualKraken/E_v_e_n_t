@@ -22,57 +22,22 @@
 }
 
 .crew-item {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--theme-border);
   padding: 16px !important;
   height: auto !important;
+  display: grid;
+  grid-template-columns: 1fr 50px;
+  align-items: center;
+  gap: 16px;
 
   &:last-child {
     border-bottom: none;
   }
 
-  &:hover {
-    background-color: #f5f5f5;
-  }
-
-  .crew-info {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
-  .service-badge {
-    background: #1976d2;
-    // color: white;
-    padding: 4px 12px;
-    border-radius: 16px;
-    font-size: 12px;
-    font-weight: 500;
-    min-width: 60px;
-    text-align: center;
-  }
-
-  .crew-details {
-    flex: 1;
-    min-width: 150px;
-
-    .crew-name {
-      font-weight: 500;
-      // color: #333;
-      margin-bottom: 4px;
-    }
-
-    .crew-contact {
-      font-size: 14px;
-      // color: #666;
-    }
-  }
-
   .crew-amount {
     font-size: 18px;
     font-weight: 600;
-    color: #2e7d32;
+    color: var(--theme-color-secondary);
     margin-left: auto;
   }
 }
@@ -104,19 +69,17 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: #f5f5f5;
   border-radius: 8px;
   margin-bottom: 20px;
 
   strong {
     font-size: 18px;
-    color: #333;
   }
 
   .total-amount {
     font-size: 24px;
     font-weight: 700;
-    color: #2e7d32;
+    color: var(--theme-color-secondary);
   }
 }
 

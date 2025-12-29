@@ -1,118 +1,62 @@
 <div class="quote-container">
-  @if (!quoteData) {
-  <div>Loading...</div>
-  }@else {
-  <mat-card class="details-card">
-    <mat-card-header>
-      <div mat-card-avatar class="avatar-placeholder">
-        {{ quoteData?.client_details?.client?.charAt(0) }}
-      </div>
-      <mat-card-title>
-        {{ quoteData?.client_details?.client }}
-      </mat-card-title>
-      <mat-card-subtitle>
-        {{ quoteData?.client_details?.function_date }}
-      </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="meta-grid">
-        <div class="meta-item">
-          <mat-icon>location_on</mat-icon>
-          <div>
-            <label>Venue</label>
-            <span>{{ quoteData?.client_details?.venue }}</span>
-          </div>
-        </div>
-        <div class="meta-item">
-          <mat-icon>receipt_long</mat-icon>
-          <div>
-            <label>Quote ID</label>
-            <span
-              >E-360-{{
-                quoteData?.client_details?.function_date | date : "yyyy"
-              }}</span
-            >
-          </div>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+  <h3>Upload Event Quotes</h3>
 
-  <mat-card class="items-card">
-    <h3>Proposals & Requirements</h3>
+  <div class="upload-controls">
+    <input
+      id="quoteFileUpload"
+      type="file"
+      multiple
+      (change)="onFileSelected($event)"
+      [disabled]="isUploading"
+      accept=".pdf, image/*"
+    />
 
-    <div class="table-responsive">
-      <table class="quote-table">
-        <thead>
-          <tr>
-            <th class="col-no">No.</th>
-            <th class="col-desc">Description</th>
-            <th class="col-qty">Qty</th>
-            <th class="col-price">Approx Rate</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of quoteData?.items; let i = index">
-            <td class="col-no">{{ item?.sl_no || i + 1 }}</td>
-
-            <td class="col-desc">
-              <span class="item-name">{{ item?.description }}</span>
-              <span *ngIf="item?.note" class="item-note">({{ item?.note }})</span>
-            </td>
-
-            <td class="col-qty">{{ item?.quantity || "-" }}</td>
-
-            <td class="col-price">
-              <span *ngIf="(item?.approx_rate_inr ?? 0) > 0">
-                {{
-                  item?.approx_rate_inr | currency : "INR" : "symbol" : "1.0-0"
-                }}
-              </span>
-              <span *ngIf="item?.approx_rate_inr === 0" class="free-tag">
-                Include
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </mat-card>
-
-  <mat-card class="financials-card">
-    <div class="summary-row">
-      <span>Sub Total</span>
-      <span>{{
-        quoteData?.financials?.sub_total | currency : "INR" : "symbol" : "1.0-0"
-      }}</span>
-    </div>
-
-    <div
-      class="summary-row discount"
-      *ngIf="
-        (quoteData?.financials?.sub_total ?? 0) !== (quoteData?.financials?.final_amount ?? 0)
-      "
+    <button
+    *ngIf="selectedFiles.length != 0 "
+      mat-raised-button
+      color="primary"
+      (click)="uploadFiles()"
+      [disabled]="selectedFiles.length === 0 || isUploading"
     >
-      <span>Discount / Adjustments</span>
-      <span
-        >-
-        {{
-          (quoteData?.financials?.sub_total || 0) - (quoteData?.financials?.final_amount || 0)
-            | currency : "INR" : "symbol" : "1.0-0"
-        }}</span
-      >
+      <span *ngIf="!isUploading">
+        <!-- <mat-icon>cloud_upload</mat-icon> -->
+        <span>Upload & Save</span>
+      </span>
+      <span *ngIf="isUploading">Uploading...</span>
+    </button>
+  </div>
+
+ <div *ngIf="selectedFiles.length > 0" class="preview-list">
+    <p class="preview-label">Ready to upload:</p>
+
+    <mat-chip-listbox>
+      <mat-chip *ngFor="let file of selectedFiles; let i = index">
+        {{ file.name }}
+
+        <button matChipRemove (click)="removeSelectedFile(i)">
+          <mat-icon>cancel</mat-icon>
+        </button>
+
+      </mat-chip>
+    </mat-chip-listbox>
+  </div>
+
+  <mat-divider style="margin: 20px 0"></mat-divider>
+
+  <h3>Attached Documents ({{ files.length }})</h3>
+
+  <div class="file-list">
+    <div *ngFor="let file of files; let i = index" class="file-item">
+      <a [href]="file.url" target="_blank" class="file-link">
+        <mat-icon color="accent">description</mat-icon>
+        {{ file.name }}
+      </a>
+
+      <button mat-icon-button color="warn" (click)="removeFile(i)">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
 
-    <mat-divider></mat-divider>
-
-    <div class="summary-row total">
-      <span>Final Amount</span>
-      <span class="highlight">{{
-        quoteData?.financials?.final_amount
-          | currency : "INR" : "symbol" : "1.0-0"
-      }}</span>
-    </div>
-  </mat-card>
-
-  <button type="button" mat-stroked-button>Export as pdf</button>
-  }
+    <p *ngIf="files.length === 0" class="no-files">No quotes attached yet.</p>
+  </div>
 </div>

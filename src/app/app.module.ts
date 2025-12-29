@@ -39,6 +39,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { environment } from '../environments/environment';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { provideStorage, getStorage } from '@angular/fire/storage';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { VendorListComponent } from './pages/vendor-list/vendor-list.component';
@@ -91,6 +92,7 @@ import { SettingsComponent } from './pages/settings/settings.component';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
      provideAuth(() => getAuth()),
+     provideStorage(() => getStorage()),
   ],
 })
 export class AppModule {}

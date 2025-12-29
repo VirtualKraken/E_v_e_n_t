@@ -3,7 +3,7 @@
         <mat-list *ngIf="crew.length > 0; else emptyState">
           <mat-list-item *ngFor="let member of crew; let i = index" class="crew-item">
             <div class="crew-info" matListItemTitle>
-              <div class="service-badge">{{ member.service_type }}</div>
+              <div class="service-badge"><strong>{{ member.service_type }}</strong> </div>
               <div class="crew-details">
                 <div class="crew-name">{{ member.person_name }}</div>
                 <div class="crew-contact">{{ member.phone }}</div>

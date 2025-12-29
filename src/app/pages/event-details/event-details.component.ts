@@ -54,7 +54,7 @@ export class EventDetailsComponent {
 
   // 1. Handle "Event Info" Save
   async handleEventSave(
-    data: EventInfo | EventCrew[] | AssetDetails | EventQuote,
+    data: EventInfo | EventCrew[] | AssetDetails | EventQuote[],
     eventdetailsType: string
   ) {
     console.log(data);

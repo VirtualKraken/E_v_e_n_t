@@ -41,6 +41,7 @@ export type EventInfo = {
   location?: string;
   phone: string;
   notes:string;
+  entry:string;
 };
 export type EventCrew = {
   service_type: string;
@@ -56,13 +57,11 @@ export type EventAsset = {
   item_name: string;
   item_count: number;
 };
+
 export type EventQuote = {
-  discount: number;
-  final_amount: number;
-  QuoteItems: QuoteItem[];
-};
-export type QuoteItem = {
+   id?: string;
   name: string;
-  quantity: number;
-  rate: number;
-};
+  url: string;
+  uploadedAt: any;
+}
+

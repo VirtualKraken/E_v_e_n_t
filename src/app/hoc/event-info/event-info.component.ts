@@ -31,6 +31,7 @@ export class EventInfoComponent implements OnChanges {
       venue: ['', Validators.required],
       location: [''],
       notes: [''],
+      entry: [''],
     });
 
     // 2. Default State: Disable the form immediately
@@ -57,6 +58,8 @@ export class EventInfoComponent implements OnChanges {
       venue: data.venue,
       location: data.location || '',
       date: data.function_date ? new Date(data.function_date) : null,
+      entry: data.entry || '',
+      notes: data.notes || '',
     });
   }
 
@@ -95,6 +98,7 @@ export class EventInfoComponent implements OnChanges {
       venue: formVal.venue,
       location: formVal.location || '',
       notes: formVal.notes || '',
+      entry: formVal.entry || '',
     };
 
     // 1. Emit the data to the parent
