@@ -109,7 +109,31 @@ body {
   color: var(--theme-color);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+/* ============================================
+   IOS ZOOM FIX - Prevent automatic zoom on input focus
+   ============================================ */
+input,
+textarea,
+select,
+.mat-mdc-input-element,
+.mat-mdc-form-field input,
+.mat-mdc-select,
+.mat-mdc-text-field-wrapper {
+  font-size: 16px !important;
+}
 
+/* Ensure form field labels also scale appropriately */
+.mat-mdc-form-field-label,
+.mat-mdc-floating-label {
+  font-size: 16px !important;
+}
+
+/* Prevent iOS text size adjustment on orientation change */
+body {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 h1,
 h2,
 h3,
@@ -122,10 +146,19 @@ h6 {
 /* ============================================
    MATERIAL COMPONENT OVERRIDES
    ============================================ */
+/* ============================================
+   MATERIAL COMPONENT OVERRIDES
+   ============================================ */
+
+.mat-drawer-container {
+  height: 100vh;
+  position: relative;
+}
+
 .mat-drawer-content {
   background-color: var(--theme-background) !important;
-  height: 100dvh !important;
   transition: background-color 0.3s ease;
+  /* Remove the height: 100dvh !important */
 }
 
 /* ============================================

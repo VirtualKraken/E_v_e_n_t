@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -11,7 +12,7 @@ import { filter } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   title = 'Evolve';
   showLayout = true;
-
+ @ViewChild('drawer') drawer!: MatSidenav;
   constructor(private router: Router) {}
 
   ngOnInit(): void {
@@ -30,5 +31,13 @@ export class AppComponent implements OnInit {
   private updateLayoutState(url: string): void {
     // If the URL includes 'login', we hide the layout (showLayout = false)
     this.showLayout = !url.includes('/login');
+  }
+
+    onSwipeRight(event: any) {
+    this.drawer.open();
+  }
+
+  onSwipeLeft(event: any) {
+    this.drawer.close();
   }
 }

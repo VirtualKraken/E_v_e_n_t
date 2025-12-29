@@ -1,5 +1,6 @@
+import 'hammerjs';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
@@ -58,6 +59,7 @@ import { VendorListComponent } from './pages/vendor-list/vendor-list.component';
     // other components go here
   ],
   imports: [
+    HammerModule,
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,

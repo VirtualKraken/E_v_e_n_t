@@ -3,9 +3,14 @@
   <router-outlet></router-outlet>
 </div>
 
-<mat-sidenav-container class="app-container" *ngIf="showLayout">
+<mat-sidenav-container
+  class="app-container"
+  *ngIf="showLayout"
+  (swiperight)="onSwipeRight($event)"
+  (swipeleft)="onSwipeLeft($event)">
+
   <!-- Side nav -->
-  <mat-sidenav #drawer mode="side" class="app-sidenav">
+  <mat-sidenav #drawer mode="over" class="app-sidenav">
     <evolve-side-nav-content [drawer]="drawer" />
   </mat-sidenav>
 
