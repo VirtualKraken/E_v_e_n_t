@@ -1,15 +1,27 @@
-<h3>
-  <span>
-    <mat-icon>redeem</mat-icon>
-  </span>
-  <span>
-    {{ eventData?.event_info?.client_name }} -
-    {{ eventData?.event_info?.function_date | date : "MMM d"
-    }}, {{ eventData?.event_info?.location }}
-  </span>
+<h3 class="event-header">
+  <mat-icon>redeem</mat-icon>
+
+  <!-- WHEN EVENT EXISTS -->
+  <ng-container *ngIf="currentEventId && eventData?.event_info; else draftHeader">
+    <span>
+      {{ eventData?.event_info?.client_name }} –
+      {{ eventData?.event_info?.function_date | date:'MMM d' }},
+      {{ eventData?.event_info?.location }}
+    </span>
+  </ng-container>
+
+  <!-- DRAFT STATE -->
+  <ng-template #draftHeader>
+    <span class="draft-text">
+      New Event 
+    </span>
+  </ng-template>
 </h3>
+
 <mat-tab-group>
-  <mat-tab *ngIf="user === 'evolve'">
+
+  <!-- INFO TAB (always enabled) -->
+  <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>info</mat-icon>
       Info
@@ -21,38 +33,43 @@
     ></event-info>
   </mat-tab>
 
-  <mat-tab *ngIf="user === 'evolve'">
+  <!-- CREW TAB -->
+  <mat-tab [disabled]="!currentEventId">
     <ng-template mat-tab-label>
       <mat-icon>group</mat-icon>
       Crew
     </ng-template>
+
     <event-crew
       (saveTriggered)="handleEventSave($event, 'event_crew')"
       [initialData]="eventData?.event_crew"
     ></event-crew>
   </mat-tab>
 
-  <mat-tab>
+  <!-- ASSETS TAB -->
+  <mat-tab [disabled]="!currentEventId">
     <ng-template mat-tab-label>
       <mat-icon>local_florist</mat-icon>
       Assets
     </ng-template>
+
     <event-assets
       (saveTriggered)="handleEventSave($event, 'event_asset_details')"
       [initialData]="eventData?.event_asset_details"
     ></event-assets>
   </mat-tab>
 
-  <mat-tab *ngIf="user === 'evolve'">
+  <!-- QUOTE TAB -->
+  <mat-tab [disabled]="!currentEventId">
     <ng-template mat-tab-label>
       <mat-icon>request_quote</mat-icon>
       Quote
     </ng-template>
+
     <event-quote
       [initialData]="eventData?.event_quote"
       (saveTriggered)="handleEventSave($event, 'event_quote')"
-    >
-      ></event-quote
-    >
+    ></event-quote>
   </mat-tab>
+
 </mat-tab-group>

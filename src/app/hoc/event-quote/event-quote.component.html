@@ -43,7 +43,7 @@
 
   <mat-divider style="margin: 20px 0"></mat-divider>
 
-  <h3>Attached Documents ({{ files.length }})</h3>
+  <h3 *ngIf="files.length != 0">Attached Documents ({{ files.length }})</h3>
 
   <div class="file-list">
     <div *ngFor="let file of files; let i = index" class="file-item">
@@ -57,6 +57,6 @@
       </button>
     </div>
 
-    <p *ngIf="files.length === 0" class="no-files">No quotes attached yet.</p>
+    <p *ngIf="files.length === 0" class="no-files">No quotes.</p>
   </div>
 </div>

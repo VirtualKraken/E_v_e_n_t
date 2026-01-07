@@ -92,7 +92,7 @@ import { ProductionChecklistComponent } from './pages/production-checklist/produ
   providers: [
     provideNativeDateAdapter(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => getFirestore()),
+    provideFirestore(() => getFirestore(environment.firebase.firestoreDB)),
      provideAuth(() => getAuth()),
      provideStorage(() => getStorage()),
   ],

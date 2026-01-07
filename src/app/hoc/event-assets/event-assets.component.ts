@@ -183,4 +183,10 @@ export class EventAssetsComponent implements OnInit, OnChanges {
   private generateId(): string {
     return 'asset_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
   }
+
+  share(){
+    //display current url
+    console.log(window.location.href);
+
+  }
 }
