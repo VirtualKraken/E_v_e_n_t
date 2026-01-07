@@ -2,35 +2,55 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { Auth, onAuthStateChanged, User } from '@angular/fire/auth';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss',
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss',
+  standalone: false,
 })
 export class AppComponent implements OnInit {
   title = 'Evolve';
   showLayout = true;
- @ViewChild('drawer') drawer!: MatSidenav;
-  constructor(private router: Router) {}
+  @ViewChild('drawer') drawer!: MatSidenav;
+  currentUser: User | null = null;
+
+  constructor(private router: Router, private auth: Auth) {}
 
   ngOnInit(): void {
-    // 1. Initial check: Handle the URL the user lands on first
-    this.updateLayoutState(this.router.url);
+    // 🔹 Listen to Firebase auth state
+    onAuthStateChanged(this.auth, (user) => {
+      this.currentUser = user;
 
-    // 2. Continuous check: Listen for navigation changes as the user clicks links
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      // Use urlAfterRedirects to ensure we have the final destination URL
-      this.updateLayoutState(event.urlAfterRedirects);
+      // Re-evaluate layout whenever auth changes
+      this.updateLayoutState(this.router.url);
     });
+
+    // 🔹 Listen to route changes
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.updateLayoutState(event.urlAfterRedirects);
+      });
   }
 
-  private updateLayoutState(url: string): void {
-    // If the URL includes 'login', we hide the layout (showLayout = false)
-    this.showLayout = !url.includes('/login');
+ private updateLayoutState(url: string): void {
+
+  // Hide layout on login page
+  if (url.includes('/login')) {
+    this.showLayout = false;
+    return;
   }
+
+  // Hide layout for anonymous users
+  if (this.currentUser?.isAnonymous) {
+    this.showLayout = false;
+    return;
+  }
+
+  // Otherwise show layout (admin users)
+  this.showLayout = true;
+}
 
 }

@@ -1,0 +1,14 @@
+<h2>
+  <span>
+    <mat-icon>redeem</mat-icon>
+  </span>
+  <span>
+    {{ eventData?.event_info?.function_date | date : "MMM d" }} -
+    {{ eventData?.event_info?.venue }} -
+    {{ eventData?.event_info?.location}}
+  </span>
+</h2>
+<event-assets
+  (saveTriggered)="handleEventSave($event, 'event_asset_details')"
+  [initialData]="eventData?.event_asset_details"
+></event-assets>

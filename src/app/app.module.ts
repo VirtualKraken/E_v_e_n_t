@@ -44,6 +44,7 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { VendorListComponent } from './pages/vendor-list/vendor-list.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { ProductionChecklistComponent } from './pages/production-checklist/production-checklist.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,7 +57,8 @@ import { SettingsComponent } from './pages/settings/settings.component';
     LoginComponent,
     EventQuoteComponent,
     VendorListComponent,
-    SettingsComponent
+    SettingsComponent,
+    ProductionChecklistComponent
     // other components go here
   ],
   imports: [

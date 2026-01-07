@@ -13,6 +13,9 @@ import { EventDetailsComponent } from './pages/event-details/event-details.compo
 import { LoginComponent } from './pages/login/login.component';
 import { VendorListComponent } from './pages/vendor-list/vendor-list.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { ProductionChecklistComponent } from './pages/production-checklist/production-checklist.component';
+import { AnonChecklistGuard } from './guards/anon-checklist.guard';
+import { AdminOnlyGuard } from './guards/admin-only.guard';
 
 // 2. Define the Rules
 // "If not logged in, go to Login"
@@ -32,30 +35,36 @@ export const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     // Protect this route: Check if logged in
-    ...canActivate(redirectUnauthorizedToLogin),
+    canActivate: [AdminOnlyGuard],
   },
   {
     path: 'event-details/:id',
     component: EventDetailsComponent,
-    ...canActivate(redirectUnauthorizedToLogin),
+    canActivate: [AdminOnlyGuard],
   },
 
   // 2. Route WITHOUT an ID (e.g. /event-details)
   {
     path: 'event-details',
     component: EventDetailsComponent,
-    ...canActivate(redirectUnauthorizedToLogin),
+    canActivate: [AdminOnlyGuard],
   },
 
   {
     path: 'vendor-list',
     component: VendorListComponent,
-    ...canActivate(redirectUnauthorizedToLogin),
+    canActivate: [AdminOnlyGuard],
   },
   {
     path: 'settings',
     component: SettingsComponent,
-    ...canActivate(redirectUnauthorizedToLogin),
+    canActivate: [AdminOnlyGuard],
+  },
+  {
+    path: 'production-checklist/:id',
+    component: ProductionChecklistComponent,
+    canActivate: [AnonChecklistGuard],
+    data: { mode: 'production' }
   },
 
   // Default Routes
