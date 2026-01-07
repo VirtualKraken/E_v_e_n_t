@@ -2,16 +2,16 @@
   <h4 class="share-title" *ngIf="user === 'evolve'">
     Share with production Team
     <mat-form-field appearance="outline">
-      <select
+      <mat-select
         matNativeControl
         required
         [(ngModel)]="sharedWith"
         (change)="onSharedWithChange()"
       >
-        <option value="none">None</option>
-        <option value="sk">SK</option>
-        <option value="rythm">Rythm</option>
-      </select>
+        <mat-option value="none">None</mat-option>
+        <mat-option value="sk">SK</mat-option>
+        <mat-option value="rythm">Rythm</mat-option>
+      </mat-select>
     </mat-form-field>
   </h4>
 
@@ -19,7 +19,7 @@
     <div class="list-header">
       <div class="col-item">Item (Qty)</div>
       <div class="col-checkbox">Out</div>
-      <div class="col-checkbox">Back</div>
+      <!-- <div class="col-checkbox">Back</div> -->
       <div class="col-actions">Actions</div>
     </div>
 
@@ -45,7 +45,7 @@
           </mat-checkbox>
         </div>
 
-        <div class="col-checkbox">
+        <!-- <div class="col-checkbox">
           <mat-checkbox
             [(ngModel)]="asset.broughtBack"
             (change)="toggleBroughtBack(asset)"
@@ -54,7 +54,7 @@
             class="large-checkbox"
           >
           </mat-checkbox>
-        </div>
+        </div> -->
 
         <div class="col-actions">
           <button

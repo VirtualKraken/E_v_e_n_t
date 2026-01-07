@@ -2,6 +2,7 @@ import { Component, TemplateRef, ViewChild, OnInit, inject } from '@angular/core
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService, Vendor } from '../../../service/firebase.service';
+import { EVENT_SERVICES } from '../../../assets/constants';
 
 @Component({
   selector: 'app-vendor-list',
@@ -29,7 +30,7 @@ export class VendorListComponent implements OnInit {
   currentVendorId: string | null = null;
 
   @ViewChild('vendorModal') vendorModal!: TemplateRef<any>;
-
+EVENT_SERVICES=EVENT_SERVICES;
   constructor() {
     this.vendorForm = this.fb.group({
       name: ['', Validators.required],

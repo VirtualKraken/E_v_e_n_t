@@ -12,6 +12,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { EventCrew } from '../../types/quotes';
+import { EVENT_SERVICES } from '../../../assets/constants';
 
 @Component({
   selector: 'event-crew',
@@ -22,10 +23,7 @@ import { EventCrew } from '../../types/quotes';
 export class EventCrewComponent implements OnInit, OnChanges {
   crew: EventCrew[] = [];
 
-  services = [
-    'MC', 'Decor', 'Lights & Sound', 'Lights', 'Sound',
-    'DJ', 'Band', 'Dancers', 'Others', 'Photography', 'Food'
-  ];
+  services =EVENT_SERVICES;
 
   crewForm: FormGroup;
 

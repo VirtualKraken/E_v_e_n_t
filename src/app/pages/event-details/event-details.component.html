@@ -3,10 +3,9 @@
     <mat-icon>redeem</mat-icon>
   </span>
   <span>
-    Client :
     {{ eventData?.event_info?.client_name }} -
     {{ eventData?.event_info?.function_date | date : "MMM d"
-    }}{{ eventData?.event_info?.location }}
+    }}, {{ eventData?.event_info?.location }}
   </span>
 </h3>
 <mat-tab-group>

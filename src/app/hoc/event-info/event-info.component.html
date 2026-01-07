@@ -1,16 +1,14 @@
 <div class="details-wrapper">
-
   <div *ngIf="isLocked" class="read-only-view">
-
-  <div class="info-grid">
-    <div class="info-item">
-      <span class="label">Date</span>
-      <span class="value">{{ form.get('date')?.value | date:'mediumDate' }}</span>
+    <div class="info-grid">
+      <!-- <div class="info-item">
+      <span class="label">Client Name</span>
+      <span class="value">{{ form.get('clientName')?.value }}</span>
     </div>
 
     <div class="info-item">
-      <span class="label">Client Name</span>
-      <span class="value">{{ form.get('clientName')?.value }}</span>
+      <span class="label">Date</span>
+      <span class="value">{{ form.get('date')?.value | date:'mediumDate' }}</span>
     </div>
 
     <div class="info-item">
@@ -22,51 +20,100 @@
       <span class="label">Venue</span>
       <span class="value">{{ form.get('venue')?.value || '--' }}</span>
     </div>
-
-    <div class="info-item">
-      <span class="label">Entry Time</span>
-      <span class="value">{{ form.get('entry')?.value || '--' }}</span>
-    </div>
-
     <div class="info-item">
       <span class="label">Location</span>
       <span class="value">{{ form.get('location')?.value || '--' }}</span>
     </div>
 
-    <div class="info-item full-width">
-      <span class="label">Notes</span>
-      <span class="value">{{ form.get('notes')?.value || 'No notes added.' }}</span>
+    <div class="info-item">
+      <span class="label">Entry Time</span>
+      <span class="value">{{ form.get('entry')?.value || '--' }}</span>
+    </div> -->
+
+      <div class="info-item">
+        <span class="label"> Details </span>
+
+        <span class="value">
+          <p>
+            <span class="icon"><mat-icon>person</mat-icon></span>
+            <span class="text">{{ form.get("clientName")?.value }}</span>
+          </p>
+
+          <p>
+            <span class="icon"><mat-icon>phone</mat-icon></span>
+            <span class="text">{{ form.get("phone")?.value }}</span>
+          </p>
+
+          <p>
+            <span class="icon"><mat-icon>event</mat-icon></span>
+            <span class="text">{{
+              form.get("date")?.value | date : "mediumDate"
+            }}   |    
+            {{ form.get("entry")?.value }}</span>
+          </p>
+
+          <p>
+            <span class="icon"><mat-icon>place</mat-icon></span>
+            <span class="text">{{ form.get("venue")?.value || "--" }}, {{ form.get("location")?.value || "--" }}</span>
+          </p>
+
+
+        </span>
+      </div>
+
+      <div class="info-item full-width">
+        <span class="label">Notes</span>
+        <span class="value">{{
+          form.get("notes")?.value || "No notes added."
+        }}</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button
+        mat-stroked-button
+        color="primary"
+        type="button"
+        (click)="unlockForm()"
+      >
+        <mat-icon>lock_open</mat-icon> Unlock to Edit
+      </button>
     </div>
   </div>
 
-  <div class="actions">
-    <button mat-stroked-button color="primary" type="button" (click)="unlockForm()">
-      <mat-icon>lock_open</mat-icon> Unlock to Edit
-    </button>
-  </div>
-</div>
-
   <form [formGroup]="form" class="form" *ngIf="!isLocked">
-
     <mat-form-field appearance="outline">
       <mat-label>Date</mat-label>
       <input matInput [matDatepicker]="picker" formControlName="date" />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="form.get('date')?.hasError('required')">Date is required</mat-error>
+      <mat-error *ngIf="form.get('date')?.hasError('required')"
+        >Date is required</mat-error
+      >
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Client Name</mat-label>
       <input matInput formControlName="clientName" />
-      <mat-error *ngIf="form.get('clientName')?.hasError('required')">Client name is required</mat-error>
+      <mat-error *ngIf="form.get('clientName')?.hasError('required')"
+        >Client name is required</mat-error
+      >
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Phone Number</mat-label>
-      <input matInput formControlName="phone" type="tel" placeholder="10 digit" />
-      <mat-error *ngIf="form.get('phone')?.hasError('required')">Phone number is required</mat-error>
-      <mat-error *ngIf="form.get('phone')?.hasError('pattern')">Enter a valid 10-digit number</mat-error>
+      <input
+        matInput
+        formControlName="phone"
+        type="tel"
+        placeholder="10 digit"
+      />
+      <mat-error *ngIf="form.get('phone')?.hasError('required')"
+        >Phone number is required</mat-error
+      >
+      <mat-error *ngIf="form.get('phone')?.hasError('pattern')"
+        >Enter a valid 10-digit number</mat-error
+      >
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -98,5 +145,4 @@
       <button mat-raised-button color="primary" (click)="submit()">Save</button>
     </div>
   </form>
-
 </div>
