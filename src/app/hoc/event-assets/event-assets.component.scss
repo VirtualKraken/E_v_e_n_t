@@ -200,14 +200,14 @@
 @media (max-width: 768px) {
   .list-header,
   .asset-row {
-    grid-template-columns: 1fr 40px 40px 40px;
+    grid-template-columns: 1fr 40px 40px ;
     gap: 8px;
     padding: 12px 16px;
     font-size: 13px;
   }
 
   .asset-row:has(.edit-mode) {
-    grid-template-columns: 2fr 100px;
+    grid-template-columns: 1fr 40px 40px;
   }
 
   .stats-bar {

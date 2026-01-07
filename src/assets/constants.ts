@@ -128,3 +128,9 @@ export const sampleQuoteData:WeddingQuotation = {
 export const productionTeam={
   
 }
+
+
+export const   EVENT_SERVICES  = [
+    'MC', 'Decor', 'Lights & Sound', 'Lights', 'Sound',
+    'DJ', 'Band', 'Dancers', 'Others', 'Photography', 'Food'
+  ];

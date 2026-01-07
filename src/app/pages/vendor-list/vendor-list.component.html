@@ -58,9 +58,14 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Service Type</mat-label>
-        <input matInput formControlName="service" placeholder="e.g. Decor, Audio, Food" />
-      </mat-form-field>
+  <mat-label>Service</mat-label>
+  <mat-select formControlName="service">
+    <mat-option *ngFor="let s of EVENT_SERVICES" [value]="s">{{ s }}</mat-option>
+  </mat-select>
+  <!-- <mat-error *ngIf="crewForm.get('service_type')?.hasError('required')">
+    Service is required
+  </mat-error> -->
+</mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Location</mat-label>
