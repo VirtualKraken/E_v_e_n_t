@@ -1,4 +1,10 @@
-import { Component, TemplateRef, ViewChild, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  TemplateRef,
+  ViewChild,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService, Vendor } from '../../../service/firebase.service';
@@ -8,7 +14,7 @@ import { EVENT_SERVICES } from '../../../assets/constants';
   selector: 'app-vendor-list',
   templateUrl: './vendor-list.component.html',
   styleUrls: ['./vendor-list.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class VendorListComponent implements OnInit {
   // Services
@@ -30,19 +36,19 @@ export class VendorListComponent implements OnInit {
   currentVendorId: string | null = null;
 
   @ViewChild('vendorModal') vendorModal!: TemplateRef<any>;
-EVENT_SERVICES=EVENT_SERVICES;
+  EVENT_SERVICES = EVENT_SERVICES;
   constructor() {
     this.vendorForm = this.fb.group({
       name: ['', Validators.required],
       service: ['', Validators.required],
       location: [''],
       phone: [''],
-      notes: ['']
+      notes: [''],
     });
   }
 
   ngOnInit() {
-    this.firebaseService.getVendors().subscribe(vendors => {
+    this.firebaseService.getVendors().subscribe((vendors) => {
       this.allVendors = vendors;
       this.extractServices();
       this.applyFilter();
@@ -52,16 +58,16 @@ EVENT_SERVICES=EVENT_SERVICES;
   // --- Logic ---
 
   extractServices() {
-    const services = this.allVendors.map(v => v.service);
-    this.availableServices = [...new Set(services.filter(s => s))];
+    const services = this.allVendors.map((v) => v.service);
+    this.availableServices = [...new Set(services.filter((s) => s))];
   }
 
   applyFilter() {
     if (!this.serviceFilter) {
       this.filteredVendors = this.allVendors;
     } else {
-      this.filteredVendors = this.allVendors.filter(v =>
-        v.service.toLowerCase() === this.serviceFilter.toLowerCase()
+      this.filteredVendors = this.allVendors.filter(
+        (v) => v.service.toLowerCase() === this.serviceFilter.toLowerCase()
       );
     }
   }

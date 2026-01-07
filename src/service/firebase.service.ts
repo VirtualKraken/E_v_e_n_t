@@ -1,4 +1,9 @@
-import { Injectable, inject } from '@angular/core';
+import {
+  Injectable,
+  Injector,
+  inject,
+  runInInjectionContext,
+} from '@angular/core';
 import {
   Firestore,
   collection,
@@ -7,22 +12,26 @@ import {
   docData,
   addDoc,
   updateDoc,
-  deleteDoc, // <--- Added this for deleting vendors
+  deleteDoc,
   query,
   orderBy,
   where,
 } from '@angular/fire/firestore';
-import { map, Observable } from 'rxjs';
-import { EventQuote, EvolveEvent } from '../app/types/quotes';
+import { Auth, authState } from '@angular/fire/auth';
 import {
   Storage,
   ref,
   uploadBytes,
   getDownloadURL,
-  deleteObject
-} from '@angular/fire/storage'; // <--- Import Storage
+  deleteObject,
+} from '@angular/fire/storage';
+import { Observable, filter } from 'rxjs';
+import { EventQuote, EvolveEvent } from '../app/types/quotes';
 
-// define interface here or in your types file
+/* =========================
+   Interfaces
+========================= */
+
 export interface Vendor {
   id?: string;
   name: string;
@@ -31,126 +40,160 @@ export interface Vendor {
   phone?: string;
   notes?: string;
 }
-// Interface for your uploaded files
+
+/* =========================
+   Service
+========================= */
 
 @Injectable({ providedIn: 'root' })
 export class FirebaseService {
   private firestore = inject(Firestore);
-  private storage = inject(Storage); // <--- Inject Storage
+  private storage = inject(Storage);
+  private auth = inject(Auth);
+  private injector = inject(Injector);
 
-  // 1. Upload raw file to Firebase Storage bucket
+  private uid: string | null = null;
+
+  constructor() {
+    authState(this.auth)
+      .pipe(filter((user) => !!user))
+      .subscribe((user) => {
+        this.uid = user!.uid;
+      });
+  }
+
+  /* =========================
+     Helpers
+  ========================= */
+
+  private requireAuth(): string {
+    if (!this.uid) {
+      throw new Error('User not authenticated');
+    }
+    return this.uid;
+  }
+
+  private userPath(): string {
+    return `users/${this.requireAuth()}`;
+  }
+
+  /* =========================
+     Storage (Quotes)
+  ========================= */
+
   async uploadFileToStorage(file: File): Promise<string> {
-    const filePath = `quotes/${Date.now()}_${file.name}`; // Unique path
+    const uid = this.requireAuth();
+    const filePath = `quotes/${uid}/${Date.now()}_${file.name}`;
     const storageRef = ref(this.storage, filePath);
     const uploadResult = await uploadBytes(storageRef, file);
     return getDownloadURL(uploadResult.ref);
   }
 
   deleteFile(fileUrl: string): Promise<void> {
-    // Create a reference from the full download URL
     const fileRef = ref(this.storage, fileUrl);
     return deleteObject(fileRef);
   }
 
-  // 2. Save file metadata (URL, name) to Firestore Database
+  /* =========================
+     Quote Uploads
+  ========================= */
+
   addFileToFirestore(fileData: EventQuote) {
-    const filesRef = collection(this.firestore, 'quote_uploads');
+    const filesRef = collection(
+      this.firestore,
+      `${this.userPath()}/quote_uploads`
+    );
     return addDoc(filesRef, fileData);
   }
 
-  // 3. Get list of uploaded files from Firestore
   getUploadedFiles(): Observable<EventQuote[]> {
-    const filesRef = collection(this.firestore, 'quote_uploads');
+    const filesRef = collection(
+      this.firestore,
+      `${this.userPath()}/quote_uploads`
+    );
     const q = query(filesRef, orderBy('uploadedAt', 'desc'));
     return collectionData(q, { idField: 'id' }) as Observable<EventQuote[]>;
   }
 
-  // ✅ USERS LIST
-  getUsers$(): Observable<any[]> {
-    const usersRef = collection(this.firestore, 'users');
-    return collectionData(usersRef, { idField: 'id' });
-  }
+  /* =========================
+     Events (TOP-LEVEL)
+  ========================= */
 
-  // ✅ TEST WRITE
-  addTestDoc(): Promise<any> {
-    return addDoc(collection(this.firestore, 'test'), {
-      message: 'Firestore connected',
+  async createEvent(initialData: Partial<EvolveEvent>): Promise<string> {
+    const uid = this.requireAuth();
+
+    const eventsRef = collection(this.firestore, 'events');
+    const docRef = await addDoc(eventsRef, {
+      ...initialData,
+      ownerId: uid,
       createdAt: new Date(),
+      updatedAt: new Date(),
     });
+
+    return docRef.id;
   }
 
-  // ✅ SINGLE EVENT (REALTIME)
   getEvent(eventId: string): Observable<EvolveEvent | undefined> {
-    const eventRef = doc(this.firestore, 'events', eventId);
+    const eventRef = doc(this.firestore, `events/${eventId}`);
     return docData(eventRef, { idField: 'id' }) as Observable<
       EvolveEvent | undefined
     >;
   }
 
-  // ✅ CREATE EVENT
-  async createEvent(initialData: Partial<EvolveEvent>): Promise<string> {
-    const eventsRef = collection(this.firestore, 'events');
-    const docRef = await addDoc(eventsRef, initialData);
-    return docRef.id;
-  }
-
-  // ✅ UPDATE EVENT
   updateEvent(
     eventId: string,
     dataToUpdate: Partial<EvolveEvent>
   ): Promise<void> {
-    const eventRef = doc(this.firestore, 'events', eventId);
-    return updateDoc(eventRef, dataToUpdate);
+    const eventRef = doc(this.firestore, `events/${eventId}`);
+    return updateDoc(eventRef, {
+      ...dataToUpdate,
+      updatedAt: new Date(),
+    });
   }
 
-  // ✅ EVENTS LIST (ORDERED, REALTIME)
-  getEventsList({ user }: { user: string }): Observable<EvolveEvent[]> {
-    const eventsRef = collection(this.firestore, 'events');
-    const q = query(eventsRef, orderBy('event_info.function_date', 'desc'));
+  getEventsList(): Observable<EvolveEvent[]> {
+    // 2. Wrap the entire query logic in runInInjectionContext
+    return runInInjectionContext(this.injector, () => {
+      const uid = this.requireAuth(); // This is now safe if it uses inject() too
 
-    return (
-      collectionData(q, { idField: 'id' }) as Observable<EvolveEvent[]>
-    ).pipe(
-      map((events) => {
-        // Admin user sees everything
-        if (user === 'evolve') {
-          return events;
-        }
+      const eventsRef = collection(this.firestore, 'events');
+      const q = query(
+        eventsRef,
+        where('ownerId', '==', uid),
+        orderBy('event_info.function_date', 'desc')
+      );
 
-        // Regular users see only their assigned events
-        return events.filter(
-          (event) => event.event_asset_details?.shared_with === user
-        );
-      })
-    );
+      return collectionData(q, { idField: 'id' }) as Observable<EvolveEvent[]>;
+    });
   }
 
-  // ==========================================================
-  // ✅ VENDOR MANAGEMENT
-  // ==========================================================
+  /* =========================
+     Vendors (USER-SCOPED)
+  ========================= */
 
   getVendors(): Observable<Vendor[]> {
-    const vendorsRef = collection(this.firestore, 'vendors');
-    // You can add orderBy here if you want them sorted by name
+    const vendorsRef = collection(this.firestore, `${this.userPath()}/vendors`);
     const q = query(vendorsRef, orderBy('name', 'asc'));
     return collectionData(q, { idField: 'id' }) as Observable<Vendor[]>;
   }
 
   addVendor(vendor: Vendor) {
-    const vendorsRef = collection(this.firestore, 'vendors');
+    const vendorsRef = collection(this.firestore, `${this.userPath()}/vendors`);
     return addDoc(vendorsRef, vendor);
   }
 
   updateVendor(vendor: Vendor) {
     if (!vendor.id) throw new Error('Vendor ID is missing');
-    const docRef = doc(this.firestore, `vendors/${vendor.id}`);
-    // Destructure to separate ID from data to avoid saving ID inside the document field
     const { id, ...data } = vendor;
+    const docRef = doc(this.firestore, `${this.userPath()}/vendors/${id}`);
     return updateDoc(docRef, data);
   }
 
-  deleteVendor(id: string) {
-    const docRef = doc(this.firestore, `vendors/${id}`);
+  deleteVendor(vendorId: string) {
+    const docRef = doc(
+      this.firestore,
+      `${this.userPath()}/vendors/${vendorId}`
+    );
     return deleteDoc(docRef);
   }
 }

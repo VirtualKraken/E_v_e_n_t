@@ -4,10 +4,11 @@ import { FirebaseService } from '../../../service/firebase.service';
 import { EvolveEvent } from '../../types/quotes';
 import { AuthService } from '../../../service/auth.service';
 import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
+import { filter } from 'rxjs/operators';
 
-// Interface for your UI grouping
+// Interface for UI grouping
 interface EventGroup {
-  month: string; // e.g., "December 2025"
+  month: string; // e.g. "December 2025"
   events: EvolveEvent[];
 }
 
@@ -18,28 +19,32 @@ interface EventGroup {
   standalone: false,
 })
 export class HomeComponent implements OnInit {
-  // This is what the HTML will iterate over
   groupedEvents: EventGroup[] = [];
   loading = true;
-  user: any;
 
-  // Store event dates for quick lookup
+  // Store event dates for calendar highlighting
   eventDates: Set<string> = new Set();
-
+  $authSub: any;
+  $eventSub: any;
+user:any;
   constructor(
     private router: Router,
     private fs: FirebaseService,
-    private auth: AuthService
+    public authservice: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.user = localStorage.getItem('eeUser');
-    // Fetch all events
-    const filters = {
-      user: this.user,
-    };
+    this.$authSub = this.authservice.user$
+      .pipe(filter((user) => !!user))
+      .subscribe((user) => {
+        this.user = user;
+        console.log(user);
+        this.getUsersEvents();
+      });
+  }
 
-    this.fs.getEventsList(filters).subscribe((events) => {
+  getUsersEvents() {
+    this.$eventSub = this.fs.getEventsList().subscribe((events) => {
       this.groupedEvents = this.groupEventsByMonth(events);
       this.extractEventDates(events);
       this.loading = false;
@@ -59,17 +64,15 @@ export class HomeComponent implements OnInit {
   // Extract dates that have events for calendar highlighting
   private extractEventDates(events: EvolveEvent[]): void {
     this.eventDates.clear();
-    events.forEach(event => {
+    events.forEach((event) => {
       const date = new Date(event.event_info.function_date);
-      // Format as YYYY-MM-DD for consistent comparison
       const dateString = date.toISOString().split('T')[0];
       this.eventDates.add(dateString);
     });
   }
 
-  // Function to add custom class to calendar dates with events
+  // Calendar date highlight logic
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
-    // Only apply to month view
     if (view === 'month') {
       const dateString = cellDate.toISOString().split('T')[0];
       return this.eventDates.has(dateString) ? 'has-event' : '';
@@ -77,22 +80,18 @@ export class HomeComponent implements OnInit {
     return '';
   };
 
-  // --- Helper to Group Events by Month ---
+  // Group events by Month
   private groupEventsByMonth(events: EvolveEvent[]): EventGroup[] {
-    // 1. Sort events by Date (Newest first)
-    const sortedEvents = events.sort((a, b) => {
-      return (
+    const sortedEvents = [...events].sort(
+      (a, b) =>
         new Date(b.event_info.function_date).getTime() -
         new Date(a.event_info.function_date).getTime()
-      );
-    });
+    );
 
     const groups: { [key: string]: EvolveEvent[] } = {};
 
-    // 2. Group them
     sortedEvents.forEach((event) => {
       const date = new Date(event.event_info.function_date);
-      // Create key like "December 2025"
       const monthKey = date.toLocaleDateString('en-US', {
         month: 'long',
         year: 'numeric',
@@ -104,10 +103,16 @@ export class HomeComponent implements OnInit {
       groups[monthKey].push(event);
     });
 
-    // 3. Convert Object to Array for *ngFor
     return Object.keys(groups).map((key) => ({
       month: key,
       events: groups[key],
     }));
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.$authSub?.unsubscribe();
+    this.$eventSub?.unsubscribe();
   }
 }

@@ -1,7 +1,7 @@
 <div class="asset-management-container">
-  <h4 class="share-title" *ngIf="user === 'evolve'">
-    Share with production Team
-    <mat-form-field appearance="outline">
+  <h4 class="share-title">
+    <span>Share with production Team</span>
+    <!-- <mat-form-field appearance="outline">
       <mat-select
         matNativeControl
         required
@@ -12,7 +12,8 @@
         <mat-option value="sk">SK</mat-option>
         <mat-option value="rythm">Rythm</mat-option>
       </mat-select>
-    </mat-form-field>
+    </mat-form-field> -->
+    <button mat-icon-button type="button" color="accent" (click)="share()"><mat-icon>share</mat-icon></button>
   </h4>
 
   <div class="asset-list">
@@ -32,7 +33,9 @@
       <ng-container *ngIf="!editMode[asset.id]">
         <div class="col-item">
           <strong>{{ asset.name }}</strong>
-          <span class="qty-badge">{{ asset.quantity }}</span>
+          <span class="qty-badge"
+            ><b> x {{ asset.quantity }}</b></span
+          >
         </div>
 
         <div class="col-checkbox">
@@ -98,28 +101,28 @@
     </div>
 
     <div class="asset-row add-row">
-        <mat-form-field class="example-full-width" appearance="outline">
-          <input
-            matInput
-            #addNameInput
-            type="text"
-            class="inline-input"
-            [(ngModel)]="newAssetName"
-            (keyup.enter)="canAddAsset() && addNewAsset()"
-            placeholder="Add new item..."
-          />
-        </mat-form-field>
-
-        <mat-form-field class="example-full-width" appearance="outline">
-          <input
+      <mat-form-field class="example-full-width" appearance="outline">
+        <input
           matInput
-            type="number"
-            class="inline-input qty-input"
-            [(ngModel)]="newAssetQuantity"
-            (keyup.enter)="canAddAsset() && addNewAsset()"
-            placeholder="Qty"
-          />
-        </mat-form-field>
+          #addNameInput
+          type="text"
+          class="inline-input"
+          [(ngModel)]="newAssetName"
+          (keyup.enter)="canAddAsset() && addNewAsset()"
+          placeholder="Add new item..."
+        />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="outline">
+        <input
+          matInput
+          type="number"
+          class="inline-input qty-input"
+          [(ngModel)]="newAssetQuantity"
+          (keyup.enter)="canAddAsset() && addNewAsset()"
+          placeholder="Qty"
+        />
+      </mat-form-field>
 
       <div class="col-actions add-actions">
         <button

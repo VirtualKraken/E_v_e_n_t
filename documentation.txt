@@ -1,0 +1,31 @@
+1. User Login & Signup
+
+Login with username + password
+
+Signup with username + password + display name
+
+After success:
+
+Firebase Auth user created / authenticated
+
+displayName set in Auth
+
+Firestore user root created:
+
+users/{uid}
+
+
+App loads only user-scoped data:
+
+users/{uid}/events
+users/{uid}/vendors
+users/{uid}/quote_uploads
+
+
+Security:
+
+User can access only their own data
+
+No global collections
+
+No shared passwords
