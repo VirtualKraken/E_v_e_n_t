@@ -33,7 +33,7 @@
   border-radius: 12px;
 
   .vendor-avatar {
-    background: #f5f5f5;
+        background: var(--theme-btn-primary);
     display: flex;
     align-items: center;
     justify-content: center;

@@ -26,7 +26,6 @@ export class EventDetailsComponent {
 
   constructor(
     private firebaseService: FirebaseService,
-    private router: Router,
     private route: ActivatedRoute,
     private location: Location,
     private ts: ThemeServiceService

@@ -1,10 +1,15 @@
 .form {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
   flex-direction: column;
   width: 100%;
   padding: 16px;
   box-sizing: border-box;
   gap: 16px;
+  .full-width {
+      grid-column: 1 / -1; /* Spans all columns */
+    }
 }
 
 .actions {
@@ -16,7 +21,7 @@
 .read-only-view {
   border-radius: 8px;
   padding: 24px;
-  margin-bottom: 16px;
+  margin: 16px;
 
   h3 {
     margin-top: 0;

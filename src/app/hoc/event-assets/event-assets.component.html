@@ -13,7 +13,9 @@
         <mat-option value="rythm">Rythm</mat-option>
       </mat-select>
     </mat-form-field> -->
-    <button mat-icon-button type="button" color="accent" (click)="share()"><mat-icon>share</mat-icon></button>
+    <button mat-icon-button type="button" color="accent" (click)="share()">
+      <mat-icon>share</mat-icon>
+    </button>
   </h4>
 
   <div class="asset-list">
@@ -72,18 +74,24 @@
 
       <ng-container *ngIf="editMode[asset.id]">
         <div class="col-item edit-mode">
-          <input
-            type="text"
-            class="inline-input"
-            [(ngModel)]="editForms[asset.id].name"
-            placeholder="Item name"
-          />
-          <input
-            type="number"
-            class="inline-input qty-input"
-            [(ngModel)]="editForms[asset.id].quantity"
-            placeholder="Qty"
-          />
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input
+              matInput
+              type="text"
+              class="inline-input"
+              [(ngModel)]="editForms[asset.id].name"
+              placeholder="Item name"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <input
+              matInput
+              type="number"
+              class="inline-input qty-input"
+              [(ngModel)]="editForms[asset.id].quantity"
+              placeholder="Qty"
+            />
+          </mat-form-field>
         </div>
 
         <div class="col-actions edit-actions">
@@ -101,7 +109,7 @@
     </div>
 
     <div class="asset-row add-row">
-      <mat-form-field class="example-full-width" appearance="outline">
+      <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
         <input
           matInput
           #addNameInput
@@ -113,7 +121,7 @@
         />
       </mat-form-field>
 
-      <mat-form-field class="example-full-width" appearance="outline">
+      <mat-form-field class="example-full-width" appearance="outline" subscriptSizing="dynamic">
         <input
           matInput
           type="number"
@@ -131,7 +139,7 @@
           (click)="addNewAsset()"
           [disabled]="!canAddAsset()"
         >
-          <mat-icon>add</mat-icon>
+          <mat-icon>check</mat-icon>
         </button>
       </div>
     </div>
