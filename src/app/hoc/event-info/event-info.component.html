@@ -1,5 +1,5 @@
 <div class="details-wrapper">
-  <div *ngIf="isLocked" class="read-only-view">
+  <mat-card *ngIf="isLocked" class="read-only-view">
     <div class="info-grid">
       <!-- <div class="info-item">
       <span class="label">Client Name</span>
@@ -46,18 +46,19 @@
 
           <p>
             <span class="icon"><mat-icon>event</mat-icon></span>
-            <span class="text">{{
-              form.get("date")?.value | date : "mediumDate"
-            }}   |    
-            {{ form.get("entry")?.value }}</span>
+            <span class="text"
+              >{{ form.get("date")?.value | date : "mediumDate" }} |
+              {{ form.get("entry")?.value }}</span
+            >
           </p>
 
           <p>
             <span class="icon"><mat-icon>place</mat-icon></span>
-            <span class="text">{{ form.get("venue")?.value || "--" }}, {{ form.get("location")?.value || "--" }}</span>
+            <span class="text"
+              >{{ form.get("venue")?.value || "--" }},
+              {{ form.get("location")?.value || "--" }}</span
+            >
           </p>
-
-
         </span>
       </div>
 
@@ -79,7 +80,7 @@
         <mat-icon>lock_open</mat-icon> Unlock to Edit
       </button>
     </div>
-  </div>
+  </mat-card>
 
   <form [formGroup]="form" class="form" *ngIf="!isLocked">
     <mat-form-field appearance="outline">
@@ -106,14 +107,16 @@
         matInput
         formControlName="phone"
         type="tel"
-        placeholder="10 digit"
+        placeholder="+91XXXXXXXXXX"
       />
-      <mat-error *ngIf="form.get('phone')?.hasError('required')"
-        >Phone number is required</mat-error
-      >
-      <mat-error *ngIf="form.get('phone')?.hasError('pattern')"
-        >Enter a valid 10-digit number</mat-error
-      >
+
+      <mat-error *ngIf="form.get('phone')?.hasError('required')">
+        Phone number is required
+      </mat-error>
+
+      <mat-error *ngIf="form.get('phone')?.hasError('pattern')">
+        Country Code Needed!
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -135,7 +138,7 @@
       <input matInput formControlName="location" />
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="full-width">
       <mat-label>Notes</mat-label>
       <textarea matInput formControlName="notes"></textarea>
     </mat-form-field>

@@ -27,7 +27,10 @@ export class EventInfoComponent implements OnChanges {
     this.form = this.fb.group({
       date: [new Date(), Validators.required],
       clientName: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      phone: [
+        '',
+        [Validators.required, Validators.pattern(/^\+[1-9]\d{1,14}$/)],
+      ],
       venue: ['', Validators.required],
       location: [''],
       notes: [''],
