@@ -13,7 +13,7 @@
   <!-- DRAFT STATE -->
   <ng-template #draftHeader>
     <span class="draft-text">
-      New Event 
+      New Event
     </span>
   </ng-template>
 </h3>
@@ -56,6 +56,7 @@
     <event-assets
       (saveTriggered)="handleEventSave($event, 'event_asset_details')"
       [initialData]="eventData?.event_asset_details"
+      [eventInfo]="eventData?.event_info"
     ></event-assets>
   </mat-tab>
 

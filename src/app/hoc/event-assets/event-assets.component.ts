@@ -7,9 +7,12 @@ import {
   Input,
   OnInit,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
-import { AssetDetails } from '../../types/quotes';
+import { AssetDetails, EventInfo } from '../../types/quotes';
+import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { DatePipe } from '@angular/common';
 
 interface Asset {
   id: string;
@@ -23,15 +26,16 @@ interface Asset {
   selector: 'event-assets',
   templateUrl: './event-assets.component.html',
   styleUrl: './event-assets.component.scss',
-  standalone: false
+  standalone: false,
 })
 export class EventAssetsComponent implements OnInit, OnChanges {
   @Input() initialData: AssetDetails | undefined;
+  @Input() eventInfo: EventInfo | undefined;
   @Output() saveTriggered = new EventEmitter<AssetDetails>();
 
   @ViewChild('addNameInput') addNameInput!: ElementRef;
 
-  user=localStorage.getItem('eeUser');
+  user = localStorage.getItem('eeUser');
   // Data
   assets: Asset[] = [];
   sharedWith: string = 'none';
@@ -43,6 +47,8 @@ export class EventAssetsComponent implements OnInit, OnChanges {
   // Add row form
   newAssetName: string = '';
   newAssetQuantity: number = 1;
+
+  constructor(private route: ActivatedRoute, private datePipe: DatePipe) {}
 
   ngOnInit() {
     this.loadData();
@@ -66,7 +72,7 @@ export class EventAssetsComponent implements OnInit, OnChanges {
           name: item.name || item.item_name, // fallback if naming differs
           quantity: item.quantity || item.item_count || 0,
           takenOut: item.takenOut || false,
-          broughtBack: item.broughtBack || false
+          broughtBack: item.broughtBack || false,
         }));
       } else {
         this.assets = [];
@@ -82,7 +88,7 @@ export class EventAssetsComponent implements OnInit, OnChanges {
     // Cast to any or map strictly to AssetDetails structure required by parent
     const payload: any = {
       shared_with: this.sharedWith,
-      items: this.assets
+      items: this.assets,
     };
     this.saveTriggered.emit(payload);
   }
@@ -112,7 +118,7 @@ export class EventAssetsComponent implements OnInit, OnChanges {
     this.editMode[asset.id] = true;
     this.editForms[asset.id] = {
       name: asset.name,
-      quantity: asset.quantity
+      quantity: asset.quantity,
     };
   }
 
@@ -152,7 +158,7 @@ export class EventAssetsComponent implements OnInit, OnChanges {
         name: this.newAssetName.trim(),
         quantity: this.newAssetQuantity,
         takenOut: false,
-        broughtBack: false
+        broughtBack: false,
       };
 
       this.assets.push(newAsset);
@@ -181,12 +187,39 @@ export class EventAssetsComponent implements OnInit, OnChanges {
   }
 
   private generateId(): string {
-    return 'asset_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    return (
+      'asset_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+    );
   }
 
-  share(){
-    //display current url
-    console.log(window.location.href);
+  share() {
+    if (!this.eventInfo) {
+      return;
+    }
+    const id = this.route.snapshot.paramMap.get('id');
+    console.log(this.eventInfo);
+    const title = 'CheckList';
 
+    const formattedDate = this.datePipe.transform(
+      this.eventInfo?.function_date,
+      'dd MMM yyyy'
+    );
+    const text = `${formattedDate} - ${this.eventInfo?.venue}, ${this.eventInfo?.location}`;
+    const url = `${environment.firebase.siteUrl}production-checklist/${id}`;
+
+    if (navigator.share) {
+      navigator.share({
+        title,
+        text,
+        url,
+      });
+    } else {
+      this.shareFallback(url);
+    }
+  }
+  shareFallback(url: string) {
+    const message = encodeURIComponent(url);
+    const whatsappUrl = `https://wa.me/?text=${message}`;
+    window.open(whatsappUrl, '_blank');
   }
 }

@@ -45,6 +45,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { VendorListComponent } from './pages/vendor-list/vendor-list.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { ProductionChecklistComponent } from './pages/production-checklist/production-checklist.component';
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -95,6 +96,7 @@ import { ProductionChecklistComponent } from './pages/production-checklist/produ
     provideFirestore(() => getFirestore(environment.firebase.firestoreDB)),
      provideAuth(() => getAuth()),
      provideStorage(() => getStorage()),
+     DatePipe
   ],
 })
 export class AppModule {}
