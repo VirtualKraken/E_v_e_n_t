@@ -1,5 +1,27 @@
 <div class="home-container">
   <h2>{{ user?.displayName }}</h2>
+  <!-- UI card to show total events, number of confirmed events, number of not converted/confirmed events, conversion percentage -->
+  <!-- <mat-card class="counts-card">
+    <mat-card-content>
+      <div class="counts">
+        <span>Total Events</span>
+        <span>20</span>
+      </div>
+      <div class="counts">
+        <span>Confirmed</span>
+        <span>15</span>
+      </div>
+      <div class="counts">
+        <span>Leads</span>
+        <span>5</span>
+      </div>
+      <div class="counts">
+        <span>Conversion</span>
+        <span>50%</span>
+      </div>
+    </mat-card-content>
+  </mat-card> -->
+
   <mat-card *ngIf="!loading" class="demo-inline-calendar-card">
     <!-- <mat-calendar [dateClass]="dateClass"></mat-calendar> -->
   </mat-card>
@@ -14,7 +36,7 @@
       class="row"
       *ngFor="let item of group.events"
       (click)="openEventDetails(item)"
-      [ngClass]="{lead:!item.event_info.confirmed}"
+      [ngClass]="{ lead: !item.event_info.confirmed }"
     >
       <span class="date">
         {{ item.event_info.function_date | date : "dd" }}
