@@ -16,6 +16,8 @@ import {
   query,
   orderBy,
   where,
+  getCountFromServer,
+  Timestamp,
 } from '@angular/fire/firestore';
 import { Auth, authState, user } from '@angular/fire/auth';
 import {
@@ -76,6 +78,57 @@ export class FirebaseService {
   private userPath(): string {
     return `users/${this.requireAuth()}`;
   }
+
+
+
+  /* =========================
+     Dashboard Stats
+  ========================= */
+  async getDashboardStats(days: number = 360) {
+  const uid = this.requireAuth();
+
+  const eventsRef = collection(this.firestore, 'events');
+
+  // Not using date filter.
+  const fromDate = Timestamp.fromMillis(
+    Date.now() - days * 24 * 60 * 60 * 1000
+  );
+
+  const baseQuery = query(
+    eventsRef,
+    where('ownerId', '==', uid),
+  );
+
+  const confirmedQuery = query(
+    eventsRef,
+    where('ownerId', '==', uid),
+    where('event_info.confirmed', '==', true)
+  );
+
+  const pendingQuery = query(
+    eventsRef,
+    where('ownerId', '==', uid),
+    where('event_info.confirmed', '==', false)
+  );
+
+  const [totalSnap, confirmedSnap, pendingSnap] = await Promise.all([
+    getCountFromServer(baseQuery),
+    getCountFromServer(confirmedQuery),
+    getCountFromServer(pendingQuery),
+  ]);
+
+  const total = totalSnap.data().count;
+  const confirmed = confirmedSnap.data().count;
+  const pending = pendingSnap.data().count;
+
+  return {
+    total,
+    confirmed,
+    pending,
+    conversion: total > 0 ? Math.round((confirmed / total) * 100) : 0,
+  };
+}
+
 
   /* =========================
      Storage (Quotes)
