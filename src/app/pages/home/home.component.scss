@@ -38,6 +38,9 @@
       }
       //last two child should have fontsixe of 12px
     }
+    .row.lead{
+      filter: grayscale(1);
+    }
   }
   .fab {
     position: fixed;

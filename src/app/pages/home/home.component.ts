@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
   eventDates: Set<string> = new Set();
   $authSub: any;
   $eventSub: any;
-user:any;
+  user: any;
   constructor(
     private router: Router,
     private fs: FirebaseService,
