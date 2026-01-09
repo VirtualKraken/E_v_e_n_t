@@ -42,6 +42,7 @@ export type EventInfo = {
   phone: string;
   notes:string;
   entry:string;
+  confirmed: boolean;
 };
 export type EventCrew = {
   service_type: string;

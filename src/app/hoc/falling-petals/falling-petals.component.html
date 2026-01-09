@@ -1,0 +1,18 @@
+<div class="petal-container">
+  <div class="petal-wrapper">
+    <div
+      *ngFor="let petal of petals; trackBy: trackById"
+      class="petal"
+      [style.left]="petal.left"
+      [style.width]="petal.size"
+      [style.height]="petal.size"
+      [style.background-color]="petal.color"
+      [style.filter]="'blur(' + petal.blur + ')'"
+      [style.animation-duration]="petal.duration + ', ' + petal.swayDuration">
+    </div>
+  </div>
+
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
+</div>

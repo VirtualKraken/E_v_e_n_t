@@ -83,6 +83,12 @@
   </mat-card>
 
   <form [formGroup]="form" class="form" *ngIf="!isLocked">
+    <mat-card>
+      <mat-label> Confirmed </mat-label>
+      <mat-slide-toggle formControlName="confirmed" class="mat-slide-toggle">
+      </mat-slide-toggle>
+    </mat-card>
+
     <mat-form-field appearance="outline">
       <mat-label>Date</mat-label>
       <input matInput [matDatepicker]="picker" formControlName="date" />
@@ -143,6 +149,8 @@
       <textarea matInput formControlName="notes"></textarea>
     </mat-form-field>
 
+    <!-- toggle button for confirmed or not -->
+    <br />
     <div class="actions">
       <button mat-button type="button" (click)="onCancel()">Cancel</button>
       <button mat-raised-button color="primary" (click)="submit()">Save</button>

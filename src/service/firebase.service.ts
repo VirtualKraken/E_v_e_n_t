@@ -17,7 +17,7 @@ import {
   orderBy,
   where,
 } from '@angular/fire/firestore';
-import { Auth, authState } from '@angular/fire/auth';
+import { Auth, authState, user } from '@angular/fire/auth';
 import {
   Storage,
   ref,
@@ -25,7 +25,7 @@ import {
   getDownloadURL,
   deleteObject,
 } from '@angular/fire/storage';
-import { Observable, filter } from 'rxjs';
+import { Observable, filter, switchMap } from 'rxjs';
 import { EventQuote, EvolveEvent } from '../app/types/quotes';
 
 /* =========================
@@ -51,8 +51,8 @@ export class FirebaseService {
   private storage = inject(Storage);
   private auth = inject(Auth);
   private injector = inject(Injector);
-
   private uid: string | null = null;
+  user$ = user(this.auth);
 
   constructor() {
     authState(this.auth)
@@ -171,21 +171,37 @@ export class FirebaseService {
      Vendors (USER-SCOPED)
   ========================= */
 
-  getVendors(): Observable<Vendor[]> {
-    const vendorsRef = collection(this.firestore, `${this.userPath()}/vendors`);
-    const q = query(vendorsRef, orderBy('name', 'asc'));
-    return collectionData(q, { idField: 'id' }) as Observable<Vendor[]>;
+  private getUserVendorsPath(uid: string) {
+    return `users/${uid}/vendors`;
   }
 
-  addVendor(vendor: Vendor) {
-    const vendorsRef = collection(this.firestore, `${this.userPath()}/vendors`);
+  // 3. Refactor getVendors to be reactive
+  getVendors(): Observable<Vendor[]> {
+    return this.user$.pipe(
+      filter((u) => !!u), // Wait until user is logged in
+      switchMap((u) => {
+        const vendorsRef = collection(
+          this.firestore,
+          this.getUserVendorsPath(u!.uid)
+        );
+        const q = query(vendorsRef, orderBy('name', 'asc'));
+        return collectionData(q, { idField: 'id' }) as Observable<Vendor[]>;
+      })
+    );
+  }
+
+async addVendor(vendor: Vendor) {
+    const u = this.auth.currentUser;
+    if (!u) throw new Error('Not authenticated');
+    const vendorsRef = collection(this.firestore, this.getUserVendorsPath(u.uid));
     return addDoc(vendorsRef, vendor);
   }
 
-  updateVendor(vendor: Vendor) {
-    if (!vendor.id) throw new Error('Vendor ID is missing');
+  async updateVendor(vendor: Vendor) {
+    const u = this.auth.currentUser;
+    if (!u || !vendor.id) throw new Error('Invalid state');
+    const docRef = doc(this.firestore, `${this.getUserVendorsPath(u.uid)}/${vendor.id}`);
     const { id, ...data } = vendor;
-    const docRef = doc(this.firestore, `${this.userPath()}/vendors/${id}`);
     return updateDoc(docRef, data);
   }
 

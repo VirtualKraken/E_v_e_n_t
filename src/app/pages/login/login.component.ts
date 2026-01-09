@@ -40,6 +40,7 @@ export class LoginComponent {
     }, { validators: this.passwordMatchValidator });
   }
 
+
   // Custom validator to check if passwords match
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password');
@@ -122,4 +123,6 @@ export class LoginComponent {
       this.signupForm.markAllAsTouched();
     }
   }
+
+  
 }

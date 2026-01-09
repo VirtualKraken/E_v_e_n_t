@@ -66,12 +66,10 @@
 
 .total-section {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding: 16px 20px;
   border-radius: 8px;
-  margin-bottom: 20px;
-
   strong {
     font-size: 18px;
   }
@@ -86,7 +84,8 @@
 .action-buttons {
   display: flex;
   gap: 12px;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
 
   button {
     mat-icon {
@@ -119,24 +118,24 @@ mat-dialog-actions {
 }
 
 // Responsive design
-@media (max-width: 600px) {
-  .crew-item {
-    .crew-info {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-    }
+// @media (max-width: 600px) {
+//   .crew-item {
+//     .crew-info {
+//       flex-direction: column;
+//       align-items: flex-start;
+//       gap: 8px;
+//     }
 
-    .crew-amount {
-      margin-left: 0;
-    }
-  }
+//     .crew-amount {
+//       margin-left: 0;
+//     }
+//   }
 
-  .action-buttons {
-    flex-direction: column;
+//   .action-buttons {
+//     flex-direction: column;
 
-    button {
-      width: 100%;
-    }
-  }
-}
+//     button {
+//       width: 100%;
+//     }
+//   }
+// }

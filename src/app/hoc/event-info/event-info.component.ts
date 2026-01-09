@@ -35,6 +35,7 @@ export class EventInfoComponent implements OnChanges {
       location: [''],
       notes: [''],
       entry: [''],
+      confirmed: [false]
     });
 
     // 2. Default State: Disable the form immediately
@@ -63,6 +64,7 @@ export class EventInfoComponent implements OnChanges {
       date: data.function_date ? new Date(data.function_date) : null,
       entry: data.entry || '',
       notes: data.notes || '',
+      confirmed: data.confirmed || false
     });
   }
 
@@ -102,6 +104,7 @@ export class EventInfoComponent implements OnChanges {
       location: formVal.location || '',
       notes: formVal.notes || '',
       entry: formVal.entry || '',
+      confirmed: formVal.confirmed || false
     };
 
     // 1. Emit the data to the parent
