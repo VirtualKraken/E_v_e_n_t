@@ -39,6 +39,7 @@ export type EventInfo = {
   function_date: string;
   venue: string;
   location?: string;
+  countryCode:string;
   phone: string;
   notes:string;
   entry:string;

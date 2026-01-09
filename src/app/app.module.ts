@@ -33,6 +33,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { LoginComponent } from './pages/login/login.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 import { EventQuoteComponent } from './hoc/event-quote/event-quote.component';
 import { MatRippleModule } from '@angular/material/core';
@@ -90,7 +91,8 @@ import { FallingPetalsComponent } from './hoc/falling-petals/falling-petals.comp
     MatMenuModule,
     MatSlideToggleModule,
     MatRippleModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
   bootstrap: [AppComponent],
   providers: [

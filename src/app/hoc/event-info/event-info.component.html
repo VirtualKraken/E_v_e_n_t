@@ -41,7 +41,7 @@
 
           <p>
             <span class="icon"><mat-icon>phone</mat-icon></span>
-            <span class="text">{{ form.get("phone")?.value }}</span>
+            <span class="text">{{ form.get("countryCode")?.value }} {{ form.get("phone")?.value }}</span>
           </p>
 
           <p>
@@ -107,23 +107,34 @@
       >
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Phone Number</mat-label>
-      <input
-        matInput
-        formControlName="phone"
-        type="tel"
-        placeholder="+91XXXXXXXXXX"
-      />
+      <mat-form-field appearance="outline" class="country-code">
+        <mat-label>Code</mat-label>
+        <mat-select formControlName="countryCode">
+          <mat-option *ngFor="let c of countryCodes" [value]="c.code">
+            {{ c.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-      <mat-error *ngIf="form.get('phone')?.hasError('required')">
-        Phone number is required
-      </mat-error>
+      <mat-form-field appearance="outline" class="phone-input">
+        <mat-label>Phone Number</mat-label>
+        <input
+          matInput
+          type="tel"
+          inputmode="numeric"
+          formControlName="phone"
+          placeholder="XXXXXXXXXX"
+          maxlength="10"
+        />
 
-      <mat-error *ngIf="form.get('phone')?.hasError('pattern')">
-        Country Code Needed!
-      </mat-error>
-    </mat-form-field>
+        <mat-error *ngIf="form.get('phone')?.hasError('required')">
+          Phone number is required
+        </mat-error>
+
+        <mat-error *ngIf="form.get('phone')?.hasError('pattern')">
+          Enter valid 10-digit number
+        </mat-error>
+      </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Venue</mat-label>

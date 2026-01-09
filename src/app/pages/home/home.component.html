@@ -5,19 +5,22 @@
     <mat-card-content>
       <div class="counts">
         <span>Total Events</span>
-        <span>20</span>
+        <span>{{ dashboardStats.total }}</span>
       </div>
+
       <div class="counts">
         <span>Confirmed</span>
-        <span>15</span>
+        <span>{{ dashboardStats.confirmed }}</span>
       </div>
+
       <div class="counts">
         <span>Leads</span>
-        <span>5</span>
+        <span>{{ dashboardStats.pending }}</span>
       </div>
+
       <div class="counts">
         <span>Conversion</span>
-        <span>50%</span>
+        <span>{{ dashboardStats.conversion }}%</span>
       </div>
     </mat-card-content>
   </mat-card> -->
@@ -25,8 +28,13 @@
   <mat-card *ngIf="!loading" class="demo-inline-calendar-card">
     <!-- <mat-calendar [dateClass]="dateClass"></mat-calendar> -->
   </mat-card>
+  @if (loading) {
+    <div class="spinner-container">
+      <mat-progress-spinner class="example-margin" mode="indeterminate" diameter="32">
+      </mat-progress-spinner>
+    </div>
 
-  <div *ngIf="loading">Loading events...</div>
+  } @else {
   <div *ngIf="!loading && groupedEvents.length === 0">No events found.</div>
 
   <div class="list-container" *ngFor="let group of groupedEvents">
@@ -47,6 +55,7 @@
       <span>{{ item.event_info.location || "" }}</span>
     </mat-card>
   </div>
+  }
 
   <!-- Create Event -->
   <button mat-fab color="primary" class="fab" (click)="openEventDetails()">

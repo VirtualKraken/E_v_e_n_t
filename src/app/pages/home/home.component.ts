@@ -27,6 +27,12 @@ export class HomeComponent implements OnInit {
   $authSub: any;
   $eventSub: any;
   user: any;
+  dashboardStats = {
+    total: 0,
+    confirmed: 0,
+    pending: 0,
+    conversion: 0,
+  };
   constructor(
     private router: Router,
     private fs: FirebaseService,
@@ -36,11 +42,19 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.$authSub = this.authservice.user$
       .pipe(filter((user) => !!user))
-      .subscribe((user) => {
+      .subscribe(async (user) => {
         this.user = user;
-        console.log(user);
         this.getUsersEvents();
+        await this.loadDashboardStats();
       });
+  }
+
+  async loadDashboardStats() {
+    try {
+      this.dashboardStats = await this.fs.getDashboardStats(30);
+    } catch (err) {
+      console.error('Failed to load dashboard stats', err);
+    }
   }
 
   getUsersEvents() {

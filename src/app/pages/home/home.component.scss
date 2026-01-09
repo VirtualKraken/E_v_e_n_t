@@ -2,6 +2,12 @@
 
 .home-container {
   padding-bottom: 100px;
+  .spinner-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+  }
   .counts-card {
     margin: 10px;
     mat-card-content {
