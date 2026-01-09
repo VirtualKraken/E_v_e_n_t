@@ -33,6 +33,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { LoginComponent } from './pages/login/login.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 import { EventQuoteComponent } from './hoc/event-quote/event-quote.component';
 import { MatRippleModule } from '@angular/material/core';
 // Firebase (MODERN, NOT compat)
@@ -46,6 +47,7 @@ import { VendorListComponent } from './pages/vendor-list/vendor-list.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { ProductionChecklistComponent } from './pages/production-checklist/production-checklist.component';
 import { DatePipe } from '@angular/common';
+import { FallingPetalsComponent } from './hoc/falling-petals/falling-petals.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +61,8 @@ import { DatePipe } from '@angular/common';
     EventQuoteComponent,
     VendorListComponent,
     SettingsComponent,
-    ProductionChecklistComponent
+    ProductionChecklistComponent,
+    FallingPetalsComponent
     // other components go here
   ],
   imports: [
