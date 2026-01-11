@@ -1,18 +1,40 @@
 <div class="quote-container">
-  <h3>Upload Event Quotes</h3>
+  <mat-card class="outer">
+    <h3>Upload Event Quotes</h3>
 
-  <div class="upload-controls">
-    <input
-      id="quoteFileUpload"
-      type="file"
-      multiple
-      (change)="onFileSelected($event)"
-      [disabled]="isUploading"
-      accept=".pdf, image/*"
-    />
+    <div class="upload-controls">
+      <mat-card matRipple class="upload-card" (click)="quoteFileUpload.click()">
+        <mat-icon>upload_file</mat-icon>
+      </mat-card>
 
+      <input
+        #quoteFileUpload
+        type="file"
+        multiple
+        hidden
+        (change)="onFileSelected($event)"
+        [disabled]="isUploading"
+        accept=".pdf, image/*"
+      />
+
+
+      <div *ngIf="selectedFiles.length > 0" class="preview-list">
+        <p class="preview-label">Ready to upload:</p>
+
+        <mat-chip-listbox>
+          <mat-chip *ngFor="let file of selectedFiles; let i = index">
+            {{ file.name }}
+
+            <button matChipRemove (click)="removeSelectedFile(i)">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+        </mat-chip-listbox>
+      </div>
+    </div>
+    
     <button
-    *ngIf="selectedFiles.length != 0 "
+      *ngIf="selectedFiles.length != 0"
       mat-raised-button
       color="primary"
       (click)="uploadFiles()"
@@ -24,22 +46,7 @@
       </span>
       <span *ngIf="isUploading">Uploading...</span>
     </button>
-  </div>
-
- <div *ngIf="selectedFiles.length > 0" class="preview-list">
-    <p class="preview-label">Ready to upload:</p>
-
-    <mat-chip-listbox>
-      <mat-chip *ngFor="let file of selectedFiles; let i = index">
-        {{ file.name }}
-
-        <button matChipRemove (click)="removeSelectedFile(i)">
-          <mat-icon>cancel</mat-icon>
-        </button>
-
-      </mat-chip>
-    </mat-chip-listbox>
-  </div>
+  </mat-card>
 
   <mat-divider style="margin: 20px 0"></mat-divider>
 

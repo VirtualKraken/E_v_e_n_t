@@ -1,18 +1,30 @@
 .quote-container {
   padding: 20px;
 }
-
+.outer{
+  padding: 10px;
+}
+h3 {
+  margin-top: 5px;
+}
 .upload-controls {
-  display: grid;
-  gap: 15px;
-  align-items: center;
+  // display: grid;
+  // gap: 15px;
+  // align-items: center;
   margin-bottom: 10px;
 
-  input[type="file"] {
+  mat-card {
     padding: 10px;
-    border: 1px dashed #ccc;
-    border-radius: 4px;
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    mat-icon {
+      $size:100px;
+      font-size: $size;
+      height: $size;
+      width: $size;
+    }
   }
 }
 
@@ -27,7 +39,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid #e0e0e0;
   transition: box-shadow 0.2s;
 
@@ -59,7 +71,7 @@
 .preview-list {
   margin-top: 15px;
   padding: 10px;
-  border-radius: 6px;
+  border-radius: 12px;
   border: 1px dashed #c2c2c2;
 
   .preview-label {
