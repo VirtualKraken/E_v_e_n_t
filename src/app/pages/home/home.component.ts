@@ -29,10 +29,15 @@ export class HomeComponent implements OnInit {
   user: any;
   dashboardStats = {
     total: 0,
-    confirmed: 0,
-    pending: 0,
+    upcoming: 0,
+    completed: 0,
     conversion: 0,
   };
+  lastVisibleDoc: any = null;
+  hasMore = true;
+  pageSize = 10;
+  allEvents: EvolveEvent[] = [];
+  readonly nowISO = new Date().toISOString();
   constructor(
     private router: Router,
     private fs: FirebaseService,
@@ -44,7 +49,8 @@ export class HomeComponent implements OnInit {
       .pipe(filter((user) => !!user))
       .subscribe(async (user) => {
         this.user = user;
-        this.getUsersEvents();
+        this.allEvents = []; // Store raw list to re-group easily
+        await this.loadMoreEvents();
         await this.loadDashboardStats();
       });
   }
@@ -57,12 +63,33 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  getUsersEvents() {
-    this.$eventSub = this.fs.getEventsList().subscribe((events) => {
-      this.groupedEvents = this.groupEventsByMonth(events);
-      this.extractEventDates(events);
+  async loadMoreEvents() {
+    if (!this.hasMore) return;
+
+    this.loading = true;
+    try {
+      const result = await this.fs.getEventsPaged(
+        this.pageSize,
+        this.lastVisibleDoc
+      );
+
+      if (result.events.length < this.pageSize) {
+        this.hasMore = false;
+      }
+
+      // Append new events to the master list
+      this.allEvents = [...this.allEvents, ...result.events];
+
+      // Group the cumulative list
+      this.groupedEvents = this.groupEventsByMonth(this.allEvents);
+      this.extractEventDates(this.allEvents);
+
+      this.lastVisibleDoc = result.lastVisible;
+    } catch (err) {
+      console.error('Error loading events', err);
+    } finally {
       this.loading = false;
-    });
+    }
   }
 
   openEventDetails(evolveEvent?: EvolveEvent) {

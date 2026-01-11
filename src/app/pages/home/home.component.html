@@ -1,7 +1,7 @@
 <div class="home-container">
   <h2>{{ user?.displayName }}</h2>
   <!-- UI card to show total events, number of confirmed events, number of not converted/confirmed events, conversion percentage -->
-  <!-- <mat-card class="counts-card">
+  <mat-card class="counts-card">
     <mat-card-content>
       <div class="counts">
         <span>Total Events</span>
@@ -9,30 +9,34 @@
       </div>
 
       <div class="counts">
-        <span>Confirmed</span>
-        <span>{{ dashboardStats.confirmed }}</span>
+        <span>Completed</span>
+        <span>{{ dashboardStats.completed }}</span>
       </div>
 
       <div class="counts">
-        <span>Leads</span>
-        <span>{{ dashboardStats.pending }}</span>
+        <span>Upcoming</span>
+        <span>{{ dashboardStats.upcoming }}</span>
       </div>
 
-      <div class="counts">
+      <!-- <div class="counts">
         <span>Conversion</span>
         <span>{{ dashboardStats.conversion }}%</span>
-      </div>
+      </div> -->
     </mat-card-content>
-  </mat-card> -->
+  </mat-card>
 
   <mat-card *ngIf="!loading" class="demo-inline-calendar-card">
     <!-- <mat-calendar [dateClass]="dateClass"></mat-calendar> -->
   </mat-card>
   @if (loading) {
-    <div class="spinner-container">
-      <mat-progress-spinner class="example-margin" mode="indeterminate" diameter="32">
-      </mat-progress-spinner>
-    </div>
+  <div class="spinner-container">
+    <mat-progress-spinner
+      class="example-margin"
+      mode="indeterminate"
+      diameter="32"
+    >
+    </mat-progress-spinner>
+  </div>
 
   } @else {
   <div *ngIf="!loading && groupedEvents.length === 0">No events found.</div>
@@ -44,7 +48,10 @@
       class="row"
       *ngFor="let item of group.events"
       (click)="openEventDetails(item)"
-      [ngClass]="{ lead: !item.event_info.confirmed }"
+      [ngClass]="{
+        lead: !item.event_info.confirmed,
+        completed: item.event_info.function_date < nowISO
+      }"
     >
       <span class="date">
         {{ item.event_info.function_date | date : "dd" }}
@@ -56,6 +63,19 @@
     </mat-card>
   </div>
   }
+
+  <div class="load-more-container" *ngIf="hasMore && !loading">
+    <button mat-stroked-button color="primary" (click)="loadMoreEvents()">
+      Load More
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="spinner-container">
+    <mat-progress-spinner
+      mode="indeterminate"
+      diameter="32"
+    ></mat-progress-spinner>
+  </div>
 
   <!-- Create Event -->
   <button mat-fab color="primary" class="fab" (click)="openEventDetails()">
