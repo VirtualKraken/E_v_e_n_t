@@ -1,35 +1,6 @@
 <div class="details-wrapper">
   <mat-card *ngIf="isLocked" class="read-only-view">
     <div class="info-grid">
-      <!-- <div class="info-item">
-      <span class="label">Client Name</span>
-      <span class="value">{{ form.get('clientName')?.value }}</span>
-    </div>
-
-    <div class="info-item">
-      <span class="label">Date</span>
-      <span class="value">{{ form.get('date')?.value | date:'mediumDate' }}</span>
-    </div>
-
-    <div class="info-item">
-      <span class="label">Phone</span>
-      <span class="value">{{ form.get('phone')?.value }}</span>
-    </div>
-
-    <div class="info-item">
-      <span class="label">Venue</span>
-      <span class="value">{{ form.get('venue')?.value || '--' }}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Location</span>
-      <span class="value">{{ form.get('location')?.value || '--' }}</span>
-    </div>
-
-    <div class="info-item">
-      <span class="label">Entry Time</span>
-      <span class="value">{{ form.get('entry')?.value || '--' }}</span>
-    </div> -->
-
       <div class="info-item">
         <span class="label"> Details </span>
 
@@ -41,7 +12,10 @@
 
           <p>
             <span class="icon"><mat-icon>phone</mat-icon></span>
-            <span class="text">{{ form.get("countryCode")?.value }} {{ form.get("phone")?.value }}</span>
+            <span class="text"
+              >{{ form.get("countryCode")?.value }}
+              {{ form.get("phone")?.value }}</span
+            >
           </p>
 
           <p>
@@ -107,34 +81,34 @@
       >
     </mat-form-field>
 
-      <mat-form-field appearance="outline" class="country-code">
-        <mat-label>Code</mat-label>
-        <mat-select formControlName="countryCode">
-          <mat-option *ngFor="let c of countryCodes" [value]="c.code">
-            {{ c.label }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field appearance="outline" class="country-code">
+      <mat-label>Code</mat-label>
+      <mat-select formControlName="countryCode">
+        <mat-option *ngFor="let c of countryCodes" [value]="c.code">
+          {{ c.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-      <mat-form-field appearance="outline" class="phone-input">
-        <mat-label>Phone Number</mat-label>
-        <input
-          matInput
-          type="tel"
-          inputmode="numeric"
-          formControlName="phone"
-          placeholder="XXXXXXXXXX"
-          maxlength="10"
-        />
+    <mat-form-field appearance="outline" class="phone-input">
+      <mat-label>Phone Number</mat-label>
+      <input
+        matInput
+        type="tel"
+        inputmode="numeric"
+        formControlName="phone"
+        placeholder="XXXXXXXXXX"
+        maxlength="10"
+      />
 
-        <mat-error *ngIf="form.get('phone')?.hasError('required')">
-          Phone number is required
-        </mat-error>
+      <mat-error *ngIf="form.get('phone')?.hasError('required')">
+        Phone number is required
+      </mat-error>
 
-        <mat-error *ngIf="form.get('phone')?.hasError('pattern')">
-          Enter valid 10-digit number
-        </mat-error>
-      </mat-form-field>
+      <mat-error *ngIf="form.get('phone')?.hasError('pattern')">
+        Enter valid 10-digit number
+      </mat-error>
+    </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Venue</mat-label>
@@ -155,6 +129,12 @@
       <input matInput formControlName="location" />
     </mat-form-field>
 
+    <mat-form-field appearance="outline">
+      <mat-label>Quoted Amount</mat-label>
+      <input matInput formControlName="quotedAmount" type="number" />
+      <span matTextPrefix>Rs&nbsp;</span>
+    </mat-form-field>
+
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Notes</mat-label>
       <textarea matInput formControlName="notes"></textarea>
@@ -167,4 +147,62 @@
       <button mat-raised-button color="primary" (click)="submit()">Save</button>
     </div>
   </form>
+
+  <mat-card class="bill-card">
+    <mat-card-header>
+      <mat-card-title>Financial Summary</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="stats-grid">
+        <!-- Profit and Expense above progress bar -->
+        <div class="stats-row">
+          <div class="stat-item">
+            <span class="stat-label">Estimated Profit</span>
+            <span
+              class="stat-value"
+              [ngClass]="calculateProfit() >= 0 ? 'profit' : 'loss'"
+            >
+              <span
+                class="stat-value"
+                [ngClass]="calculateProfit() >= 0 ? 'profit' : 'loss'"
+              >
+                {{ calculateProfit() | currency : "INR" : "symbol" : "1.0-0" }}
+                <span class="percentage"
+                  >({{ calculateMargin() | number : "1.0-0" }}%)</span
+                >
+              </span>
+            </span>
+          </div>
+
+          <div class="stat-item">
+            <span class="stat-label">Total Expense</span>
+            <span class="stat-value expense">
+              {{ totalExpense | currency : "INR" : "symbol" : "1.0-0" }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <mat-progress-bar
+          #matProgressBar
+          mode="determinate"
+          [value]="calculateMargin()"
+          [color]="calculateProfit() >= 0 ? 'primary' : 'warn'"
+        >
+        </mat-progress-bar>
+
+        <!-- Quoted amount below progress bar -->
+        <div class="quoted-section">
+          <span class="stat-label">Quoted Amount</span>
+          <span class="stat-value quoted">
+            {{
+              form.value.quotedAmount || 0
+                | currency : "INR" : "symbol" : "1.0-0"
+            }}
+          </span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

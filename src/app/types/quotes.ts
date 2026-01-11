@@ -37,6 +37,7 @@ export type EvolveEvent = {
 export type EventInfo = {
   client_name: string;
   function_date: string;
+  quotedAmount: number;
   venue: string;
   location?: string;
   countryCode:string;

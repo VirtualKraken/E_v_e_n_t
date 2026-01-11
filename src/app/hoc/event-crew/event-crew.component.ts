@@ -23,7 +23,7 @@ import { EVENT_SERVICES } from '../../../assets/constants';
 export class EventCrewComponent implements OnInit, OnChanges {
   crew: EventCrew[] = [];
 
-  services =EVENT_SERVICES;
+  services = EVENT_SERVICES;
 
   crewForm: FormGroup;
 
@@ -36,9 +36,9 @@ export class EventCrewComponent implements OnInit, OnChanges {
   constructor(private fb: FormBuilder, public dialog: MatDialog) {
     // Defines form with snake_case to match interface directly
     this.crewForm = this.fb.group({
-      service_type: ['', Validators.required],
+      service_type: [''],
       person_name: ['', Validators.required],
-      phone: ['', [ Validators.pattern(/^[0-9]{10}$/)]],
+      phone: ['', [Validators.pattern(/^[0-9]{10}$/)]],
       amount: [null, [Validators.required, Validators.min(0)]],
     });
   }
@@ -93,7 +93,6 @@ export class EventCrewComponent implements OnInit, OnChanges {
   triggerSave() {
     this.saveTriggered.emit(this.crew);
     // console.log(this.crew);
-
   }
 
   getTotalAmount(): number {

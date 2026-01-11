@@ -49,6 +49,8 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { ProductionChecklistComponent } from './pages/production-checklist/production-checklist.component';
 import { DatePipe } from '@angular/common';
 import { FallingPetalsComponent } from './hoc/falling-petals/falling-petals.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -92,7 +94,8 @@ import { FallingPetalsComponent } from './hoc/falling-petals/falling-petals.comp
     MatSlideToggleModule,
     MatRippleModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatProgressBarModule
   ],
   bootstrap: [AppComponent],
   providers: [

@@ -2,24 +2,23 @@
   <mat-icon>redeem</mat-icon>
 
   <!-- WHEN EVENT EXISTS -->
-  <ng-container *ngIf="currentEventId && eventData?.event_info; else draftHeader">
+  <ng-container
+    *ngIf="currentEventId && eventData?.event_info; else draftHeader"
+  >
     <span>
       {{ eventData?.event_info?.client_name }} –
-      {{ eventData?.event_info?.function_date | date:'MMM d' }},
+      {{ eventData?.event_info?.function_date | date : "MMM d" }},
       {{ eventData?.event_info?.location }}
     </span>
   </ng-container>
 
   <!-- DRAFT STATE -->
   <ng-template #draftHeader>
-    <span class="draft-text">
-      New Event
-    </span>
+    <span class="draft-text"> New Event </span>
   </ng-template>
 </h3>
 
 <mat-tab-group>
-
   <!-- INFO TAB (always enabled) -->
   <mat-tab>
     <ng-template mat-tab-label>
@@ -30,6 +29,7 @@
     <event-info
       (saveTriggered)="handleEventSave($event, 'event_info')"
       [initialData]="eventData?.event_info"
+      [fullData]="eventData"
     ></event-info>
   </mat-tab>
 
@@ -37,7 +37,7 @@
   <mat-tab [disabled]="!currentEventId">
     <ng-template mat-tab-label>
       <mat-icon>group</mat-icon>
-      Crew
+      Expense
     </ng-template>
 
     <event-crew
@@ -72,5 +72,4 @@
       (saveTriggered)="handleEventSave($event, 'event_quote')"
     ></event-quote>
   </mat-tab>
-
 </mat-tab-group>

@@ -4,3 +4,7 @@ h3{
     align-items: center;
     gap: 10px;
 }
+
+::ng-deep mat-tab .mat-mdc.mat-mdc-tab{
+  padding: 0px 10px !important;
+}
