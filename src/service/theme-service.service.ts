@@ -41,7 +41,7 @@ export class ThemeServiceService {
     return this.theme === 'dark';
   }
 
-   showNotification(message: string, panelClass = 'success-snackbar') {
+   showNotification(message: string, panelClass = 'custom-offset-snackbar') {
     this.snackBar.open(message, 'Close', {
       duration: 3000, // Closes after 3 seconds
       horizontalPosition: 'center',

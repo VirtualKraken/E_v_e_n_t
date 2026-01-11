@@ -41,9 +41,10 @@
     width: 46px;
     height: 46px;
     mat-icon {
-      font-size: 28px;
-      width: 28px;
-      height: 28px;
+      $icon-size: 24px;
+      font-size:$icon-size;
+      width: $icon-size;
+      height: $icon-size;
     }
 
     &.active {

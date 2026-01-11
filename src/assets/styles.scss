@@ -271,3 +271,8 @@ h6 {
 ::ng-deep .mdc-notched-outline__notch {
   border-top: none !important;
 }
+
+.custom-offset-snackbar {
+  // Move the snackbar container up by 100px
+  margin-bottom: 60px !important;
+}
