@@ -110,9 +110,10 @@ export class FirebaseService {
     const completedQuery = query(
       eventsRef,
       where('ownerId', '==', uid),
-      where('event_info.confirmed', '==', false),
+      where('event_info.confirmed', '==', true),
       where('event_info.function_date', '<=', now)
     );
+
 
     const [totalSnap, upcomingSnap, completedSnap] = await Promise.all([
       getCountFromServer(baseQuery),

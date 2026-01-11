@@ -58,6 +58,8 @@ export class HomeComponent implements OnInit {
   async loadDashboardStats() {
     try {
       this.dashboardStats = await this.fs.getDashboardStats(30);
+      console.log(this.dashboardStats);
+
     } catch (err) {
       console.error('Failed to load dashboard stats', err);
     }
