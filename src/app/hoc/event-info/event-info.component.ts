@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EventInfo, EvolveEvent } from '../../types/quotes';
 import { COUNTRY_CODES } from '../../../assets/constants';
 import { count } from 'firebase/firestore';
+import { map, Observable, startWith } from 'rxjs';
 
 @Component({
   selector: 'event-info',
@@ -23,6 +24,7 @@ export class EventInfoComponent implements OnChanges {
   @Output() saveTriggered = new EventEmitter<EventInfo>();
   @Output() cancel = new EventEmitter<void>();
   countryCodes = COUNTRY_CODES;
+filteredCountryCodes!: Observable<typeof COUNTRY_CODES>;
 
   form: FormGroup;
   isLocked = true; // 1. State variable for UI toggling
@@ -45,6 +47,23 @@ export class EventInfoComponent implements OnChanges {
     // 2. Default State: Disable the form immediately
     this.form.disable();
   }
+
+  ngOnInit() {
+  this.filteredCountryCodes = this.form
+    .get('countryCode')!
+    .valueChanges.pipe(
+      startWith(''),
+      map(value => this.filterCountryCodes(value || ''))
+    );
+}
+
+private filterCountryCodes(value: string) {
+  const v = value.toLowerCase();
+  return this.countryCodes.filter(c =>
+    c.label.toLowerCase().includes(v) ||
+    c.code.includes(v)
+  );
+}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['initialData'] && this.initialData) {

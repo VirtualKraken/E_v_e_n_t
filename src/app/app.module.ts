@@ -34,7 +34,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { LoginComponent } from './pages/login/login.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { EventQuoteComponent } from './hoc/event-quote/event-quote.component';
 import { MatRippleModule } from '@angular/material/core';
 // Firebase (MODERN, NOT compat)
@@ -95,7 +95,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatRippleModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatAutocompleteModule
   ],
   bootstrap: [AppComponent],
   providers: [

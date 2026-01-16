@@ -83,11 +83,23 @@
 
     <mat-form-field appearance="outline" class="country-code">
       <mat-label>Code</mat-label>
-      <mat-select formControlName="countryCode">
-        <mat-option *ngFor="let c of countryCodes" [value]="c.code">
+
+      <input
+        type="text"
+        matInput
+        formControlName="countryCode"
+        [matAutocomplete]="auto"
+        placeholder="Search country or code"
+      />
+
+      <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
+        <mat-option
+          *ngFor="let c of filteredCountryCodes | async"
+          [value]="c.code"
+        >
           {{ c.label }}
         </mat-option>
-      </mat-select>
+      </mat-autocomplete>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="phone-input">
