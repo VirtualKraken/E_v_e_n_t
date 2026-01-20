@@ -46,7 +46,6 @@ export class EventDetailsComponent {
     this.firebaseService.getEvent(id).subscribe((event) => {
       if (event) {
         this.eventData = event;
-        console.log(event); // Works perfectly!
       }
     });
   }
@@ -56,7 +55,7 @@ export class EventDetailsComponent {
     data: EventInfo | EventCrew[] | AssetDetails | EventQuote[],
     eventdetailsType: string
   ) {
-    console.log(data);
+    // console.log(data);
 
     try {
       if (!this.currentEventId) {
@@ -75,6 +74,9 @@ export class EventDetailsComponent {
       }
     } catch (error) {
       console.error('Save failed', error);
+    }finally{
+      localStorage.setItem('eventsUpdated', 'true');
     }
+
   }
 }

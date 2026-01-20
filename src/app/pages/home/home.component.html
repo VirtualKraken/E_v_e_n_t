@@ -18,15 +18,16 @@
         <span>{{ dashboardStats.upcoming }}</span>
       </div>
 
-      <!-- <div class="counts">
-        <span>Conversion</span>
-        <span>{{ dashboardStats.conversion }}%</span>
-      </div> -->
+      <div class="counts" (click)="loadThisYearsEvents(displayingYear)">
+        <span>Sync</span>
+        <span> <mat-icon>sync</mat-icon> </span>
+      </div>
     </mat-card-content>
   </mat-card>
 
   <mat-card *ngIf="!loading" class="demo-inline-calendar-card">
     <mat-calendar
+    [startAt]="calendarStartDate"
       [dateClass]="dateClass"
       (selectedChange)="calandarClick($event)"
       (viewChanged)="onCalandarViewChanged($event)"
@@ -50,7 +51,7 @@
       <h4 class="month">
         {{ group.month }} <span>{{ group.events.length }} events</span>
       </h4>
-      <p *ngIf="group.events.length === 0" >No Events</p>
+      <p *ngIf="group.events.length === 0">No Events</p>
       <!-- <mat-card *ngIf="group.events.length === 0" class="row"><span></span> No Events</mat-card> -->
 
       <mat-card
