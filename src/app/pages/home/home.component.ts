@@ -57,18 +57,19 @@ export class HomeComponent implements OnInit {
   }
 
   async loadData() {
-    if (localStorage.getItem('eventsUpdated')) {
-      console.log('Loaded from API');
-      await this.loadThisYearsEvents(this.displayingYear);
-    } else {
-      this.allEvents = await this.ds.getEvents();
-      if (this.allEvents.length === 0) {
-        await this.loadThisYearsEvents(this.displayingYear);
-      } else {
-        this.processEventData();
-      }
-      console.log('Loaded from cache');
-    }
+    // if (localStorage.getItem('eventsUpdated')) {
+    //   console.log('Loaded from API');
+    //   await this.loadThisYearsEvents(this.displayingYear);
+    // } else {
+    //   this.allEvents = await this.ds.getEvents();
+    //   if (this.allEvents.length === 0) {
+    //     await this.loadThisYearsEvents(this.displayingYear);
+    //   } else {
+    //     this.processEventData();
+    //   }
+    //   console.log('Loaded from cache');
+    // }
+    await this.loadThisYearsEvents(this.displayingYear);
     await this.loadDashboardStats();
   }
 
