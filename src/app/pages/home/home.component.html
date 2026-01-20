@@ -26,49 +26,52 @@
   </mat-card>
 
   <mat-card *ngIf="!loading" class="demo-inline-calendar-card">
-    <mat-calendar [dateClass]="dateClass"></mat-calendar>
+    <mat-calendar
+      [dateClass]="dateClass"
+      (selectedChange)="calandarClick($event)"
+      (viewChanged)="onCalandarViewChanged($event)"
+    ></mat-calendar>
   </mat-card>
   @if (loading) {
-  <div class="spinner-container">
-    <mat-progress-spinner
-      class="example-margin"
-      mode="indeterminate"
-      diameter="32"
-    >
-    </mat-progress-spinner>
-  </div>
-
+    <div class="spinner-container">
+      <mat-progress-spinner
+        class="example-margin"
+        mode="indeterminate"
+        diameter="32"
+      >
+      </mat-progress-spinner>
+    </div>
   } @else {
-  <div *ngIf="!loading && groupedEvents.length === 0">No events found.</div>
+    <div class="no-events" *ngIf="!loading && groupedEvents.length === 0">
+      No events found for {{ displayingYear }}.
+    </div>
 
-  <div class="list-container" *ngFor="let group of groupedEvents">
-    <h4 class="month">{{ group.month }}</h4>
+    <div class="list-container" *ngFor="let group of groupedEvents">
+      <h4 class="month">
+        {{ group.month }} <span>{{ group.events.length }} events</span>
+      </h4>
+      <p *ngIf="group.events.length === 0" >No Events</p>
+      <!-- <mat-card *ngIf="group.events.length === 0" class="row"><span></span> No Events</mat-card> -->
 
-    <mat-card
-      class="row"
-      *ngFor="let item of group.events"
-      (click)="openEventDetails(item)"
-      [ngClass]="{
-        lead: !item.event_info.confirmed,
-        completed: item.event_info.function_date < nowISO
-      }"
-    >
-      <span class="date">
-        {{ item.event_info.function_date | date : "dd" }}
-      </span>
+      <mat-card
+        class="row"
+        *ngFor="let item of group.events"
+        (click)="openEventDetails(item)"
+        [ngClass]="{
+          lead: !item.event_info.confirmed,
+          completed: item.event_info.function_date < nowISO,
+        }"
+      >
+        <span class="date">
+          {{ item.event_info.function_date | date: "dd" }}
+        </span>
 
-      <span>{{ item.event_info.client_name }}</span>
-      <span>{{ item.event_info.venue }}</span>
-      <span>{{ item.event_info.location || "" }}</span>
-    </mat-card>
-  </div>
+        <span>{{ item.event_info.client_name }}</span>
+        <span>{{ item.event_info.venue }}</span>
+        <span>{{ item.event_info.location || "" }}</span>
+      </mat-card>
+    </div>
   }
-
-  <div class="load-more-container" *ngIf="hasMore && !loading">
-    <button mat-stroked-button color="primary" (click)="loadMoreEvents()">
-      Load More
-    </button>
-  </div>
 
   <div *ngIf="loading" class="spinner-container">
     <mat-progress-spinner
@@ -81,4 +84,23 @@
   <button mat-fab color="primary" class="fab" (click)="openEventDetails()">
     <mat-icon>add</mat-icon>
   </button>
+
+  <div class="load-more-container" *ngIf="!loading">
+    <button
+      mat-stroked-button
+      color="primary"
+      type="button"
+      (click)="loadThisYearsEvents(displayingYear - 1)"
+    >
+      Load {{ displayingYear - 1 }} Events
+    </button>
+    <button
+      mat-stroked-button
+      color="primary"
+      type="button"
+      (click)="loadThisYearsEvents(displayingYear + 1)"
+    >
+      Load {{ displayingYear + 1 }} Events
+    </button>
+  </div>
 </div>

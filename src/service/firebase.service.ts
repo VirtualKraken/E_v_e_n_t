@@ -93,7 +93,7 @@ export class FirebaseService {
 
     // Not using date filter.
     const fromDate = Timestamp.fromMillis(
-      Date.now() - days * 24 * 60 * 60 * 1000
+      Date.now() - days * 24 * 60 * 60 * 1000,
     );
 
     const baseQuery = query(eventsRef, where('ownerId', '==', uid));
@@ -104,16 +104,15 @@ export class FirebaseService {
       eventsRef,
       where('ownerId', '==', uid),
       where('event_info.confirmed', '==', true),
-      where('event_info.function_date', '>', now)
+      where('event_info.function_date', '>', now),
     );
 
     const completedQuery = query(
       eventsRef,
       where('ownerId', '==', uid),
       where('event_info.confirmed', '==', true),
-      where('event_info.function_date', '<=', now)
+      where('event_info.function_date', '<=', now),
     );
-
 
     const [totalSnap, upcomingSnap, completedSnap] = await Promise.all([
       getCountFromServer(baseQuery),
@@ -157,7 +156,7 @@ export class FirebaseService {
   addFileToFirestore(fileData: EventQuote) {
     const filesRef = collection(
       this.firestore,
-      `${this.userPath()}/quote_uploads`
+      `${this.userPath()}/quote_uploads`,
     );
     return addDoc(filesRef, fileData);
   }
@@ -165,7 +164,7 @@ export class FirebaseService {
   getUploadedFiles(): Observable<EventQuote[]> {
     const filesRef = collection(
       this.firestore,
-      `${this.userPath()}/quote_uploads`
+      `${this.userPath()}/quote_uploads`,
     );
     const q = query(filesRef, orderBy('uploadedAt', 'desc'));
     return collectionData(q, { idField: 'id' }) as Observable<EventQuote[]>;
@@ -198,7 +197,7 @@ export class FirebaseService {
 
   updateEvent(
     eventId: string,
-    dataToUpdate: Partial<EvolveEvent>
+    dataToUpdate: Partial<EvolveEvent>,
   ): Promise<void> {
     const eventRef = doc(this.firestore, `events/${eventId}`);
     return updateDoc(eventRef, {
@@ -207,42 +206,34 @@ export class FirebaseService {
     });
   }
 
-  async getEventsPaged(
-    pageSize: number,
-    lastDoc: QueryDocumentSnapshot | null = null
-  ) {
+  async getEventsOfEachMonth() {}
+
+  async getEventsByYear(year: number): Promise<EvolveEvent[]> {
     return runInInjectionContext(this.injector, async () => {
       const uid = this.requireAuth();
+
+      // Define boundaries using UTC to avoid local timezone shifts
+      const start = `${year}-01-01`;
+      const end = `${year + 1}-01-01`;
+
       const eventsRef = collection(this.firestore, 'events');
 
-      // Build the query
-      let q;
-      if (lastDoc) {
-        q = query(
-          eventsRef,
-          where('ownerId', '==', uid),
-          orderBy('event_info.function_date', 'desc'),
-          startAfter(lastDoc),
-          limit(pageSize)
-        );
-      } else {
-        q = query(
-          eventsRef,
-          where('ownerId', '==', uid),
-          orderBy('event_info.function_date', 'desc'),
-          limit(pageSize)
-        );
-      }
+      const q = query(
+        eventsRef,
+        where('ownerId', '==', uid),
+        where('event_info.function_date', '>=', start),
+        where('event_info.function_date', '<', end),
+        orderBy('event_info.function_date', 'asc'),
+      );
 
-      const querySnapshot = await getDocs(q);
 
-      // Return both the data and the last visible document for the next page
-      return {
-        events: querySnapshot.docs.map(
-          (doc) => ({ id: doc.id, ...doc.data() } as EvolveEvent)
-        ),
-        lastVisible: querySnapshot.docs[querySnapshot.docs.length - 1] || null,
-      };
+      const snapshot = await getDocs(q);
+
+      return snapshot.docs.map((doc) => {
+        const data = doc.data();
+
+        return { id: doc.id, ...data } as EvolveEvent;
+      });
     });
   }
 
@@ -255,7 +246,7 @@ export class FirebaseService {
       const q = query(
         eventsRef,
         where('ownerId', '==', uid),
-        orderBy('event_info.function_date', 'desc')
+        orderBy('event_info.function_date', 'desc'),
       );
 
       return collectionData(q, { idField: 'id' }) as Observable<EvolveEvent[]>;
@@ -277,11 +268,11 @@ export class FirebaseService {
       switchMap((u) => {
         const vendorsRef = collection(
           this.firestore,
-          this.getUserVendorsPath(u!.uid)
+          this.getUserVendorsPath(u!.uid),
         );
         const q = query(vendorsRef, orderBy('name', 'asc'));
         return collectionData(q, { idField: 'id' }) as Observable<Vendor[]>;
-      })
+      }),
     );
   }
 
@@ -290,7 +281,7 @@ export class FirebaseService {
     if (!u) throw new Error('Not authenticated');
     const vendorsRef = collection(
       this.firestore,
-      this.getUserVendorsPath(u.uid)
+      this.getUserVendorsPath(u.uid),
     );
     return addDoc(vendorsRef, vendor);
   }
@@ -300,7 +291,7 @@ export class FirebaseService {
     if (!u || !vendor.id) throw new Error('Invalid state');
     const docRef = doc(
       this.firestore,
-      `${this.getUserVendorsPath(u.uid)}/${vendor.id}`
+      `${this.getUserVendorsPath(u.uid)}/${vendor.id}`,
     );
     const { id, ...data } = vendor;
     return updateDoc(docRef, data);
@@ -309,7 +300,7 @@ export class FirebaseService {
   deleteVendor(vendorId: string) {
     const docRef = doc(
       this.firestore,
-      `${this.userPath()}/vendors/${vendorId}`
+      `${this.userPath()}/vendors/${vendorId}`,
     );
     return deleteDoc(docRef);
   }

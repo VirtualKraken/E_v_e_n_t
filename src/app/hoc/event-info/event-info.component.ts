@@ -95,7 +95,7 @@ private filterCountryCodes(value: string) {
   }
 
   calculateExpense() {
-    this.totalExpense = this.fullData?.event_crew.reduce(
+    this.totalExpense = this.fullData?.event_crew?.reduce(
       (sum, member) => sum + (member.amount || 0),
       0
     );

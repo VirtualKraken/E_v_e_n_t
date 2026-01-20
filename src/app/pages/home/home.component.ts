@@ -33,15 +33,14 @@ export class HomeComponent implements OnInit {
     completed: 0,
     conversion: 0,
   };
-  lastVisibleDoc: any = null;
-  hasMore = true;
-  pageSize = 10;
   allEvents: EvolveEvent[] = [];
   readonly nowISO = new Date().toISOString();
+  displayingYear = new Date().getFullYear();
+
   constructor(
     private router: Router,
     private fs: FirebaseService,
-    public authservice: AuthService
+    public authservice: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +49,7 @@ export class HomeComponent implements OnInit {
       .subscribe(async (user) => {
         this.user = user;
         this.allEvents = []; // Store raw list to re-group easily
-        await this.loadMoreEvents();
+        await this.loadThisYearsEvents(this.displayingYear);
         await this.loadDashboardStats();
       });
   }
@@ -59,39 +58,28 @@ export class HomeComponent implements OnInit {
     try {
       this.dashboardStats = await this.fs.getDashboardStats(30);
       console.log(this.dashboardStats);
-
     } catch (err) {
       console.error('Failed to load dashboard stats', err);
     }
   }
 
-  async loadMoreEvents() {
-    if (!this.hasMore) return;
-
+  async loadThisYearsEvents(year: number) {
     this.loading = true;
     try {
-      const result = await this.fs.getEventsPaged(
-        this.pageSize,
-        this.lastVisibleDoc
-      );
-
-      if (result.events.length < this.pageSize) {
-        this.hasMore = false;
-      }
-
-      // Append new events to the master list
-      this.allEvents = [...this.allEvents, ...result.events];
-
-      // Group the cumulative list
+      this.displayingYear = year;
+      this.allEvents = await this.fs.getEventsByYear(year);
       this.groupedEvents = this.groupEventsByMonth(this.allEvents);
-      this.extractEventDates(this.allEvents);
+      console.log(this.groupedEvents);
 
-      this.lastVisibleDoc = result.lastVisible;
-    } catch (err) {
-      console.error('Error loading events', err);
+      this.extractEventDates(this.allEvents);
+    } catch {
     } finally {
       this.loading = false;
     }
+  }
+
+  onCalandarViewChanged(view: 'month' | 'year' | 'multi-year') {
+    console.log('Calendar view changed:', view);
   }
 
   openEventDetails(evolveEvent?: EvolveEvent) {
@@ -102,6 +90,28 @@ export class HomeComponent implements OnInit {
       // Create Mode
       this.router.navigate(['/event-details']);
     }
+  }
+
+  loadLastYear(){
+
+  }
+  calandarClick(date: any) {
+    console.log('Clicked date:', date.toISOString());
+    const event = this.allEvents.find(
+      (event) =>
+        new Date(event.event_info.function_date).toISOString() ===
+        date.toISOString(),
+    );
+    if (event) {
+      this.openEventDetails(event);
+    } else {
+      console.log('No event found for this date.');
+    }
+
+    // example usage
+    // this.router.navigate(['/events'], {
+    //   queryParams: { date: date.toISOString() }
+    // });
   }
 
   // Extract dates that have events for calendar highlighting
@@ -123,34 +133,49 @@ export class HomeComponent implements OnInit {
     return '';
   };
 
-  // Group events by Month
-  private groupEventsByMonth(events: EvolveEvent[]): EventGroup[] {
-    const sortedEvents = [...events].sort(
-      (a, b) =>
-        new Date(b.event_info.function_date).getTime() -
-        new Date(a.event_info.function_date).getTime()
-    );
+private groupEventsByMonth(
+  events: EvolveEvent[],
+  year: number = new Date().getFullYear()
+): EventGroup[] {
 
-    const groups: { [key: string]: EvolveEvent[] } = {};
+  // 1. Create all 12 months first
+  const monthMap: { [key: string]: EventGroup } = {};
+  const result: EventGroup[] = [];
 
-    sortedEvents.forEach((event) => {
-      const date = new Date(event.event_info.function_date);
-      const monthKey = date.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
+  for (let month = 0; month < 12; month++) {
+    const date = new Date(year, month, 1);
 
-      if (!groups[monthKey]) {
-        groups[monthKey] = [];
-      }
-      groups[monthKey].push(event);
+    const monthKey = date.toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric',
     });
 
-    return Object.keys(groups).map((key) => ({
-      month: key,
-      events: groups[key],
-    }));
+    const group: EventGroup = {
+      month: monthKey,
+      events: [],
+    };
+
+    monthMap[monthKey] = group;
+    result.push(group);
   }
+
+  // 2. Push events into their month bucket
+  events.forEach(event => {
+    const date = new Date(event.event_info.function_date);
+
+    if (date.getFullYear() !== year) return; // ignore other years
+
+    const monthKey = date.toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric',
+    });
+
+    monthMap[monthKey]?.events.push(event);
+  });
+
+  return result;
+}
+
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.

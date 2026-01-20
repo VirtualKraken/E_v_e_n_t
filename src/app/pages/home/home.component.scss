@@ -2,7 +2,7 @@
 
 .home-container {
   padding-bottom: 100px;
-  .spinner-container{
+  .spinner-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -25,12 +25,18 @@
       }
     }
   }
-  .demo-inline-calendar-card{
+  .demo-inline-calendar-card {
     margin: 10px;
   }
 
   h2 {
     margin: 10px;
+  }
+  .no-events {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100dvh - 767px);
   }
   .list-container {
     padding: 10px;
@@ -39,6 +45,13 @@
       margin: 0 0 10px 0;
       font-weight: 600;
       font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      span{
+        font-weight: normal !important;
+        font-size: 14px;
+      }
     }
     .row {
       display: grid;
@@ -70,7 +83,7 @@
     .row.lead {
       filter: grayscale(1);
     }
-    .row.completed{
+    .row.completed {
       background: var(--theme-background) !important;
     }
   }
@@ -85,10 +98,8 @@
 
 ::ng-deep .mat-calendar-body-cell.has-event {
   .mat-calendar-body-cell-content {
-    background-color: var(--primary-color, #ff91004a);
-    color: white;
+    background-color: var(--theme-btn-primary, #ff91004a);
     border-radius: 50%;
-    font-weight: bold;
   }
 }
 
@@ -98,10 +109,10 @@
     background-color: var(--accent-color, #ff4081);
     border: 2px solid var(--primary-color, #3f51b5);
   }
-
 }
-.load-more-container{
+.load-more-container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  margin: 0 10px;
 }
