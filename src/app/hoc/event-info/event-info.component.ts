@@ -24,7 +24,7 @@ export class EventInfoComponent implements OnChanges {
   @Output() saveTriggered = new EventEmitter<EventInfo>();
   @Output() cancel = new EventEmitter<void>();
   countryCodes = COUNTRY_CODES;
-filteredCountryCodes!: Observable<typeof COUNTRY_CODES>;
+  filteredCountryCodes!: Observable<typeof COUNTRY_CODES>;
 
   form: FormGroup;
   isLocked = true; // 1. State variable for UI toggling
@@ -49,21 +49,18 @@ filteredCountryCodes!: Observable<typeof COUNTRY_CODES>;
   }
 
   ngOnInit() {
-  this.filteredCountryCodes = this.form
-    .get('countryCode')!
-    .valueChanges.pipe(
+    this.filteredCountryCodes = this.form.get('countryCode')!.valueChanges.pipe(
       startWith(''),
-      map(value => this.filterCountryCodes(value || ''))
+      map((value) => this.filterCountryCodes(value || '')),
     );
-}
+  }
 
-private filterCountryCodes(value: string) {
-  const v = value.toLowerCase();
-  return this.countryCodes.filter(c =>
-    c.label.toLowerCase().includes(v) ||
-    c.code.includes(v)
-  );
-}
+  private filterCountryCodes(value: string) {
+    const v = value.toLowerCase();
+    return this.countryCodes.filter(
+      (c) => c.label.toLowerCase().includes(v) || c.code.includes(v),
+    );
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['initialData'] && this.initialData) {
@@ -97,7 +94,7 @@ private filterCountryCodes(value: string) {
   calculateExpense() {
     this.totalExpense = this.fullData?.event_crew?.reduce(
       (sum, member) => sum + (member.amount || 0),
-      0
+      0,
     );
   }
 
@@ -125,8 +122,9 @@ private filterCountryCodes(value: string) {
       this.form.markAllAsTouched();
       return;
     }
-
     const formVal = this.form.value;
+    const noonDate = formVal.date as Date;
+    noonDate.setHours(12, 0, 0, 0);
 
     // Prepare the data object
     const eventInfoData: EventInfo = {
@@ -134,7 +132,7 @@ private filterCountryCodes(value: string) {
       countryCode: formVal.countryCode,
       quotedAmount: formVal.quotedAmount || 0,
       phone: formVal.phone,
-      function_date: formVal.date.toISOString(),
+      function_date: noonDate.toISOString(),
       venue: formVal.venue,
       location: formVal.location || '',
       notes: formVal.notes || '',
@@ -153,17 +151,15 @@ private filterCountryCodes(value: string) {
   calculateProfit(): number {
     // update bar color based on profit,
 
-  const quoted = this.form.value.quotedAmount || 0;
-  return quoted - this.totalExpense;
-}
+    const quoted = this.form.value.quotedAmount || 0;
+    return quoted - this.totalExpense;
+  }
 
-calculateMargin(): number {
-  const quoted = this.form.value.quotedAmount || 0;
-  if (quoted === 0) return 0;
-  const profit = this.calculateProfit();
-  // Returns percentage of profit relative to revenue
-  return (profit / quoted) * 100;
-}
-
-
+  calculateMargin(): number {
+    const quoted = this.form.value.quotedAmount || 0;
+    if (quoted === 0) return 0;
+    const profit = this.calculateProfit();
+    // Returns percentage of profit relative to revenue
+    return (profit / quoted) * 100;
+  }
 }
