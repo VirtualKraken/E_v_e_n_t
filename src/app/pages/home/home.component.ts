@@ -155,48 +155,58 @@ export class HomeComponent implements OnInit {
     return '';
   };
 
-  private groupEventsByMonth(
-    events: EvolveEvent[],
-    yearr?: number,
-  ): EventGroup[] {
-    const targetYear = yearr ?? this.displayingYear;
-    // 1. Create all 12 months first
-    const monthMap: { [key: string]: EventGroup } = {};
-    const result: EventGroup[] = [];
+ private groupEventsByMonth(
+  events: EvolveEvent[],
+  yearr?: number,
+): EventGroup[] {
+  const targetYear = yearr ?? this.displayingYear;
+  const now = new Date();
+  const currentMonthIndex = now.getMonth(); // 0 for Jan, 1 for Feb, etc.
 
-    for (let month = 0; month < 12; month++) {
-      const date = new Date(targetYear, month, 1);
+  const monthMap: { [key: string]: EventGroup } = {};
+  const result: EventGroup[] = [];
 
-      const monthKey = date.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
+  // 1. Create all 12 months starting from the current month
+  for (let i = 0; i < 12; i++) {
+    // This allows the index to wrap around (e.g., 10, 11, 0, 1...)
+    const monthIndex = (currentMonthIndex + i) % 12;
 
-      const group: EventGroup = {
-        month: monthKey,
-        events: [],
-      };
+    // Note: If the month wraps around to the next year,
+    // we still use targetYear to keep the UI consistent for the selected year view.
+    const date = new Date(targetYear, monthIndex, 1);
 
-      monthMap[monthKey] = group;
-      result.push(group);
-    }
-
-    // 2. Push events into their month bucket
-    events.forEach((event) => {
-      const date = new Date(event.event_info.function_date);
-
-      if (date.getFullYear() !== targetYear) return; // ignore other years
-
-      const monthKey = date.toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
-      });
-
-      monthMap[monthKey]?.events.push(event);
+    const monthKey = date.toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric',
     });
 
-    return result;
+    const group: EventGroup = {
+      month: monthKey,
+      events: [],
+    };
+
+    monthMap[monthKey] = group;
+    result.push(group);
   }
+
+  // 2. Push events into their month bucket
+  events.forEach((event) => {
+    const date = new Date(event.event_info.function_date);
+
+    if (date.getFullYear() !== targetYear) return;
+
+    const monthKey = date.toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric',
+    });
+
+    if (monthMap[monthKey]) {
+      monthMap[monthKey].events.push(event);
+    }
+  });
+
+  return result;
+}
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
