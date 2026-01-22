@@ -1,5 +1,5 @@
 <div class="home-container">
-  <h2>{{ user?.displayName }}</h2>
+  <h2 >{{ user?.displayName }}</h2>
   <!-- UI card to show total events, number of confirmed events, number of not converted/confirmed events, conversion percentage -->
   <mat-card class="counts-card">
     <mat-card-content>
@@ -25,14 +25,40 @@
     </mat-card-content>
   </mat-card>
 
+  <!-- <mat-form-field class="search-form-field" appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Search</mat-label>
+    <input matInput type="text" [(ngModel)]="searchText" />
+    @if (searchText) {
+      <button
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="searchText = ''"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    } @else {
+      <button
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="searchText = ''"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+    }
+  </mat-form-field> -->
+
   <mat-card *ngIf="!loading" class="demo-inline-calendar-card">
     <mat-calendar
-    [startAt]="calendarStartDate"
+      [startAt]="calendarStartDate"
       [dateClass]="dateClass"
       (selectedChange)="calandarClick($event)"
       (viewChanged)="onCalandarViewChanged($event)"
     ></mat-calendar>
   </mat-card>
+
+
   @if (loading) {
     <div class="spinner-container">
       <mat-progress-spinner

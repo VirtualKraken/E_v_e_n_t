@@ -41,7 +41,7 @@ export class EventInfoComponent implements OnChanges {
       quotedAmount: [0],
       notes: [''],
       entry: [''],
-      confirmed: [false],
+      confirmed: [true],
     });
 
     // 2. Default State: Disable the form immediately

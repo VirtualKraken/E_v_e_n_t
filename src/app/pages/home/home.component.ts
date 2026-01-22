@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
   readonly nowISO = new Date().toISOString();
   displayingYear = new Date().getFullYear();
   calendarStartDate: Date = new Date();
-
+searchText:string=''
   constructor(
     private router: Router,
     private fs: FirebaseService,
