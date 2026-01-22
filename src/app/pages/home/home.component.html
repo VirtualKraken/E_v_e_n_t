@@ -1,5 +1,5 @@
 <div class="home-container">
-  <h2 >{{ user?.displayName }}</h2>
+  <h2>{{ user?.displayName }}</h2>
   <!-- UI card to show total events, number of confirmed events, number of not converted/confirmed events, conversion percentage -->
   <mat-card class="counts-card">
     <mat-card-content>
@@ -58,7 +58,6 @@
     ></mat-calendar>
   </mat-card>
 
-
   @if (loading) {
     <div class="spinner-container">
       <mat-progress-spinner
@@ -81,6 +80,7 @@
       <!-- <mat-card *ngIf="group.events.length === 0" class="row"><span></span> No Events</mat-card> -->
 
       <mat-card
+        matRipple
         class="row"
         *ngFor="let item of group.events"
         (click)="openEventDetails(item)"

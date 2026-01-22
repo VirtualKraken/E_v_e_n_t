@@ -11,6 +11,7 @@ import { EventInfo, EvolveEvent } from '../../types/quotes';
 import { COUNTRY_CODES } from '../../../assets/constants';
 import { count } from 'firebase/firestore';
 import { map, Observable, startWith } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'event-info',
@@ -30,7 +31,7 @@ export class EventInfoComponent implements OnChanges {
   isLocked = true; // 1. State variable for UI toggling
   totalExpense: any;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private datePipe: DatePipe) {
     this.form = this.fb.group({
       date: [new Date(), Validators.required],
       clientName: ['', Validators.required],
@@ -123,8 +124,7 @@ export class EventInfoComponent implements OnChanges {
       return;
     }
     const formVal = this.form.value;
-    const noonDate = formVal.date as Date;
-    noonDate.setHours(12, 0, 0, 0);
+    const justDate = this.datePipe.transform(formVal.date, 'yyyy-MM-dd') as string;
 
     // Prepare the data object
     const eventInfoData: EventInfo = {
@@ -132,7 +132,7 @@ export class EventInfoComponent implements OnChanges {
       countryCode: formVal.countryCode,
       quotedAmount: formVal.quotedAmount || 0,
       phone: formVal.phone,
-      function_date: noonDate.toISOString(),
+      function_date: justDate,
       venue: formVal.venue,
       location: formVal.location || '',
       notes: formVal.notes || '',

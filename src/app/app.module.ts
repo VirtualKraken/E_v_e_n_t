@@ -50,6 +50,7 @@ import { ProductionChecklistComponent } from './pages/production-checklist/produ
 import { DatePipe } from '@angular/common';
 import { FallingPetalsComponent } from './hoc/falling-petals/falling-petals.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -101,6 +102,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
   bootstrap: [AppComponent],
   providers: [
     provideNativeDateAdapter(),
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore(environment.firebase.firestoreDB)),
      provideAuth(() => getAuth()),

@@ -6,6 +6,7 @@ import { AuthService } from '../../../service/auth.service';
 import { MatCalendarCellClassFunction } from '@angular/material/datepicker';
 import { filter } from 'rxjs/operators';
 import { DataService } from '../../../service/data.service';
+import { DatePipe } from '@angular/common';
 
 // Interface for UI grouping
 interface EventGroup {
@@ -38,12 +39,13 @@ export class HomeComponent implements OnInit {
   readonly nowISO = new Date().toISOString();
   displayingYear = new Date().getFullYear();
   calendarStartDate: Date = new Date();
-searchText:string=''
+  searchText: string = '';
   constructor(
     private router: Router,
     private fs: FirebaseService,
     public authservice: AuthService,
     private ds: DataService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
@@ -76,7 +78,6 @@ searchText:string=''
   async loadDashboardStats() {
     try {
       this.dashboardStats = await this.fs.getDashboardStats(30);
-      console.log(this.dashboardStats);
     } catch (err) {
       console.error('Failed to load dashboard stats', err);
     }
@@ -120,11 +121,12 @@ searchText:string=''
 
   loadLastYear() {}
   calandarClick(date: any) {
-    console.log('Clicked date:', date.toISOString());
+    console.log('Clicked date:', this.datePipe.transform(date, 'yyyy-MM-dd'));
     const event = this.allEvents.find(
       (event) =>
-        new Date(event.event_info.function_date).toISOString() ===
-        date.toISOString(),
+
+        this.datePipe.transform(event.event_info.function_date, 'yyyy-MM-dd')===
+        this.datePipe.transform(date, 'yyyy-MM-dd'),
     );
     if (event) {
       this.openEventDetails(event);
@@ -132,10 +134,6 @@ searchText:string=''
       console.log('No event found for this date.');
     }
 
-    // example usage
-    // this.router.navigate(['/events'], {
-    //   queryParams: { date: date.toISOString() }
-    // });
   }
 
   // Extract dates that have events for calendar highlighting
@@ -143,15 +141,15 @@ searchText:string=''
     this.eventDates.clear();
     events.forEach((event) => {
       const date = new Date(event.event_info.function_date);
-      const dateString = date.toISOString().split('T')[0];
-      this.eventDates.add(dateString);
+        const dateString = this.datePipe.transform(date, 'yyyy-MM-dd') as string;
+        this.eventDates.add(dateString);
     });
   }
 
   // Calendar date highlight logic
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     if (view === 'month') {
-      const dateString = cellDate.toISOString().split('T')[0];
+      const dateString = this.datePipe.transform(cellDate, 'yyyy-MM-dd') as string;
       return this.eventDates.has(dateString) ? 'has-event' : '';
     }
     return '';
